@@ -31,6 +31,13 @@ A detailed installation note for gRASPA on CentOS/Ubuntu 24.04 is documented in 
 ## Quick Start
 * Go to [```Examples/```](Examples/) folder and read more!
 
+## Energy Drift Analysis
+* **NEW**: Comprehensive energy drift documentation and analysis tools
+* See [`ENERGY_DRIFT_EXPLAINED.md`](ENERGY_DRIFT_EXPLAINED.md) for detailed explanation of why energy drift matters
+* Use [`analyze_energy_drift.py`](analyze_energy_drift.py) to analyze your simulation results
+* Try [`demo_energy_drift_effects.py`](demo_energy_drift_effects.py) to understand energy drift impact
+* Read [`README_ENERGY_DRIFT.md`](README_ENERGY_DRIFT.md) for quick start guide
+
 ## gRASPA Manual
 * gRASPA manual is available online @ https://zhaoli2042.github.io/gRASPA-mkdoc
   * also available in [Chinese](https://zhaoli2042.github.io/gRASPA-mkdoc/Chinese)
