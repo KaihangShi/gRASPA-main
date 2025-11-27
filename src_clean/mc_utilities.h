@@ -46,7 +46,7 @@ void AllocateMoreSpace(Atoms*& d_a, size_t SelectedComponent, Components& System
 {
   printf("Allocating more space on device\n");
   Atoms temp; // allocate a struct on the device for copying data.
-  //Atoms tempSystem[SystemComponents.Total_Components];
+  //Atoms tempSystem[SystemComponents.NComponents.x];
   size_t Copysize=SystemComponents.Allocate_size[SelectedComponent];
   size_t Morespace = 1024;
   size_t Newspace = Copysize+Morespace;
@@ -61,7 +61,7 @@ void AllocateMoreSpace(Atoms*& d_a, size_t SelectedComponent, Components& System
   AllocateMoreSpace_CopyToTemp<<<1,1>>>(d_a, temp, Copysize, SelectedComponent);
   // Allocate more space on the device pointers
 
-  Atoms System[SystemComponents.Total_Components]; cudaMemcpy(System, d_a, SystemComponents.Total_Components * sizeof(Atoms), cudaMemcpyDeviceToHost);
+  Atoms System[SystemComponents.NComponents.x]; cudaMemcpy(System, d_a, SystemComponents.NComponents.x * sizeof(Atoms), cudaMemcpyDeviceToHost);
 
   cudaMalloc(&System[SelectedComponent].pos,       Newspace * sizeof(double3));
   cudaMalloc(&System[SelectedComponent].scale,     Newspace * sizeof(double));
@@ -155,6 +155,79 @@ __global__ void Update_deletion_data(Atoms* d_a, size_t SelectedComponent, size_
   }
 }
 
+__global__ void Update_deletion_data_Parallel(Atoms* d_a, size_t SelectedComponent, size_t UpdateLocation, int Moleculesize, size_t LastLocation)
+{
+  size_t i = blockIdx.x * blockDim.x + threadIdx.x;
+  
+  //UpdateLocation should be the molecule that needs to be deleted
+  //Then move the atom at the last position to the location of the deleted molecule
+  //**Zhao's note** MolID of the deleted molecule should not be changed
+  //**Zhao's note** if Molecule deleted is the last molecule, then nothing is copied, just change the size later.
+  if(UpdateLocation != LastLocation)
+  {
+    if(i < Moleculesize)
+    {
+      d_a[SelectedComponent].pos[UpdateLocation+i]       = d_a[SelectedComponent].pos[LastLocation+i];
+      d_a[SelectedComponent].scale[UpdateLocation+i]     = d_a[SelectedComponent].scale[LastLocation+i];
+      d_a[SelectedComponent].charge[UpdateLocation+i]    = d_a[SelectedComponent].charge[LastLocation+i];
+      d_a[SelectedComponent].scaleCoul[UpdateLocation+i] = d_a[SelectedComponent].scaleCoul[LastLocation+i];
+      d_a[SelectedComponent].Type[UpdateLocation+i]      = d_a[SelectedComponent].Type[LastLocation+i];
+    }
+  }
+  //Zhao's note: the single values in d_a and System are pointing to different locations//
+  //d_a is just device (cannot access on host), while System is shared (accessible on host), need to update d_a values here
+  //there are two of these values: size and Allocate_size
+  if(i==0)
+  {
+    d_a[SelectedComponent].size  -= Moleculesize; //Zhao's special note: AllData.size doesn't work... So single values are painful, need to consider pointers for single values
+  }
+} 
+
+__global__ void Update_insertion_data_Parallel(Atoms* d_a, Atoms Mol, Atoms NewMol, size_t SelectedTrial, size_t SelectedComponent, size_t UpdateLocation, int Moleculesize)
+{
+  size_t i = blockIdx.x * blockDim.x + threadIdx.x;
+  //UpdateLocation should be the last position of the dataset
+  //Need to check if Allocate_size is smaller than size
+  if(i == 0)
+  {
+    //Zhao's note: the single values in d_a and System are pointing to different locations//
+    //d_a is just device (cannot access on host), while System is shared (accessible on host), need to update d_a values here
+    //there are two of these values: size and Allocate_size
+    d_a[SelectedComponent].size  += Moleculesize;
+	  if(Moleculesize == 1) //Only first bead is inserted, first bead data is stored in NewMol
+	  {
+	    d_a[SelectedComponent].pos[UpdateLocation]       = NewMol.pos[SelectedTrial];
+	    d_a[SelectedComponent].scale[UpdateLocation]     = NewMol.scale[SelectedTrial];
+	    d_a[SelectedComponent].charge[UpdateLocation]    = NewMol.charge[SelectedTrial];
+	    d_a[SelectedComponent].scaleCoul[UpdateLocation] = NewMol.scaleCoul[SelectedTrial];
+	    d_a[SelectedComponent].Type[UpdateLocation]      = NewMol.Type[SelectedTrial];
+	    d_a[SelectedComponent].MolID[UpdateLocation]     = NewMol.MolID[SelectedTrial];
+	  }
+	  else //Multiple beads: first bead + trial orientations
+	  {
+	    //Update the first bead, first bead data stored in position 0 of Mol //
+	    d_a[SelectedComponent].pos[UpdateLocation]       = Mol.pos[0];
+	    d_a[SelectedComponent].scale[UpdateLocation]     = Mol.scale[0];
+	    d_a[SelectedComponent].charge[UpdateLocation]    = Mol.charge[0];
+	    d_a[SelectedComponent].scaleCoul[UpdateLocation] = Mol.scaleCoul[0];
+	    d_a[SelectedComponent].Type[UpdateLocation]      = Mol.Type[0];
+	    d_a[SelectedComponent].MolID[UpdateLocation]     = Mol.MolID[0];
+	  }
+  }
+  else if(i < Moleculesize)
+  {
+      size_t chainsize = Moleculesize - 1; size_t j = i - 1;
+      size_t selectsize = SelectedTrial*chainsize+j;
+      d_a[SelectedComponent].pos[UpdateLocation+j+1]       = NewMol.pos[selectsize];
+      d_a[SelectedComponent].scale[UpdateLocation+j+1]     = NewMol.scale[selectsize];
+      d_a[SelectedComponent].charge[UpdateLocation+j+1]    = NewMol.charge[selectsize];
+      d_a[SelectedComponent].scaleCoul[UpdateLocation+j+1] = NewMol.scaleCoul[selectsize];
+      d_a[SelectedComponent].Type[UpdateLocation+j+1]      = NewMol.Type[selectsize];
+      d_a[SelectedComponent].MolID[UpdateLocation+j+1]     = NewMol.MolID[selectsize];
+  }
+}
+
+
 __global__ void Update_insertion_data(Atoms* d_a, Atoms Mol, Atoms NewMol, size_t SelectedTrial, size_t SelectedComponent, size_t UpdateLocation, int Moleculesize)
 {
   size_t i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -213,11 +286,28 @@ __global__ void update_translation_position(Atoms* d_a, Atoms NewMol, size_t sta
   d_a[SelectedComponent].scaleCoul[start_position+i] = NewMol.scaleCoul[i];
 }
 
+void AcceptTranslation(Variables& Vars, size_t systemId)
+{
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations& Sims            = Vars.Sims[systemId];
+  ForceField& FF               = Vars.device_FF;
+
+  size_t& SelectedComponent = SystemComponents.TempVal.component;
+
+  size_t Molsize = SystemComponents.Moleculesize[SelectedComponent]; //Get the size of the selected Molecule
+  size_t& start_position = SystemComponents.TempVal.start_position;
+  update_translation_position<<<1,Molsize>>>(Sims.d_a, Sims.New, start_position, SelectedComponent);
+  if(!FF.noCharges && SystemComponents.hasPartialCharge[SelectedComponent])
+  {
+    Update_Vector_Ewald(Sims.Box, false, SystemComponents, SelectedComponent);
+  }
+}
+
 ////////////////////////////////////////////////
 // GET PREFACTOR FOR INSERTION/DELETION MOVES //
 ////////////////////////////////////////////////
 
-static inline double GetPrefactor(Components& SystemComponents, Simulations& Sims, size_t SelectedComponent, int MoveType)
+inline double GetPrefactor(Components& SystemComponents, Simulations& Sims, size_t SelectedComponent, int MoveType)
 {
   double MolFraction = SystemComponents.MolFraction[SelectedComponent];
   double FugacityCoefficient = SystemComponents.FugacityCoeff[SelectedComponent];
@@ -235,12 +325,12 @@ static inline double GetPrefactor(Components& SystemComponents, Simulations& Sim
   {
     case INSERTION: case SINGLE_INSERTION:
     {
-      preFactor = SystemComponents.Beta * MolFraction * Sims.Box.Pressure * FugacityCoefficient * Sims.Box.Volume / (1.0+NumberOfMolecules);
+      preFactor = SystemComponents.Beta * MolFraction * SystemComponents.Pressure * FugacityCoefficient * Sims.Box.Volume / (1.0+NumberOfMolecules);
       break;
     }
     case DELETION: case SINGLE_DELETION:
     {
-      preFactor = (NumberOfMolecules) / (SystemComponents.Beta * MolFraction * Sims.Box.Pressure * FugacityCoefficient * Sims.Box.Volume);
+      preFactor = (NumberOfMolecules) / (SystemComponents.Beta * MolFraction * SystemComponents.Pressure * FugacityCoefficient * Sims.Box.Volume);
       break;
     }
     case IDENTITY_SWAP:
@@ -259,14 +349,24 @@ static inline double GetPrefactor(Components& SystemComponents, Simulations& Sim
 // ACCEPTION OF MOVES //
 ////////////////////////
 
-static inline void AcceptInsertion(Components& SystemComponents, Simulations& Sims, size_t SelectedComponent, size_t SelectedTrial, bool noCharges, int MoveType)
+void AcceptInsertion(Variables& Vars, CBMC_Variables& InsertionVariables, size_t systemId, int MoveType)
 {
-  size_t UpdateLocation = SystemComponents.Moleculesize[SelectedComponent] * SystemComponents.NumberOfMolecule_for_Component[SelectedComponent];
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations& Sims            = Vars.Sims[systemId];
+  ForceField& FF               = Vars.device_FF;
+
+  //int& MoveType   = SystemComponents.TempVal.MoveType;
+  size_t& SelectedComponent = SystemComponents.TempVal.component;
+  bool& noCharges = FF.noCharges;
   //printf("AccInsertion, SelectedTrial: %zu, UpdateLocation: %zu\n", SelectedTrial, UpdateLocation);
   //Zhao's note: here needs more consideration: need to update after implementing polyatomic molecule
   if(MoveType == INSERTION)
   {
-    Update_insertion_data<<<1,1>>>(Sims.d_a, Sims.Old, Sims.New, SelectedTrial, SelectedComponent, UpdateLocation, (int) SystemComponents.Moleculesize[SelectedComponent]);
+    //CBMC_Variables& InsertionVariables = SystemComponents.CBMC_New[0];
+    size_t UpdateLocation = SystemComponents.Moleculesize[SelectedComponent] * SystemComponents.NumberOfMolecule_for_Component[SelectedComponent];
+    size_t SelectedTrial = InsertionVariables.selectedTrial;
+    if(SystemComponents.Moleculesize[SelectedComponent] > 1) SelectedTrial = InsertionVariables.selectedTrialOrientation;
+    Update_insertion_data_Parallel<<<1,SystemComponents.Moleculesize[SelectedComponent]>>>(Sims.d_a, Sims.Old, Sims.New, SelectedTrial, SelectedComponent, UpdateLocation, (int) SystemComponents.Moleculesize[SelectedComponent]);
   }
   else if(MoveType == SINGLE_INSERTION)
   {
@@ -275,27 +375,39 @@ static inline void AcceptInsertion(Components& SystemComponents, Simulations& Si
   Update_NumberOfMolecules(SystemComponents, Sims.d_a, SelectedComponent, INSERTION); //true = Insertion//
   if(!noCharges && SystemComponents.hasPartialCharge[SelectedComponent])
   {
-    Update_Ewald_Vector(Sims.Box, false, SystemComponents, SelectedComponent);
+    Update_Vector_Ewald(Sims.Box, false, SystemComponents, SelectedComponent);
   }
 }
 
-static inline void AcceptDeletion(Components& SystemComponents, Simulations& Sims, size_t SelectedComponent, size_t UpdateLocation, size_t SelectedMol, bool noCharges)
+inline void AcceptDeletion(Variables& Vars, size_t systemId, int MoveType)
 {
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations& Sims            = Vars.Sims[systemId];
+  ForceField& FF               = Vars.device_FF;
+  bool& noCharges = FF.noCharges;
+
+  size_t& SelectedComponent = SystemComponents.TempVal.component;
+
   size_t LastMolecule = SystemComponents.NumberOfMolecule_for_Component[SelectedComponent]-1;
   size_t LastLocation = LastMolecule*SystemComponents.Moleculesize[SelectedComponent];
-  Update_deletion_data<<<1,1>>>(Sims.d_a, SelectedComponent, UpdateLocation, (int) SystemComponents.Moleculesize[SelectedComponent], LastLocation);
+
+  size_t& UpdateLocation = SystemComponents.TempVal.UpdateLocation;
+  if(MoveType == SINGLE_DELETION) 
+    UpdateLocation = SystemComponents.TempVal.molecule * SystemComponents.Moleculesize[SelectedComponent];
+
+  Update_deletion_data_Parallel<<<1,SystemComponents.Moleculesize[SelectedComponent]>>>(Sims.d_a, SelectedComponent, UpdateLocation, (int) SystemComponents.Moleculesize[SelectedComponent], LastLocation);
 
   Update_NumberOfMolecules(SystemComponents, Sims.d_a, SelectedComponent, DELETION); //false = Deletion//
   if(!noCharges && SystemComponents.hasPartialCharge[SelectedComponent])
   {
-    Update_Ewald_Vector(Sims.Box, false, SystemComponents, SelectedComponent);
+    Update_Vector_Ewald(Sims.Box, false, SystemComponents, SelectedComponent);
   }
   //Zhao's note: the last molecule can be the fractional molecule, (fractional molecule ID is stored on the host), we need to update it as well (at least check it)//
   //The function below will only be processed if the system has a fractional molecule and the transfered molecule is NOT the fractional one //
   if((SystemComponents.hasfractionalMolecule[SelectedComponent])&&(LastMolecule == SystemComponents.Lambda[SelectedComponent].FractionalMoleculeID))
   {
     //Since the fractional molecule is moved to the place of the selected deleted molecule, update fractional molecule ID on host
-    SystemComponents.Lambda[SelectedComponent].FractionalMoleculeID = SelectedMol;
+    SystemComponents.Lambda[SelectedComponent].FractionalMoleculeID = SystemComponents.TempVal.molecule;
   }
 }
 
@@ -512,6 +624,10 @@ static inline void Update_Max_Translation(Components& SystemComponents, size_t C
   if(SystemComponents.MaxTranslation[Comp].x > 5.0) SystemComponents.MaxTranslation[Comp].x = 5.0;
   if(SystemComponents.MaxTranslation[Comp].y > 5.0) SystemComponents.MaxTranslation[Comp].y = 5.0;
   if(SystemComponents.MaxTranslation[Comp].z > 5.0) SystemComponents.MaxTranslation[Comp].z = 5.0;
+
+
+  SystemComponents.Moves[Comp].CumTranslationAccepted += SystemComponents.Moves[Comp].TranslationAccepted;
+  SystemComponents.Moves[Comp].CumTranslationTotal    += SystemComponents.Moves[Comp].TranslationTotal;
   SystemComponents.Moves[Comp].TranslationAccepted = 0;
   SystemComponents.Moves[Comp].TranslationTotal = 0;
 }
@@ -536,6 +652,9 @@ static inline void Update_Max_Rotation(Components& SystemComponents, size_t Comp
   if(SystemComponents.MaxRotation[Comp].x > 3.14) SystemComponents.MaxRotation[Comp].x = 3.14;
   if(SystemComponents.MaxRotation[Comp].y > 3.14) SystemComponents.MaxRotation[Comp].y = 3.14;
   if(SystemComponents.MaxRotation[Comp].z > 3.14) SystemComponents.MaxRotation[Comp].z = 3.14;
+
+  SystemComponents.Moves[Comp].CumRotationAccepted += SystemComponents.Moves[Comp].RotationAccepted;
+  SystemComponents.Moves[Comp].CumRotationTotal    += SystemComponents.Moves[Comp].RotationTotal;
   SystemComponents.Moves[Comp].RotationAccepted = 0;
   SystemComponents.Moves[Comp].RotationTotal = 0;
 }
@@ -562,4 +681,27 @@ static inline void Update_Max_SpecialRotation(Components& SystemComponents, size
   if(SystemComponents.MaxSpecialRotation[Comp].z > 3.14) SystemComponents.MaxSpecialRotation[Comp].z = 3.14;
   SystemComponents.Moves[Comp].SpecialRotationAccepted = 0;
   SystemComponents.Moves[Comp].SpecialRotationTotal = 0;
+}
+
+static inline void Update_Max_VolumeChange(Components& SystemComponents)
+{
+  if(SystemComponents.VolumeMoveAttempts == 0) return;
+  double AccRatio = static_cast<double>(SystemComponents.VolumeMoveAccepted) / static_cast<double>(SystemComponents.VolumeMoveAttempts);
+  
+  double compare_to_target_ratio = AccRatio / SystemComponents.VolumeMoveTargetAccRatio;
+  if(compare_to_target_ratio>1.5) compare_to_target_ratio = 1.5;
+  else if(compare_to_target_ratio<0.5) compare_to_target_ratio = 0.5;
+  SystemComponents.VolumeMoveMaxChange *= compare_to_target_ratio;
+
+  if(SystemComponents.VolumeMoveMaxChange < 0.0005)
+    SystemComponents.VolumeMoveMaxChange = 0.0005;
+    if(SystemComponents.VolumeMoveMaxChange > 0.5)
+      SystemComponents.VolumeMoveMaxChange=0.5;
+
+  printf("CYCLE: %zu, AccRatio: %.5f, compare_to_target_ratio: %.5f, MaxVolumeChange: %.5f\n", SystemComponents.CURRENTCYCLE, AccRatio, compare_to_target_ratio, SystemComponents.VolumeMoveMaxChange);
+ 
+  SystemComponents.VolumeMoveTotalAccepted += SystemComponents.VolumeMoveAccepted;
+  SystemComponents.VolumeMoveTotalAttempts += SystemComponents.VolumeMoveAttempts;
+  SystemComponents.VolumeMoveAccepted = 0;
+  SystemComponents.VolumeMoveAttempts = 0;
 }

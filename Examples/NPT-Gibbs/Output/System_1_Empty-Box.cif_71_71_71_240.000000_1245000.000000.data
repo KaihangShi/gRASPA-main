@@ -1,0 +1,2567 @@
+================FUGACITY COEFFICIENT CALCULATION================
+Checking: Current Fugacity Coeff for 1 component: 1.00000
+Every Adsorbate Component has fugacity coefficient assigned, skip EOS calculation!
+----------------- MEMORY ALLOCAION STATUS -----------------
+System allocate_sizes are: 0, 10240
+Component allocate_sizes are: 0, 10240
+Allocated Blocksum size: 16001, vdw_real size: 16001, fourier_size: 0
+------------------------------------------------------------
+------------------- SIMULATION BOX PARAMETERS -----------------
+Pressure:        0.07498
+Box Volume:      357911.00000
+Box Beta:        0.00501
+Box Temperature: 240.00000
+---------------------------------------------------------------
+======================== CALCULATING INITIAL STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: 0.00000; Real: 0.00000
+Guest-Guest VDW: 0.00000; Real: 0.00000
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: 0.00000, Real: 0.00000
+Compoent [1-1], VDW: 0.00000, Real: 0.00000
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 0.00000, Host-Host Fourier: 0.00000, Framework-Guest Fourier: 0.00000
+Component: 0, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 1, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+HostEwald took 0.00032 sec
+Ewald Summation (total energy) on the CPU took 0.00032 secs
+DEBUG: comp: 0, IntraE: 0.00000, SelfE: 0.00000
+Component 1, Intra Exclusion Energy: -12071.55453 (-14518.75179 kJ/mol)
+Component 1, Atom Self Exclusion Energy: 12087.37520 (14537.77969 kJ/mol)
+DEBUG: comp: 1, IntraE: -12071.55453, SelfE: 12087.37520
+******   Allocating Ewald WaveVectors + StructureFactors (INITIAL STAGE ONLY)   ******
+Allocated 204 204 204 space for eikxyz
+Structure Factor 0 is 0.00000 0.00000
+Structure Factor 1 is 0.00000 0.00000
+Structure Factor 2 is 0.00000 0.00000
+Structure Factor 3 is 0.00000 0.00000
+Structure Factor 4 is 0.00000 0.00000
+Structure Factor 5 is 0.00000 0.00000
+Structure Factor 6 is 0.00000 0.00000
+Structure Factor 7 is 0.00000 0.00000
+Structure Factor 8 is 0.00000 0.00000
+Structure Factor 9 is 0.00000 0.00000
+****** DONE Allocating Ewald WaveVectors + StructureFactors(INITIAL STAGE ONLY) ******
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 18513, GPU SF: 18513
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 7, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 8, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 9, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: 0.00000 imag: 0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: 0.00000 imag: 0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00000 secs
+Ewald Summation (total energy) on the GPU took 0.00000 secs
+Total GPU Energy: 
+====================== DONE CALCULATING INITIAL STAGE ENERGY ======================
+Component 1, Need to create 251 full molecule
+Creating 0 Molecule for Component 1; There are 0 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 1 Molecule for Component 1; There are 1 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 2 Molecule for Component 1; There are 2 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 3 Molecule for Component 1; There are 3 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 4 Molecule for Component 1; There are 4 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 5 Molecule for Component 1; There are 5 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 6 Molecule for Component 1; There are 6 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 7 Molecule for Component 1; There are 7 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 8 Molecule for Component 1; There are 8 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 9 Molecule for Component 1; There are 9 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 10 Molecule for Component 1; There are 10 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 11 Molecule for Component 1; There are 11 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 12 Molecule for Component 1; There are 12 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 13 Molecule for Component 1; There are 13 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 14 Molecule for Component 1; There are 14 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 15 Molecule for Component 1; There are 15 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 16 Molecule for Component 1; There are 16 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 17 Molecule for Component 1; There are 17 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 18 Molecule for Component 1; There are 18 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 19 Molecule for Component 1; There are 19 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 20 Molecule for Component 1; There are 20 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 21 Molecule for Component 1; There are 21 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 22 Molecule for Component 1; There are 22 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 23 Molecule for Component 1; There are 23 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 24 Molecule for Component 1; There are 24 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 25 Molecule for Component 1; There are 25 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 26 Molecule for Component 1; There are 26 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 27 Molecule for Component 1; There are 27 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 28 Molecule for Component 1; There are 28 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 29 Molecule for Component 1; There are 29 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 30 Molecule for Component 1; There are 30 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 31 Molecule for Component 1; There are 31 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 32 Molecule for Component 1; There are 32 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 33 Molecule for Component 1; There are 33 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 34 Molecule for Component 1; There are 34 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 35 Molecule for Component 1; There are 35 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 36 Molecule for Component 1; There are 36 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 37 Molecule for Component 1; There are 37 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 38 Molecule for Component 1; There are 38 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 39 Molecule for Component 1; There are 39 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 40 Molecule for Component 1; There are 40 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 41 Molecule for Component 1; There are 41 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 42 Molecule for Component 1; There are 42 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 43 Molecule for Component 1; There are 43 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 44 Molecule for Component 1; There are 44 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 45 Molecule for Component 1; There are 45 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 46 Molecule for Component 1; There are 46 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 47 Molecule for Component 1; There are 47 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 48 Molecule for Component 1; There are 48 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 49 Molecule for Component 1; There are 49 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 50 Molecule for Component 1; There are 50 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 51 Molecule for Component 1; There are 51 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 52 Molecule for Component 1; There are 52 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 53 Molecule for Component 1; There are 53 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 54 Molecule for Component 1; There are 54 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 55 Molecule for Component 1; There are 55 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 56 Molecule for Component 1; There are 56 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 57 Molecule for Component 1; There are 57 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 58 Molecule for Component 1; There are 58 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 59 Molecule for Component 1; There are 59 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 60 Molecule for Component 1; There are 60 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 61 Molecule for Component 1; There are 61 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 62 Molecule for Component 1; There are 62 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 63 Molecule for Component 1; There are 63 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 64 Molecule for Component 1; There are 64 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 65 Molecule for Component 1; There are 65 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 66 Molecule for Component 1; There are 66 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 67 Molecule for Component 1; There are 67 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 68 Molecule for Component 1; There are 68 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 69 Molecule for Component 1; There are 69 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 70 Molecule for Component 1; There are 70 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 71 Molecule for Component 1; There are 71 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 72 Molecule for Component 1; There are 72 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 73 Molecule for Component 1; There are 73 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 74 Molecule for Component 1; There are 74 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 75 Molecule for Component 1; There are 75 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 76 Molecule for Component 1; There are 76 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 77 Molecule for Component 1; There are 77 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 78 Molecule for Component 1; There are 78 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 79 Molecule for Component 1; There are 79 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 80 Molecule for Component 1; There are 80 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 81 Molecule for Component 1; There are 81 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 82 Molecule for Component 1; There are 82 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 83 Molecule for Component 1; There are 83 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 84 Molecule for Component 1; There are 84 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 85 Molecule for Component 1; There are 85 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 86 Molecule for Component 1; There are 86 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 87 Molecule for Component 1; There are 87 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 88 Molecule for Component 1; There are 88 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 89 Molecule for Component 1; There are 89 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 90 Molecule for Component 1; There are 90 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 91 Molecule for Component 1; There are 91 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 92 Molecule for Component 1; There are 92 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 93 Molecule for Component 1; There are 93 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 94 Molecule for Component 1; There are 94 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 95 Molecule for Component 1; There are 95 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 96 Molecule for Component 1; There are 96 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 97 Molecule for Component 1; There are 97 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 98 Molecule for Component 1; There are 98 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 99 Molecule for Component 1; There are 99 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 100 Molecule for Component 1; There are 100 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 101 Molecule for Component 1; There are 101 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 102 Molecule for Component 1; There are 102 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 103 Molecule for Component 1; There are 103 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 104 Molecule for Component 1; There are 104 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 105 Molecule for Component 1; There are 105 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 106 Molecule for Component 1; There are 106 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 107 Molecule for Component 1; There are 107 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 108 Molecule for Component 1; There are 108 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 109 Molecule for Component 1; There are 109 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 110 Molecule for Component 1; There are 110 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 111 Molecule for Component 1; There are 111 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 112 Molecule for Component 1; There are 112 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 113 Molecule for Component 1; There are 113 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 114 Molecule for Component 1; There are 114 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 115 Molecule for Component 1; There are 115 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 116 Molecule for Component 1; There are 116 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 117 Molecule for Component 1; There are 117 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 118 Molecule for Component 1; There are 118 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 119 Molecule for Component 1; There are 119 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 120 Molecule for Component 1; There are 120 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 121 Molecule for Component 1; There are 121 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 122 Molecule for Component 1; There are 122 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 123 Molecule for Component 1; There are 123 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 124 Molecule for Component 1; There are 124 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 125 Molecule for Component 1; There are 125 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 126 Molecule for Component 1; There are 126 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 127 Molecule for Component 1; There are 127 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 128 Molecule for Component 1; There are 128 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 129 Molecule for Component 1; There are 129 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 130 Molecule for Component 1; There are 130 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 131 Molecule for Component 1; There are 131 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 132 Molecule for Component 1; There are 132 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 133 Molecule for Component 1; There are 133 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 134 Molecule for Component 1; There are 134 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 135 Molecule for Component 1; There are 135 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 136 Molecule for Component 1; There are 136 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 137 Molecule for Component 1; There are 137 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 138 Molecule for Component 1; There are 138 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 139 Molecule for Component 1; There are 139 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 140 Molecule for Component 1; There are 140 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 141 Molecule for Component 1; There are 141 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 142 Molecule for Component 1; There are 142 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 143 Molecule for Component 1; There are 143 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 144 Molecule for Component 1; There are 144 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 145 Molecule for Component 1; There are 145 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 146 Molecule for Component 1; There are 146 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 147 Molecule for Component 1; There are 147 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 148 Molecule for Component 1; There are 148 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 149 Molecule for Component 1; There are 149 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 150 Molecule for Component 1; There are 150 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 151 Molecule for Component 1; There are 151 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 152 Molecule for Component 1; There are 152 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 153 Molecule for Component 1; There are 153 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 154 Molecule for Component 1; There are 154 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 155 Molecule for Component 1; There are 155 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 156 Molecule for Component 1; There are 156 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 157 Molecule for Component 1; There are 157 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 158 Molecule for Component 1; There are 158 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 159 Molecule for Component 1; There are 159 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 160 Molecule for Component 1; There are 160 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 161 Molecule for Component 1; There are 161 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 162 Molecule for Component 1; There are 162 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 163 Molecule for Component 1; There are 163 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 164 Molecule for Component 1; There are 164 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 165 Molecule for Component 1; There are 165 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 166 Molecule for Component 1; There are 166 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 167 Molecule for Component 1; There are 167 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 168 Molecule for Component 1; There are 168 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 169 Molecule for Component 1; There are 169 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 170 Molecule for Component 1; There are 170 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 171 Molecule for Component 1; There are 171 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 172 Molecule for Component 1; There are 172 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 173 Molecule for Component 1; There are 173 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 174 Molecule for Component 1; There are 174 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 175 Molecule for Component 1; There are 175 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 176 Molecule for Component 1; There are 176 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 177 Molecule for Component 1; There are 177 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 178 Molecule for Component 1; There are 178 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 179 Molecule for Component 1; There are 179 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 180 Molecule for Component 1; There are 180 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 181 Molecule for Component 1; There are 181 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 182 Molecule for Component 1; There are 182 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 183 Molecule for Component 1; There are 183 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 184 Molecule for Component 1; There are 184 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 185 Molecule for Component 1; There are 185 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 186 Molecule for Component 1; There are 186 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 187 Molecule for Component 1; There are 187 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 188 Molecule for Component 1; There are 188 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 189 Molecule for Component 1; There are 189 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 190 Molecule for Component 1; There are 190 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 191 Molecule for Component 1; There are 191 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 192 Molecule for Component 1; There are 192 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 193 Molecule for Component 1; There are 193 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 194 Molecule for Component 1; There are 194 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 195 Molecule for Component 1; There are 195 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 196 Molecule for Component 1; There are 196 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 197 Molecule for Component 1; There are 197 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 198 Molecule for Component 1; There are 198 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 199 Molecule for Component 1; There are 199 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 200 Molecule for Component 1; There are 200 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 201 Molecule for Component 1; There are 201 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 202 Molecule for Component 1; There are 202 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 203 Molecule for Component 1; There are 203 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 204 Molecule for Component 1; There are 204 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 205 Molecule for Component 1; There are 205 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 206 Molecule for Component 1; There are 206 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 207 Molecule for Component 1; There are 207 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 208 Molecule for Component 1; There are 208 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 209 Molecule for Component 1; There are 209 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 210 Molecule for Component 1; There are 210 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 211 Molecule for Component 1; There are 211 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 212 Molecule for Component 1; There are 212 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 213 Molecule for Component 1; There are 213 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 214 Molecule for Component 1; There are 214 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 215 Molecule for Component 1; There are 215 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 216 Molecule for Component 1; There are 216 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 217 Molecule for Component 1; There are 217 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 218 Molecule for Component 1; There are 218 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 219 Molecule for Component 1; There are 219 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 220 Molecule for Component 1; There are 220 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 221 Molecule for Component 1; There are 221 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 222 Molecule for Component 1; There are 222 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 223 Molecule for Component 1; There are 223 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 224 Molecule for Component 1; There are 224 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 225 Molecule for Component 1; There are 225 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 226 Molecule for Component 1; There are 226 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 227 Molecule for Component 1; There are 227 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 228 Molecule for Component 1; There are 228 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 229 Molecule for Component 1; There are 229 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 230 Molecule for Component 1; There are 230 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 231 Molecule for Component 1; There are 231 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 232 Molecule for Component 1; There are 232 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 233 Molecule for Component 1; There are 233 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 234 Molecule for Component 1; There are 234 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 235 Molecule for Component 1; There are 235 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 236 Molecule for Component 1; There are 236 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 237 Molecule for Component 1; There are 237 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 238 Molecule for Component 1; There are 238 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 239 Molecule for Component 1; There are 239 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 240 Molecule for Component 1; There are 240 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 241 Molecule for Component 1; There are 241 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 242 Molecule for Component 1; There are 242 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 243 Molecule for Component 1; There are 243 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 244 Molecule for Component 1; There are 244 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 245 Molecule for Component 1; There are 245 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 246 Molecule for Component 1; There are 246 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 247 Molecule for Component 1; There are 247 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 248 Molecule for Component 1; There are 248 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 249 Molecule for Component 1; There are 249 Molecules of that component in the System
+Delta E in creating molecules:
+Creating 250 Molecule for Component 1; There are 250 Molecules of that component in the System
+Delta E in creating molecules:
+======================== CALCULATING CREATE_MOLECULE STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: 0.00000; Real: 0.00000
+Guest-Guest VDW: -13510.42239; Real: -2626.02718
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: 0.00000, Real: 0.00000
+Compoent [1-1], VDW: -13510.42239, Real: -2626.02718
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 4024.17119, Host-Host Fourier: 0.00000, Framework-Guest Fourier: 0.00000
+Component: 0, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 1, SelfAtomE: 3033931.17573 (3648982.70316 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 3029960.18805 (3644206.69984 kJ/mol)
+HostEwald took 0.08043 sec
+Ewald Summation (total energy) on the CPU took 0.08043 secs
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 18513, GPU SF: 18513
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 7, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 8, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 9, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: 0.00000 imag: 0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: 0.00000 imag: 0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00045 secs
+Ewald Summation (total energy) on the GPU took 0.00032 secs
+Total GPU Energy: 
+====================== DONE CALCULATING CREATE_MOLECULE STAGE ENERGY ======================
+==================================
+== RUNNING INITIALIZATION PHASE ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+Box 1, Volume: 357911.00000
+Total Volume: 417230.00000
+INITIALIZATION Cycle: 0, 256 Adsorbate Molecules, Total Energy: -17252.12514  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 256 Molecules  ||  
+INITIALIZATION Cycle: 10, 236 Adsorbate Molecules, Total Energy: -12994.39519  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 236 Molecules  ||  
+INITIALIZATION Cycle: 20, 215 Adsorbate Molecules, Total Energy: -10997.57933  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 215 Molecules  ||  
+INITIALIZATION Cycle: 30, 193 Adsorbate Molecules, Total Energy: -10089.43576  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 193 Molecules  ||  
+INITIALIZATION Cycle: 40, 163 Adsorbate Molecules, Total Energy: -8544.83623  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 163 Molecules  ||  
+INITIALIZATION Cycle: 50, 141 Adsorbate Molecules, Total Energy: -5033.88054  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 141 Molecules  ||  
+INITIALIZATION Cycle: 60, 127 Adsorbate Molecules, Total Energy: -6827.42460  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 127 Molecules  ||  
+INITIALIZATION Cycle: 70, 93 Adsorbate Molecules, Total Energy: -5401.04812  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+INITIALIZATION Cycle: 80, 101 Adsorbate Molecules, Total Energy: -6886.73149  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 101 Molecules  ||  
+INITIALIZATION Cycle: 90, 97 Adsorbate Molecules, Total Energy: -4096.99320  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+INITIALIZATION Cycle: 100, 84 Adsorbate Molecules, Total Energy: -4939.89157  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+INITIALIZATION Cycle: 110, 72 Adsorbate Molecules, Total Energy: -2519.69691  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+INITIALIZATION Cycle: 120, 75 Adsorbate Molecules, Total Energy: -4169.85233  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+INITIALIZATION Cycle: 130, 71 Adsorbate Molecules, Total Energy: -2799.65785  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+INITIALIZATION Cycle: 140, 71 Adsorbate Molecules, Total Energy: -1590.54448  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+INITIALIZATION Cycle: 150, 64 Adsorbate Molecules, Total Energy: -2524.80632  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+INITIALIZATION Cycle: 160, 58 Adsorbate Molecules, Total Energy: -1870.85642  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 58 Molecules  ||  
+INITIALIZATION Cycle: 170, 60 Adsorbate Molecules, Total Energy: -4609.26599  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 60 Molecules  ||  
+INITIALIZATION Cycle: 180, 48 Adsorbate Molecules, Total Energy: -1533.18271  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 190, 40 Adsorbate Molecules, Total Energy: -1491.57985  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 40 Molecules  ||  
+INITIALIZATION Cycle: 200, 37 Adsorbate Molecules, Total Energy: -2159.24549  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 210, 38 Adsorbate Molecules, Total Energy: -986.25012  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 38 Molecules  ||  
+INITIALIZATION Cycle: 220, 46 Adsorbate Molecules, Total Energy: -2996.10164  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 230, 33 Adsorbate Molecules, Total Energy: -1545.04722  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 240, 45 Adsorbate Molecules, Total Energy: -839.52148  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 250, 37 Adsorbate Molecules, Total Energy: -2825.63261  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 260, 33 Adsorbate Molecules, Total Energy: -1201.73314  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 270, 34 Adsorbate Molecules, Total Energy: -1885.02449  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 34 Molecules  ||  
+INITIALIZATION Cycle: 280, 31 Adsorbate Molecules, Total Energy: -2581.08857  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 290, 30 Adsorbate Molecules, Total Energy: -1893.04866  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 30 Molecules  ||  
+INITIALIZATION Cycle: 300, 31 Adsorbate Molecules, Total Energy: -1068.77320  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 310, 33 Adsorbate Molecules, Total Energy: -1521.02259  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 320, 33 Adsorbate Molecules, Total Energy: -1190.64057  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 330, 32 Adsorbate Molecules, Total Energy: -2196.40628  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 32 Molecules  ||  
+INITIALIZATION Cycle: 340, 33 Adsorbate Molecules, Total Energy: -2365.61936  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 350, 22 Adsorbate Molecules, Total Energy: -702.53572  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 22 Molecules  ||  
+INITIALIZATION Cycle: 360, 20 Adsorbate Molecules, Total Energy: -380.58262  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 20 Molecules  ||  
+INITIALIZATION Cycle: 370, 22 Adsorbate Molecules, Total Energy: -684.06803  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 22 Molecules  ||  
+INITIALIZATION Cycle: 380, 19 Adsorbate Molecules, Total Energy: -825.43146  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 19 Molecules  ||  
+INITIALIZATION Cycle: 390, 21 Adsorbate Molecules, Total Energy: -1775.78558  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 21 Molecules  ||  
+INITIALIZATION Cycle: 400, 23 Adsorbate Molecules, Total Energy: -698.68927  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 23 Molecules  ||  
+INITIALIZATION Cycle: 410, 26 Adsorbate Molecules, Total Energy: -866.27874  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 26 Molecules  ||  
+INITIALIZATION Cycle: 420, 37 Adsorbate Molecules, Total Energy: -2178.03767  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 430, 28 Adsorbate Molecules, Total Energy: -678.03791  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 28 Molecules  ||  
+INITIALIZATION Cycle: 440, 29 Adsorbate Molecules, Total Energy: -1493.06089  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 29 Molecules  ||  
+INITIALIZATION Cycle: 450, 33 Adsorbate Molecules, Total Energy: -2021.60154  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 460, 32 Adsorbate Molecules, Total Energy: -890.38777  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 32 Molecules  ||  
+INITIALIZATION Cycle: 470, 30 Adsorbate Molecules, Total Energy: -1014.24413  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 30 Molecules  ||  
+INITIALIZATION Cycle: 480, 36 Adsorbate Molecules, Total Energy: -1432.54022  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 36 Molecules  ||  
+INITIALIZATION Cycle: 490, 33 Adsorbate Molecules, Total Energy: -896.01279  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 33 Molecules  ||  
+INITIALIZATION Cycle: 500, 38 Adsorbate Molecules, Total Energy: -2645.78652  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 38 Molecules  ||  
+INITIALIZATION Cycle: 510, 30 Adsorbate Molecules, Total Energy: -1054.86071  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 30 Molecules  ||  
+INITIALIZATION Cycle: 520, 26 Adsorbate Molecules, Total Energy: -1111.09988  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 26 Molecules  ||  
+INITIALIZATION Cycle: 530, 34 Adsorbate Molecules, Total Energy: -2263.02953  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 34 Molecules  ||  
+INITIALIZATION Cycle: 540, 31 Adsorbate Molecules, Total Energy: -1025.99796  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 550, 34 Adsorbate Molecules, Total Energy: -2170.51825  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 34 Molecules  ||  
+INITIALIZATION Cycle: 560, 31 Adsorbate Molecules, Total Energy: -1713.47584  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 570, 37 Adsorbate Molecules, Total Energy: -2727.63413  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 580, 32 Adsorbate Molecules, Total Energy: -1828.11164  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 32 Molecules  ||  
+INITIALIZATION Cycle: 590, 31 Adsorbate Molecules, Total Energy: -1078.90465  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 600, 26 Adsorbate Molecules, Total Energy: -611.92518  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 26 Molecules  ||  
+INITIALIZATION Cycle: 610, 30 Adsorbate Molecules, Total Energy: -1294.50456  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 30 Molecules  ||  
+INITIALIZATION Cycle: 620, 27 Adsorbate Molecules, Total Energy: -863.24717  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 27 Molecules  ||  
+INITIALIZATION Cycle: 630, 24 Adsorbate Molecules, Total Energy: -1260.55798  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 24 Molecules  ||  
+INITIALIZATION Cycle: 640, 22 Adsorbate Molecules, Total Energy: -1805.43721  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 22 Molecules  ||  
+INITIALIZATION Cycle: 650, 25 Adsorbate Molecules, Total Energy: -500.88618  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 25 Molecules  ||  
+INITIALIZATION Cycle: 660, 21 Adsorbate Molecules, Total Energy: -563.11160  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 21 Molecules  ||  
+INITIALIZATION Cycle: 670, 24 Adsorbate Molecules, Total Energy: -2202.72938  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 24 Molecules  ||  
+INITIALIZATION Cycle: 680, 25 Adsorbate Molecules, Total Energy: -1699.97713  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 25 Molecules  ||  
+INITIALIZATION Cycle: 690, 24 Adsorbate Molecules, Total Energy: -2441.40790  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 24 Molecules  ||  
+INITIALIZATION Cycle: 700, 31 Adsorbate Molecules, Total Energy: -1096.53258  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 31 Molecules  ||  
+INITIALIZATION Cycle: 710, 29 Adsorbate Molecules, Total Energy: -2376.86558  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 29 Molecules  ||  
+INITIALIZATION Cycle: 720, 26 Adsorbate Molecules, Total Energy: -982.22957  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 26 Molecules  ||  
+INITIALIZATION Cycle: 730, 28 Adsorbate Molecules, Total Energy: -3402.55450  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 28 Molecules  ||  
+INITIALIZATION Cycle: 740, 29 Adsorbate Molecules, Total Energy: -1159.28119  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 29 Molecules  ||  
+INITIALIZATION Cycle: 750, 26 Adsorbate Molecules, Total Energy: -1491.27118  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 26 Molecules  ||  
+INITIALIZATION Cycle: 760, 35 Adsorbate Molecules, Total Energy: -2988.94700  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 35 Molecules  ||  
+INITIALIZATION Cycle: 770, 36 Adsorbate Molecules, Total Energy: -2817.63349  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 36 Molecules  ||  
+INITIALIZATION Cycle: 780, 36 Adsorbate Molecules, Total Energy: -2898.26440  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 36 Molecules  ||  
+INITIALIZATION Cycle: 790, 38 Adsorbate Molecules, Total Energy: -3770.66013  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 38 Molecules  ||  
+INITIALIZATION Cycle: 800, 37 Adsorbate Molecules, Total Energy: -1592.68012  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 810, 44 Adsorbate Molecules, Total Energy: -3674.07616  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 44 Molecules  ||  
+INITIALIZATION Cycle: 820, 51 Adsorbate Molecules, Total Energy: -1746.89738  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 830, 51 Adsorbate Molecules, Total Energy: -4131.90622  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 840, 48 Adsorbate Molecules, Total Energy: -2863.68935  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 850, 48 Adsorbate Molecules, Total Energy: -2627.39002  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 860, 47 Adsorbate Molecules, Total Energy: -3637.17390  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 870, 45 Adsorbate Molecules, Total Energy: -1595.82959  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 880, 45 Adsorbate Molecules, Total Energy: -2064.96293  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 890, 37 Adsorbate Molecules, Total Energy: -2218.41538  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 37 Molecules  ||  
+INITIALIZATION Cycle: 900, 36 Adsorbate Molecules, Total Energy: -2076.41189  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 36 Molecules  ||  
+INITIALIZATION Cycle: 910, 44 Adsorbate Molecules, Total Energy: -2451.88842  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 44 Molecules  ||  
+INITIALIZATION Cycle: 920, 47 Adsorbate Molecules, Total Energy: -2321.36448  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 930, 46 Adsorbate Molecules, Total Energy: -4071.72623  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 940, 45 Adsorbate Molecules, Total Energy: -2679.47967  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 950, 44 Adsorbate Molecules, Total Energy: -1213.73995  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 44 Molecules  ||  
+INITIALIZATION Cycle: 960, 39 Adsorbate Molecules, Total Energy: -1891.13272  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 39 Molecules  ||  
+INITIALIZATION Cycle: 970, 45 Adsorbate Molecules, Total Energy: -1786.89251  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 980, 43 Adsorbate Molecules, Total Energy: -2913.14671  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 43 Molecules  ||  
+INITIALIZATION Cycle: 990, 47 Adsorbate Molecules, Total Energy: -4978.41379  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 1000, 51 Adsorbate Molecules, Total Energy: -4678.87930  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1010, 48 Adsorbate Molecules, Total Energy: -3925.12804  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 1020, 46 Adsorbate Molecules, Total Energy: -3928.95252  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 1030, 46 Adsorbate Molecules, Total Energy: -3377.65063  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 1040, 54 Adsorbate Molecules, Total Energy: -3593.06235  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1050, 47 Adsorbate Molecules, Total Energy: -1066.12374  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 1060, 52 Adsorbate Molecules, Total Energy: -3676.99903  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1070, 54 Adsorbate Molecules, Total Energy: -2065.21789  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1080, 53 Adsorbate Molecules, Total Energy: -3823.10644  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1090, 52 Adsorbate Molecules, Total Energy: -1787.15211  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1100, 52 Adsorbate Molecules, Total Energy: -2359.58733  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1110, 52 Adsorbate Molecules, Total Energy: -2605.10950  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1120, 55 Adsorbate Molecules, Total Energy: -3519.73203  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1130, 54 Adsorbate Molecules, Total Energy: -2141.79308  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1140, 62 Adsorbate Molecules, Total Energy: -5020.79113  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 1150, 63 Adsorbate Molecules, Total Energy: -3528.36363  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+INITIALIZATION Cycle: 1160, 61 Adsorbate Molecules, Total Energy: -1868.13521  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 61 Molecules  ||  
+INITIALIZATION Cycle: 1170, 62 Adsorbate Molecules, Total Energy: -3871.76592  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 1180, 51 Adsorbate Molecules, Total Energy: -2582.67958  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1190, 51 Adsorbate Molecules, Total Energy: -2511.87440  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1200, 57 Adsorbate Molecules, Total Energy: -1904.98209  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 57 Molecules  ||  
+INITIALIZATION Cycle: 1210, 54 Adsorbate Molecules, Total Energy: -1483.91428  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1220, 51 Adsorbate Molecules, Total Energy: -3431.14416  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1230, 57 Adsorbate Molecules, Total Energy: -1751.13970  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 57 Molecules  ||  
+INITIALIZATION Cycle: 1240, 48 Adsorbate Molecules, Total Energy: -3375.89238  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 1250, 44 Adsorbate Molecules, Total Energy: -3198.03254  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 44 Molecules  ||  
+INITIALIZATION Cycle: 1260, 50 Adsorbate Molecules, Total Energy: -2744.18526  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 50 Molecules  ||  
+INITIALIZATION Cycle: 1270, 53 Adsorbate Molecules, Total Energy: -4703.61641  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1280, 52 Adsorbate Molecules, Total Energy: -3938.28160  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1290, 55 Adsorbate Molecules, Total Energy: -3168.73540  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1300, 51 Adsorbate Molecules, Total Energy: -1383.78634  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1310, 58 Adsorbate Molecules, Total Energy: -2802.73216  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 58 Molecules  ||  
+INITIALIZATION Cycle: 1320, 61 Adsorbate Molecules, Total Energy: -3233.87563  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 61 Molecules  ||  
+INITIALIZATION Cycle: 1330, 52 Adsorbate Molecules, Total Energy: -1753.11031  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1340, 62 Adsorbate Molecules, Total Energy: -2764.86981  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 1350, 58 Adsorbate Molecules, Total Energy: -2698.20474  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 58 Molecules  ||  
+INITIALIZATION Cycle: 1360, 59 Adsorbate Molecules, Total Energy: -3151.80135  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+INITIALIZATION Cycle: 1370, 54 Adsorbate Molecules, Total Energy: -3064.66467  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1380, 46 Adsorbate Molecules, Total Energy: -3092.59833  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 1390, 49 Adsorbate Molecules, Total Energy: -2462.69644  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 49 Molecules  ||  
+INITIALIZATION Cycle: 1400, 59 Adsorbate Molecules, Total Energy: -3895.81579  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+INITIALIZATION Cycle: 1410, 53 Adsorbate Molecules, Total Energy: -2519.77642  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1420, 55 Adsorbate Molecules, Total Energy: -3674.55283  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1430, 56 Adsorbate Molecules, Total Energy: -3432.65013  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1440, 62 Adsorbate Molecules, Total Energy: -4464.39546  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 1450, 52 Adsorbate Molecules, Total Energy: -3895.91651  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1460, 54 Adsorbate Molecules, Total Energy: -2157.68261  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1470, 54 Adsorbate Molecules, Total Energy: -3422.53881  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1480, 52 Adsorbate Molecules, Total Energy: -3973.67085  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1490, 52 Adsorbate Molecules, Total Energy: -2239.10084  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1500, 51 Adsorbate Molecules, Total Energy: -1354.19226  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1510, 50 Adsorbate Molecules, Total Energy: -3122.24850  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 50 Molecules  ||  
+INITIALIZATION Cycle: 1520, 55 Adsorbate Molecules, Total Energy: -3852.98708  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1530, 45 Adsorbate Molecules, Total Energy: -1428.36705  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 1540, 38 Adsorbate Molecules, Total Energy: -1814.55971  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 38 Molecules  ||  
+INITIALIZATION Cycle: 1550, 40 Adsorbate Molecules, Total Energy: -1103.65952  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 40 Molecules  ||  
+INITIALIZATION Cycle: 1560, 45 Adsorbate Molecules, Total Energy: -1402.95291  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 1570, 53 Adsorbate Molecules, Total Energy: -1750.54582  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1580, 52 Adsorbate Molecules, Total Energy: -2123.31194  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1590, 45 Adsorbate Molecules, Total Energy: -2601.95869  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 1600, 53 Adsorbate Molecules, Total Energy: -3965.85680  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1610, 48 Adsorbate Molecules, Total Energy: -2834.39016  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 1620, 54 Adsorbate Molecules, Total Energy: -4640.85620  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1630, 55 Adsorbate Molecules, Total Energy: -4109.84956  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1640, 48 Adsorbate Molecules, Total Energy: -1851.38623  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 1650, 52 Adsorbate Molecules, Total Energy: -3150.89445  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1660, 47 Adsorbate Molecules, Total Energy: -3214.80192  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 1670, 46 Adsorbate Molecules, Total Energy: -3519.78676  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 46 Molecules  ||  
+INITIALIZATION Cycle: 1680, 47 Adsorbate Molecules, Total Energy: -1563.63089  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 1690, 50 Adsorbate Molecules, Total Energy: -3171.90108  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 50 Molecules  ||  
+INITIALIZATION Cycle: 1700, 54 Adsorbate Molecules, Total Energy: -3664.39496  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1710, 54 Adsorbate Molecules, Total Energy: -1475.61072  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1720, 58 Adsorbate Molecules, Total Energy: -3189.34249  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 58 Molecules  ||  
+INITIALIZATION Cycle: 1730, 55 Adsorbate Molecules, Total Energy: -2352.73571  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 55 Molecules  ||  
+INITIALIZATION Cycle: 1740, 52 Adsorbate Molecules, Total Energy: -3368.97577  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1750, 54 Adsorbate Molecules, Total Energy: -3202.91726  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1760, 56 Adsorbate Molecules, Total Energy: -3760.43995  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1770, 53 Adsorbate Molecules, Total Energy: -2479.97158  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1780, 45 Adsorbate Molecules, Total Energy: -958.46290  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 45 Molecules  ||  
+INITIALIZATION Cycle: 1790, 49 Adsorbate Molecules, Total Energy: -3038.11934  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 49 Molecules  ||  
+INITIALIZATION Cycle: 1800, 53 Adsorbate Molecules, Total Energy: -3168.89740  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1810, 54 Adsorbate Molecules, Total Energy: -1662.94693  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1820, 48 Adsorbate Molecules, Total Energy: -2238.98699  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 1830, 51 Adsorbate Molecules, Total Energy: -2258.86137  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1840, 51 Adsorbate Molecules, Total Energy: -1584.91909  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 1850, 57 Adsorbate Molecules, Total Energy: -3980.68860  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 57 Molecules  ||  
+INITIALIZATION Cycle: 1860, 56 Adsorbate Molecules, Total Energy: -3824.19681  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1870, 58 Adsorbate Molecules, Total Energy: -4121.61553  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 58 Molecules  ||  
+INITIALIZATION Cycle: 1880, 56 Adsorbate Molecules, Total Energy: -3579.25636  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1890, 60 Adsorbate Molecules, Total Energy: -2184.94748  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 60 Molecules  ||  
+INITIALIZATION Cycle: 1900, 63 Adsorbate Molecules, Total Energy: -2288.98000  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+INITIALIZATION Cycle: 1910, 54 Adsorbate Molecules, Total Energy: -2165.85096  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 1920, 52 Adsorbate Molecules, Total Energy: -3729.95152  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 1930, 53 Adsorbate Molecules, Total Energy: -2917.49917  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1940, 56 Adsorbate Molecules, Total Energy: -4211.31560  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1950, 56 Adsorbate Molecules, Total Energy: -2174.82123  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1960, 56 Adsorbate Molecules, Total Energy: -3676.88969  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 56 Molecules  ||  
+INITIALIZATION Cycle: 1970, 53 Adsorbate Molecules, Total Energy: -3248.76261  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 1980, 59 Adsorbate Molecules, Total Energy: -4300.95615  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+INITIALIZATION Cycle: 1990, 65 Adsorbate Molecules, Total Energy: -2379.31753  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+INITIALIZATION Cycle: 2000, 60 Adsorbate Molecules, Total Energy: -4533.73218  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 60 Molecules  ||  
+INITIALIZATION Cycle: 2010, 53 Adsorbate Molecules, Total Energy: -1312.14273  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 53 Molecules  ||  
+INITIALIZATION Cycle: 2020, 52 Adsorbate Molecules, Total Energy: -4346.97625  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 2030, 54 Adsorbate Molecules, Total Energy: -6911.07115  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 2040, 52 Adsorbate Molecules, Total Energy: -3597.01133  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 2050, 50 Adsorbate Molecules, Total Energy: -2210.64973  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 50 Molecules  ||  
+INITIALIZATION Cycle: 2060, 51 Adsorbate Molecules, Total Energy: -4151.60100  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 2070, 47 Adsorbate Molecules, Total Energy: -4097.68213  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 47 Molecules  ||  
+INITIALIZATION Cycle: 2080, 42 Adsorbate Molecules, Total Energy: -2299.03719  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 42 Molecules  ||  
+INITIALIZATION Cycle: 2090, 38 Adsorbate Molecules, Total Energy: -1503.80733  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 38 Molecules  ||  
+INITIALIZATION Cycle: 2100, 48 Adsorbate Molecules, Total Energy: -2708.81060  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 2110, 48 Adsorbate Molecules, Total Energy: -3113.66424  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 48 Molecules  ||  
+INITIALIZATION Cycle: 2120, 57 Adsorbate Molecules, Total Energy: -3682.93182  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 57 Molecules  ||  
+INITIALIZATION Cycle: 2130, 57 Adsorbate Molecules, Total Energy: -4435.17813  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 57 Molecules  ||  
+INITIALIZATION Cycle: 2140, 62 Adsorbate Molecules, Total Energy: -4409.09186  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 2150, 54 Adsorbate Molecules, Total Energy: -3728.97353  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 54 Molecules  ||  
+INITIALIZATION Cycle: 2160, 60 Adsorbate Molecules, Total Energy: -4172.97519  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 60 Molecules  ||  
+INITIALIZATION Cycle: 2170, 52 Adsorbate Molecules, Total Energy: -2732.44584  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 52 Molecules  ||  
+INITIALIZATION Cycle: 2180, 51 Adsorbate Molecules, Total Energy: -2591.06118  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 2190, 51 Adsorbate Molecules, Total Energy: -3583.38452  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 51 Molecules  ||  
+INITIALIZATION Cycle: 2200, 62 Adsorbate Molecules, Total Energy: -3300.55183  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+INITIALIZATION Cycle: 2210, 60 Adsorbate Molecules, Total Energy: -2753.32228  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 60 Molecules  ||  
+INITIALIZATION Cycle: 2220, 67 Adsorbate Molecules, Total Energy: -3796.12960  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+INITIALIZATION Cycle: 2230, 67 Adsorbate Molecules, Total Energy: -3847.59319  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+INITIALIZATION Cycle: 2240, 69 Adsorbate Molecules, Total Energy: -5791.85575  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+INITIALIZATION Cycle: 2250, 71 Adsorbate Molecules, Total Energy: -6292.37182  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+INITIALIZATION Cycle: 2260, 66 Adsorbate Molecules, Total Energy: -4245.79034  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 66 Molecules  ||  
+INITIALIZATION Cycle: 2270, 73 Adsorbate Molecules, Total Energy: -6377.33743  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+INITIALIZATION Cycle: 2280, 71 Adsorbate Molecules, Total Energy: -3087.59675  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+INITIALIZATION Cycle: 2290, 71 Adsorbate Molecules, Total Energy: -3837.53332  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+INITIALIZATION Cycle: 2300, 69 Adsorbate Molecules, Total Energy: -4337.77556  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+INITIALIZATION Cycle: 2310, 67 Adsorbate Molecules, Total Energy: -4720.51723  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+INITIALIZATION Cycle: 2320, 65 Adsorbate Molecules, Total Energy: -1658.63608  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+INITIALIZATION Cycle: 2330, 77 Adsorbate Molecules, Total Energy: -4480.49725  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+INITIALIZATION Cycle: 2340, 70 Adsorbate Molecules, Total Energy: -1580.32198  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+INITIALIZATION Cycle: 2350, 70 Adsorbate Molecules, Total Energy: -4431.23168  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+INITIALIZATION Cycle: 2360, 80 Adsorbate Molecules, Total Energy: -4602.29615  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+INITIALIZATION Cycle: 2370, 92 Adsorbate Molecules, Total Energy: -5639.01379  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+INITIALIZATION Cycle: 2380, 87 Adsorbate Molecules, Total Energy: -6451.26971  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+INITIALIZATION Cycle: 2390, 94 Adsorbate Molecules, Total Energy: -3532.65579  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 94 Molecules  ||  
+INITIALIZATION Cycle: 2400, 93 Adsorbate Molecules, Total Energy: -6447.97224  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+INITIALIZATION Cycle: 2410, 91 Adsorbate Molecules, Total Energy: -4840.78905  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+INITIALIZATION Cycle: 2420, 81 Adsorbate Molecules, Total Energy: -6970.26514  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+INITIALIZATION Cycle: 2430, 85 Adsorbate Molecules, Total Energy: -4027.99451  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+INITIALIZATION Cycle: 2440, 90 Adsorbate Molecules, Total Energy: -3628.54191  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 90 Molecules  ||  
+INITIALIZATION Cycle: 2450, 93 Adsorbate Molecules, Total Energy: -5843.61094  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+INITIALIZATION Cycle: 2460, 89 Adsorbate Molecules, Total Energy: -7077.99829  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 89 Molecules  ||  
+INITIALIZATION Cycle: 2470, 80 Adsorbate Molecules, Total Energy: -7865.74446  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+INITIALIZATION Cycle: 2480, 77 Adsorbate Molecules, Total Energy: -4803.16029  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+INITIALIZATION Cycle: 2490, 72 Adsorbate Molecules, Total Energy: -3846.43810  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+======================== MOVE STATISTICS FOR COMPONENT [1] (CO2) ========================
+=====================TRANSLATION MOVES=====================
+Translation Performed: 24831
+Translation Accepted: 18109
+Max Translation: 5.0000000000, 5.0000000000, 5.0000000000
+===========================================================
+=====================ROTATION MOVES========================
+Rotation Performed: 24886
+Rotation Accepted: 22563
+Max Rotation: 0.6364188141, 0.6364188141, 0.6364188141
+===========================================================
+=====================SWAP MOVES=====================
+Insertion Performed:   0
+Insertion Accepted:    0
+Deletion Performed:    0
+Deletion Accepted:     0
+Reinsertion Performed: 32298
+Reinsertion Accepted:  24098
+====================================================
+=====================IDENTITY SWAP MOVES=====================
+=============================================================
+================================================================================================
+=====================GIBBS MONTE CARLO STATISTICS=====================
+GIBBS VOLUME MOVE ATTEMPTS: 0
+GIBBS VOLUME MOVE ACCEPTED: 0
+GIBBS VOLUME MOVE TOOK    : 0.00000 [seconds]
+GIBBS PARTICLE TRANSFER MOVE ATTEMPTS: 385732
+GIBBS PARTICLE TRANSFER MOVE ACCEPTED: 20007
+======================================================================
+=====================VOLUME MOVE STATISTICS for BOX [1]=====================
+VOLUME MOVE ATTEMPTS:   10068
+VOLUME MOVE ACCEPTED:   8811
+VOLUME MOVE MAX CHANGE: 0.12656
+VOLUME MOVE TOOK    : 6.71639 [seconds]
+======================================================================
+===============================
+== INITIALIZATION PHASE ENDS ==
+===============================
+==================================
+== RUNNING EQUILIBRATION PHASE ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+===============================
+== EQUILIBRATION PHASE ENDS ==
+===============================
+==================================
+==  RUNNING PRODUCTION PHASE   ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+PRODUCTION Cycle: 0, 92 Adsorbate Molecules, Total Energy: -7075.02167  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 10, 80 Adsorbate Molecules, Total Energy: -5730.48689  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 20, 84 Adsorbate Molecules, Total Energy: -4211.67567  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 30, 82 Adsorbate Molecules, Total Energy: -5020.75871  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 40, 86 Adsorbate Molecules, Total Energy: -5009.26521  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 50, 78 Adsorbate Molecules, Total Energy: -4530.91728  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 60, 80 Adsorbate Molecules, Total Energy: -5456.25460  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 70, 63 Adsorbate Molecules, Total Energy: -3858.05387  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 63, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 80, 59 Adsorbate Molecules, Total Energy: -4670.95314  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 59, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 90, 71 Adsorbate Molecules, Total Energy: -3534.90049  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 100, 67 Adsorbate Molecules, Total Energy: -3050.64491  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 67, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 110, 69 Adsorbate Molecules, Total Energy: -3353.16722  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 69, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 120, 81 Adsorbate Molecules, Total Energy: -4249.10720  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 130, 74 Adsorbate Molecules, Total Energy: -4416.54716  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 140, 65 Adsorbate Molecules, Total Energy: -2796.80845  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 65, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 150, 73 Adsorbate Molecules, Total Energy: -4783.74053  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 160, 72 Adsorbate Molecules, Total Energy: -4758.85755  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 170, 70 Adsorbate Molecules, Total Energy: -2422.15068  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 180, 68 Adsorbate Molecules, Total Energy: -4097.73778  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 68 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 68, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 190, 65 Adsorbate Molecules, Total Energy: -5604.20318  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 65, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 200, 76 Adsorbate Molecules, Total Energy: -5257.90444  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 210, 78 Adsorbate Molecules, Total Energy: -2364.32345  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 220, 83 Adsorbate Molecules, Total Energy: -4226.49134  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 230, 82 Adsorbate Molecules, Total Energy: -5225.20801  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 240, 77 Adsorbate Molecules, Total Energy: -5600.50429  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 250, 74 Adsorbate Molecules, Total Energy: -4276.74813  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 260, 81 Adsorbate Molecules, Total Energy: -9729.81950  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 270, 81 Adsorbate Molecules, Total Energy: -6583.57851  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 280, 76 Adsorbate Molecules, Total Energy: -2345.96025  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 290, 78 Adsorbate Molecules, Total Energy: -3709.41335  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 300, 77 Adsorbate Molecules, Total Energy: -5524.86025  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 310, 83 Adsorbate Molecules, Total Energy: -4910.60657  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 320, 72 Adsorbate Molecules, Total Energy: -4788.91036  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 330, 73 Adsorbate Molecules, Total Energy: -4944.98342  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 340, 75 Adsorbate Molecules, Total Energy: -5936.84695  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 350, 80 Adsorbate Molecules, Total Energy: -3929.46578  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 360, 75 Adsorbate Molecules, Total Energy: -3527.44666  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 370, 77 Adsorbate Molecules, Total Energy: -4481.70833  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 380, 75 Adsorbate Molecules, Total Energy: -4403.98117  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 390, 82 Adsorbate Molecules, Total Energy: -4656.20522  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 400, 81 Adsorbate Molecules, Total Energy: -2969.97164  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 410, 86 Adsorbate Molecules, Total Energy: -6563.63362  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 420, 82 Adsorbate Molecules, Total Energy: -3430.04096  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 430, 81 Adsorbate Molecules, Total Energy: -4512.41217  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 440, 87 Adsorbate Molecules, Total Energy: -6563.46071  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 450, 93 Adsorbate Molecules, Total Energy: -5399.28580  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 93, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 460, 86 Adsorbate Molecules, Total Energy: -3322.84183  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 470, 85 Adsorbate Molecules, Total Energy: -3624.85768  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 85, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 480, 91 Adsorbate Molecules, Total Energy: -6862.14966  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 91, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 490, 88 Adsorbate Molecules, Total Energy: -4092.53949  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 88 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 88, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 500, 90 Adsorbate Molecules, Total Energy: -6643.09834  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 90 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 90, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 510, 85 Adsorbate Molecules, Total Energy: -4185.49659  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 85, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 520, 86 Adsorbate Molecules, Total Energy: -6409.10556  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 530, 86 Adsorbate Molecules, Total Energy: -3312.63851  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 540, 93 Adsorbate Molecules, Total Energy: -4364.35080  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 93, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 550, 96 Adsorbate Molecules, Total Energy: -5631.05094  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 96 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 96, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 560, 98 Adsorbate Molecules, Total Energy: -5093.71981  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 98 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 98, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 570, 81 Adsorbate Molecules, Total Energy: -2888.01741  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 580, 87 Adsorbate Molecules, Total Energy: -4798.97061  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 590, 98 Adsorbate Molecules, Total Energy: -5283.81350  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 98 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 98, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 600, 99 Adsorbate Molecules, Total Energy: -5372.14507  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 99 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 99, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 610, 108 Adsorbate Molecules, Total Energy: -3485.83545  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 108 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 108, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 620, 103 Adsorbate Molecules, Total Energy: -4667.32112  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 103 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 103, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 630, 92 Adsorbate Molecules, Total Energy: -5034.99630  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 640, 95 Adsorbate Molecules, Total Energy: -4581.11070  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 95 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 95, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 650, 94 Adsorbate Molecules, Total Energy: -4737.39300  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 94 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 94, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 660, 92 Adsorbate Molecules, Total Energy: -6437.34096  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 670, 96 Adsorbate Molecules, Total Energy: -4879.10148  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 96 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 96, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 680, 98 Adsorbate Molecules, Total Energy: -5451.38414  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 98 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 98, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 690, 90 Adsorbate Molecules, Total Energy: -4091.39755  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 90 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 90, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 700, 97 Adsorbate Molecules, Total Energy: -8046.87835  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 710, 99 Adsorbate Molecules, Total Energy: -4590.01297  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 99 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 99, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 720, 104 Adsorbate Molecules, Total Energy: -4355.69138  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 104 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 104, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 730, 101 Adsorbate Molecules, Total Energy: -5984.07457  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 101 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 101, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 740, 107 Adsorbate Molecules, Total Energy: -3836.08708  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 107 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 107, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 750, 104 Adsorbate Molecules, Total Energy: -4824.00821  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 104 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 104, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 760, 107 Adsorbate Molecules, Total Energy: -5853.97454  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 107 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 107, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 770, 98 Adsorbate Molecules, Total Energy: -6355.91368  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 98 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 98, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 780, 102 Adsorbate Molecules, Total Energy: -4788.90798  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 102 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 102, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 790, 101 Adsorbate Molecules, Total Energy: -7664.05207  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 101 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 101, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 800, 97 Adsorbate Molecules, Total Energy: -7202.54707  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 810, 97 Adsorbate Molecules, Total Energy: -5172.12454  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 820, 91 Adsorbate Molecules, Total Energy: -3573.03086  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 91, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 830, 97 Adsorbate Molecules, Total Energy: -3675.27963  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 840, 86 Adsorbate Molecules, Total Energy: -4340.25535  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 850, 83 Adsorbate Molecules, Total Energy: -5140.74234  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 860, 91 Adsorbate Molecules, Total Energy: -4732.65245  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 91, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 870, 84 Adsorbate Molecules, Total Energy: -5260.66680  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 880, 78 Adsorbate Molecules, Total Energy: -5731.03848  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 890, 80 Adsorbate Molecules, Total Energy: -5477.56190  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 900, 81 Adsorbate Molecules, Total Energy: -2872.08324  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 910, 71 Adsorbate Molecules, Total Energy: -3043.86095  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 920, 78 Adsorbate Molecules, Total Energy: -4242.28214  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 930, 81 Adsorbate Molecules, Total Energy: -7654.44257  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 940, 78 Adsorbate Molecules, Total Energy: -4193.15560  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 950, 70 Adsorbate Molecules, Total Energy: -5083.56042  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 960, 75 Adsorbate Molecules, Total Energy: -4885.49621  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 970, 80 Adsorbate Molecules, Total Energy: -7039.50678  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 980, 83 Adsorbate Molecules, Total Energy: -7844.98298  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 990, 84 Adsorbate Molecules, Total Energy: -4063.56126  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1000, 83 Adsorbate Molecules, Total Energy: -6546.40558  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1010, 80 Adsorbate Molecules, Total Energy: -2973.26630  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1020, 66 Adsorbate Molecules, Total Energy: -3474.80793  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 66 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 66, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1030, 76 Adsorbate Molecules, Total Energy: -4173.62403  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1040, 71 Adsorbate Molecules, Total Energy: -3449.74702  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1050, 71 Adsorbate Molecules, Total Energy: -2974.67710  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1060, 73 Adsorbate Molecules, Total Energy: -4431.72999  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1070, 70 Adsorbate Molecules, Total Energy: -5028.42198  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1080, 72 Adsorbate Molecules, Total Energy: -3732.05392  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1090, 74 Adsorbate Molecules, Total Energy: -3287.07526  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1100, 74 Adsorbate Molecules, Total Energy: -5423.07633  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1110, 68 Adsorbate Molecules, Total Energy: -3996.96397  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 68 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 68, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1120, 71 Adsorbate Molecules, Total Energy: -4295.14184  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1130, 74 Adsorbate Molecules, Total Energy: -5330.77389  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1140, 77 Adsorbate Molecules, Total Energy: -5572.54565  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1150, 79 Adsorbate Molecules, Total Energy: -5027.06045  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 79 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 79, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1160, 80 Adsorbate Molecules, Total Energy: -2872.44520  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1170, 74 Adsorbate Molecules, Total Energy: -2614.27169  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1180, 61 Adsorbate Molecules, Total Energy: -3411.65840  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 61 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 61, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1190, 64 Adsorbate Molecules, Total Energy: -3163.11926  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 64, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1200, 65 Adsorbate Molecules, Total Energy: -3842.11710  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 65, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1210, 65 Adsorbate Molecules, Total Energy: -4558.56574  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 65, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1220, 65 Adsorbate Molecules, Total Energy: -5315.09810  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 65 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 65, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1230, 64 Adsorbate Molecules, Total Energy: -5236.97860  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 64, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1240, 72 Adsorbate Molecules, Total Energy: -4579.25154  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1250, 63 Adsorbate Molecules, Total Energy: -2960.69376  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 63, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1260, 64 Adsorbate Molecules, Total Energy: -3738.52605  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 64, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1270, 62 Adsorbate Molecules, Total Energy: -4245.93005  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 62 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 62, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1280, 64 Adsorbate Molecules, Total Energy: -3559.78940  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 64, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1290, 63 Adsorbate Molecules, Total Energy: -1856.92473  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 63, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1300, 64 Adsorbate Molecules, Total Energy: -1288.90565  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 64 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 64, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1310, 67 Adsorbate Molecules, Total Energy: -3993.15235  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 67, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1320, 66 Adsorbate Molecules, Total Energy: -5778.15819  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 66 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 66, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1330, 63 Adsorbate Molecules, Total Energy: -4052.66351  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 63 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 63, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1340, 67 Adsorbate Molecules, Total Energy: -4468.30281  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 67, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1350, 70 Adsorbate Molecules, Total Energy: -4310.60720  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1360, 69 Adsorbate Molecules, Total Energy: -3779.42683  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 69, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1370, 70 Adsorbate Molecules, Total Energy: -4333.84761  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1380, 70 Adsorbate Molecules, Total Energy: -3882.36777  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1390, 74 Adsorbate Molecules, Total Energy: -4647.95693  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1400, 73 Adsorbate Molecules, Total Energy: -5138.28412  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1410, 77 Adsorbate Molecules, Total Energy: -4026.22095  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1420, 83 Adsorbate Molecules, Total Energy: -4193.06472  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1430, 73 Adsorbate Molecules, Total Energy: -3734.53569  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1440, 75 Adsorbate Molecules, Total Energy: -3566.47502  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1450, 68 Adsorbate Molecules, Total Energy: -3662.14452  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 68 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 68, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1460, 67 Adsorbate Molecules, Total Energy: -4904.50608  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 67 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 67, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1470, 75 Adsorbate Molecules, Total Energy: -3778.93028  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1480, 76 Adsorbate Molecules, Total Energy: -4393.07194  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1490, 80 Adsorbate Molecules, Total Energy: -3079.55731  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1500, 78 Adsorbate Molecules, Total Energy: -4214.70852  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1510, 76 Adsorbate Molecules, Total Energy: -4255.77265  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1520, 82 Adsorbate Molecules, Total Energy: -4046.20180  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1530, 76 Adsorbate Molecules, Total Energy: -2789.14131  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1540, 74 Adsorbate Molecules, Total Energy: -4453.02204  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1550, 78 Adsorbate Molecules, Total Energy: -3905.71708  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 78 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 78, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1560, 81 Adsorbate Molecules, Total Energy: -5013.84137  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1570, 71 Adsorbate Molecules, Total Energy: -4102.22622  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1580, 73 Adsorbate Molecules, Total Energy: -2848.08698  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1590, 72 Adsorbate Molecules, Total Energy: -4476.22134  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1600, 74 Adsorbate Molecules, Total Energy: -2981.32759  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1610, 73 Adsorbate Molecules, Total Energy: -4658.27750  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1620, 69 Adsorbate Molecules, Total Energy: -4469.22094  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 69, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1630, 68 Adsorbate Molecules, Total Energy: -3611.45085  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 68 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 68, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1640, 71 Adsorbate Molecules, Total Energy: -2960.40497  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1650, 61 Adsorbate Molecules, Total Energy: -6047.28003  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 61 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 61, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1660, 71 Adsorbate Molecules, Total Energy: -4389.33423  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1670, 74 Adsorbate Molecules, Total Energy: -3157.78499  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1680, 59 Adsorbate Molecules, Total Energy: -2389.57152  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 59, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1690, 70 Adsorbate Molecules, Total Energy: -5189.05278  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 70 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 70, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1700, 59 Adsorbate Molecules, Total Energy: -3141.77459  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 59 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 59, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1710, 73 Adsorbate Molecules, Total Energy: -3528.18059  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1720, 81 Adsorbate Molecules, Total Energy: -4681.79227  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1730, 83 Adsorbate Molecules, Total Energy: -3526.35009  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1740, 79 Adsorbate Molecules, Total Energy: -3662.96784  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 79 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 79, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1750, 75 Adsorbate Molecules, Total Energy: -3953.86797  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1760, 71 Adsorbate Molecules, Total Energy: -2503.65288  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 71 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 71, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1770, 75 Adsorbate Molecules, Total Energy: -3833.99134  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1780, 80 Adsorbate Molecules, Total Energy: -5355.02618  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 80 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 80, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1790, 85 Adsorbate Molecules, Total Energy: -5740.56131  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 85, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1800, 76 Adsorbate Molecules, Total Energy: -5484.07070  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1810, 83 Adsorbate Molecules, Total Energy: -4962.54488  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1820, 85 Adsorbate Molecules, Total Energy: -5365.11799  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 85, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1830, 83 Adsorbate Molecules, Total Energy: -5559.97063  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1840, 87 Adsorbate Molecules, Total Energy: -2874.13814  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1850, 79 Adsorbate Molecules, Total Energy: -2060.62059  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 79 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 79, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1860, 87 Adsorbate Molecules, Total Energy: -5233.27684  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1870, 77 Adsorbate Molecules, Total Energy: -5992.12733  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 77 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 77, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1880, 84 Adsorbate Molecules, Total Energy: -4390.61522  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1890, 81 Adsorbate Molecules, Total Energy: -6741.57910  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1900, 75 Adsorbate Molecules, Total Energy: -2679.62600  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1910, 79 Adsorbate Molecules, Total Energy: -3596.44855  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 79 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 79, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1920, 87 Adsorbate Molecules, Total Energy: -5053.59408  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1930, 82 Adsorbate Molecules, Total Energy: -5586.53544  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1940, 86 Adsorbate Molecules, Total Energy: -5749.50344  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1950, 85 Adsorbate Molecules, Total Energy: -3045.43396  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 85, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1960, 82 Adsorbate Molecules, Total Energy: -5080.51262  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1970, 83 Adsorbate Molecules, Total Energy: -4539.01393  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1980, 75 Adsorbate Molecules, Total Energy: -1857.57993  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 1990, 83 Adsorbate Molecules, Total Energy: -2952.60891  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2000, 86 Adsorbate Molecules, Total Energy: -3688.68633  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2010, 83 Adsorbate Molecules, Total Energy: -5225.51669  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2020, 84 Adsorbate Molecules, Total Energy: -5964.82540  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2030, 76 Adsorbate Molecules, Total Energy: -3356.01705  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2040, 86 Adsorbate Molecules, Total Energy: -5830.95899  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 86 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 86, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2050, 83 Adsorbate Molecules, Total Energy: -4109.34857  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 83 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 83, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2060, 81 Adsorbate Molecules, Total Energy: -3303.22513  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 81 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 81, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2070, 75 Adsorbate Molecules, Total Energy: -4509.47704  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2080, 76 Adsorbate Molecules, Total Energy: -2365.09240  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2090, 74 Adsorbate Molecules, Total Energy: -2796.32072  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2100, 75 Adsorbate Molecules, Total Energy: -5297.75833  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 75 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 75, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2110, 74 Adsorbate Molecules, Total Energy: -4082.98770  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 74 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 74, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2120, 69 Adsorbate Molecules, Total Energy: -3420.83125  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 69 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 69, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2130, 76 Adsorbate Molecules, Total Energy: -2879.65018  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2140, 76 Adsorbate Molecules, Total Energy: -2875.46238  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2150, 68 Adsorbate Molecules, Total Energy: -2345.98656  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 68 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 68, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2160, 72 Adsorbate Molecules, Total Energy: -2544.71073  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 72 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 72, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2170, 73 Adsorbate Molecules, Total Energy: -4667.07907  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2180, 73 Adsorbate Molecules, Total Energy: -4901.16483  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2190, 73 Adsorbate Molecules, Total Energy: -4938.91106  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 73 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 73, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2200, 76 Adsorbate Molecules, Total Energy: -4112.44242  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 76 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 76, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2210, 84 Adsorbate Molecules, Total Energy: -5941.95736  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 84 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 84, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2220, 92 Adsorbate Molecules, Total Energy: -5784.68312  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2230, 94 Adsorbate Molecules, Total Energy: -4280.22114  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 94 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 94, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2240, 93 Adsorbate Molecules, Total Energy: -5102.48871  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 93, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2250, 88 Adsorbate Molecules, Total Energy: -5233.66063  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 88 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 88, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2260, 87 Adsorbate Molecules, Total Energy: -5624.74603  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 87 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 87, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2270, 98 Adsorbate Molecules, Total Energy: -7281.14960  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 98 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 98, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2280, 100 Adsorbate Molecules, Total Energy: -9201.60399  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 100 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 100, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2290, 104 Adsorbate Molecules, Total Energy: -6399.36497  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 104 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 104, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2300, 99 Adsorbate Molecules, Total Energy: -7144.11115  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 99 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 99, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2310, 99 Adsorbate Molecules, Total Energy: -6206.75310  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 99 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 99, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2320, 90 Adsorbate Molecules, Total Energy: -6178.53767  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 90 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 90, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2330, 91 Adsorbate Molecules, Total Energy: -3235.79928  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 91, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2340, 91 Adsorbate Molecules, Total Energy: -5565.13871  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 91 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 91, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2350, 82 Adsorbate Molecules, Total Energy: -4395.91737  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 82 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 82, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2360, 99 Adsorbate Molecules, Total Energy: -4888.12720  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 99 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 99, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2370, 102 Adsorbate Molecules, Total Energy: -3970.31329  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 102 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 102, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2380, 103 Adsorbate Molecules, Total Energy: -5258.60874  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 103 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 103, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2390, 97 Adsorbate Molecules, Total Energy: -4974.53614  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2400, 93 Adsorbate Molecules, Total Energy: -7671.81238  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 93, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2410, 93 Adsorbate Molecules, Total Energy: -3673.87335  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 93 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 93, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2420, 95 Adsorbate Molecules, Total Energy: -4633.55414  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 95 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 95, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2430, 101 Adsorbate Molecules, Total Energy: -4307.99365  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 101 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 101, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2440, 97 Adsorbate Molecules, Total Energy: -4694.51269  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 97 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 97, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2450, 92 Adsorbate Molecules, Total Energy: -6471.38756  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2460, 94 Adsorbate Molecules, Total Energy: -5858.28604  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 94 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 94, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2470, 92 Adsorbate Molecules, Total Energy: -7548.76132  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 92 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 92, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2480, 94 Adsorbate Molecules, Total Energy: -5775.70652  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 94 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 94, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+PRODUCTION Cycle: 2490, 96 Adsorbate Molecules, Total Energy: -6917.80220  ||  Component 0 [Empty-Box.cif], 1 Molecules  ||  Component 1 [CO2], 96 Molecules  ||  
+Printing: Component: 0 [ Empty-Box.cif ], NumMol: 1, Molsize: 0
+Printing: Component: 1 [ CO2 ], NumMol: 96, Molsize: 3
+Component 0, Molsize: 0
+Component 1, Molsize: 3
+======================== MOVE STATISTICS FOR COMPONENT [1] (CO2) ========================
+=====================TRANSLATION MOVES=====================
+Translation Performed: 71273
+Translation Accepted: 51417
+Max Translation: 5.0000000000, 5.0000000000, 5.0000000000
+===========================================================
+=====================ROTATION MOVES========================
+Rotation Performed: 71782
+Rotation Accepted: 63808
+Max Rotation: 0.8122495984, 0.8122495984, 0.8122495984
+===========================================================
+=====================SWAP MOVES=====================
+Insertion Performed:   0
+Insertion Accepted:    0
+Deletion Performed:    0
+Deletion Accepted:     0
+Reinsertion Performed: 82208
+Reinsertion Accepted:  60974
+====================================================
+=====================IDENTITY SWAP MOVES=====================
+=============================================================
+================================================================================================
+============= BLOCK AVERAGES (HEAT OF ADSORPTION: kJ/mol) =========
+COMPONENT [1] (CO2)
+BLOCK [0], Blocksize: 500, Average: -5.92839
+BLOCK [1], Blocksize: 500, Average: -4.02502
+BLOCK [2], Blocksize: 500, Average: -6.80282
+BLOCK [3], Blocksize: 500, Average: -6.16389
+BLOCK [4], Blocksize: 500, Average: -4.39740
+Overall: Average: -5.46350, ErrorBar: 2.13659
+-----------------------------
+==============================================================
+=================== BLOCK AVERAGES (LOADING: # MOLECULES)=============
+COMPONENT [0] (Empty-Box.cif)
+BLOCK [0], Blocksize: 500, Average: 1.00000, ErrorBar: 0.00000
+BLOCK [1], Blocksize: 500, Average: 1.00000, ErrorBar: 0.00000
+BLOCK [2], Blocksize: 500, Average: 1.00000, ErrorBar: 0.00000
+BLOCK [3], Blocksize: 500, Average: 1.00000, ErrorBar: 0.00000
+BLOCK [4], Blocksize: 500, Average: 1.00000, ErrorBar: 0.00000
+Overall: Average: 1.00000, ErrorBar: 0.00000
+NO Equation-of-State calculation, no compressibility, cannot calculate Excess Loadings
+----------------------------------------------------------
+COMPONENT [1] (CO2)
+BLOCK [0], Blocksize: 500, Average: 78.25000, ErrorBar: 14.29287
+BLOCK [1], Blocksize: 500, Average: 91.12000, ErrorBar: 19.32435
+BLOCK [2], Blocksize: 500, Average: 70.66600, ErrorBar: 12.22431
+BLOCK [3], Blocksize: 500, Average: 76.97400, ErrorBar: 13.29682
+BLOCK [4], Blocksize: 500, Average: 87.12600, ErrorBar: 20.07328
+Overall: Average: 80.82720, ErrorBar: 14.70662
+NO Equation-of-State calculation, no compressibility, cannot calculate Excess Loadings
+----------------------------------------------------------
+======================================================================
+=====================BLOCK AVERAGES (LOADING: mg/g)=============
+COMPONENT [0] (Empty-Box.cif)
+Framework component 0, molar mass: 0.00000
+Framework total mass: 0.00000
+BLOCK [0], Blocksize: 500, Average: -nan, ErrorBar: -nan
+BLOCK [1], Blocksize: 500, Average: -nan, ErrorBar: -nan
+BLOCK [2], Blocksize: 500, Average: -nan, ErrorBar: -nan
+BLOCK [3], Blocksize: 500, Average: -nan, ErrorBar: -nan
+BLOCK [4], Blocksize: 500, Average: -nan, ErrorBar: -nan
+Overall: Average: -nan, ErrorBar: -nan
+----------------------------------------------------------
+COMPONENT [1] (CO2)
+Framework component 0, molar mass: 0.00000
+Framework total mass: 0.00000
+BLOCK [0], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [1], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [2], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [3], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [4], Blocksize: 500, Average: inf, ErrorBar: -nan
+Overall: Average: inf, ErrorBar: -nan
+----------------------------------------------------------
+==============================================================
+=====================BLOCK AVERAGES (LOADING: mol/kg)=============
+COMPONENT [0] (Empty-Box.cif)
+Framework component 0, molar mass: 0.00000
+Framework total mass: 0.00000
+BLOCK [0], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [1], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [2], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [3], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [4], Blocksize: 500, Average: inf, ErrorBar: -nan
+Overall: Average: inf, ErrorBar: -nan
+----------------------------------------------------------
+COMPONENT [1] (CO2)
+Framework component 0, molar mass: 0.00000
+Framework total mass: 0.00000
+BLOCK [0], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [1], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [2], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [3], Blocksize: 500, Average: inf, ErrorBar: -nan
+BLOCK [4], Blocksize: 500, Average: inf, ErrorBar: -nan
+Overall: Average: inf, ErrorBar: -nan
+----------------------------------------------------------
+==============================================================
+=====================BLOCK AVERAGES (LOADING: g/L)=============
+COMPONENT [1] (CO2)
+Total Unit Cells 357911 
+BLOCK [0], Blocksize: 500, Average: 31.41973, ErrorBar: 8.22316
+BLOCK [1], Blocksize: 500, Average: 31.26959, ErrorBar: 7.29238
+BLOCK [2], Blocksize: 500, Average: 31.19695, ErrorBar: 8.85248
+BLOCK [3], Blocksize: 500, Average: 31.20509, ErrorBar: 8.34539
+BLOCK [4], Blocksize: 500, Average: 31.45008, ErrorBar: 7.84936
+Overall: Average: 31.30829, ErrorBar: 0.21367
+----------------------------------------------------------
+==============================================================
+=====================BLOCK AVERAGES (VOLUME Å^3)================
+BLOCK [0], Blocksize: 500, Average: 185077.89002, ErrorBar: 59119.91811
+BLOCK [1], Blocksize: 500, Average: 215739.76344, ErrorBar: 67311.11453
+BLOCK [2], Blocksize: 500, Average: 169066.16322, ErrorBar: 58843.09298
+BLOCK [3], Blocksize: 500, Average: 183394.53869, ErrorBar: 56474.77829
+BLOCK [4], Blocksize: 500, Average: 204724.82265, ErrorBar: 59882.54448
+Overall: Average: 191600.63560, ErrorBar: 33137.65786
+----------------------------------------------------------
+==============================================================
+=====================GIBBS MONTE CARLO STATISTICS=====================
+GIBBS VOLUME MOVE ATTEMPTS: 0
+GIBBS VOLUME MOVE ACCEPTED: 0
+GIBBS VOLUME MOVE TOOK    : 0.00000 [seconds]
+GIBBS PARTICLE TRANSFER MOVE ATTEMPTS: 766719
+GIBBS PARTICLE TRANSFER MOVE ACCEPTED: 35270
+======================================================================
+=====================VOLUME MOVE STATISTICS for BOX [1]=====================
+VOLUME MOVE ATTEMPTS:   29228
+VOLUME MOVE ACCEPTED:   19263
+VOLUME MOVE MAX CHANGE: 0.20160
+VOLUME MOVE TOOK    : 17.63166 [seconds]
+======================================================================
+===============================
+== PRODUCTION PHASE ENDS ==
+===============================
+Work took 945.693387 seconds
+======================================
+CHECKING FINAL ENERGY FOR SYSTEM [1]
+======================================
+======================== CALCULATING FINAL STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: 0.00000; Real: 0.00000
+Guest-Guest VDW: -7474.44333; Real: -2439.66654
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: 0.00000, Real: 0.00000
+Compoent [1-1], VDW: -7474.44333, Real: -2439.66654
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 1563.36606, Host-Host Fourier: 0.00000, Framework-Guest Fourier: 0.00000
+Component: 0, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 1, SelfAtomE: 1172475.39460 (1410164.63030 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 1170940.78980 (1408318.92384 kJ/mol)
+HostEwald took 0.01675 sec
+Ewald Summation (total energy) on the CPU took 0.01675 secs
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 10206, GPU SF: 10206
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 7, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 8, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 9, CPU: -1.78086 -3.46219, GPU: -1.78086 -3.46219
+There is a difference in GPU/CPU StructureFactor at position 31: CPU: 0.00000 0.00000, GPU: 0.70928 -1.15077
+There is a difference in GPU/CPU StructureFactor at position 32: CPU: 0.00000 0.00000, GPU: 0.14919 5.92272
+There is a difference in GPU/CPU StructureFactor at position 33: CPU: 0.00000 0.00000, GPU: 0.93205 2.37853
+There is a difference in GPU/CPU StructureFactor at position 55: CPU: 0.00000 0.00000, GPU: 1.67416 -3.80591
+There is a difference in GPU/CPU StructureFactor at position 56: CPU: 0.00000 0.00000, GPU: -1.57162 0.16926
+There is a difference in GPU/CPU StructureFactor at position 57: CPU: 0.00000 0.00000, GPU: 1.87012 2.93696
+There is a difference in GPU/CPU StructureFactor at position 58: CPU: 0.00000 0.00000, GPU: -2.29802 -0.76185
+There is a difference in GPU/CPU StructureFactor at position 79: CPU: 0.00000 0.00000, GPU: -1.02139 -2.65498
+There is a difference in GPU/CPU StructureFactor at position 80: CPU: 0.00000 0.00000, GPU: -0.28612 -1.33540
+More than 10 StructureFactors mismatch.
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: 0.00000 imag: 0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: 0.00000 imag: 0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00046 secs
+Ewald Summation (total energy) on the GPU took 0.00015 secs
+Total GPU Energy: 
+====================== DONE CALCULATING FINAL STAGE ENERGY ======================
+======================================
+Random Numbers Regenerated 202 times, offset: 123734, randomsize: 333334
+DNN Feature Preparation Time: 0.00000, DNN Prediction Time: 0.00000
+DNN GPU Time: 0.00000, DNN Sort Time: 0.00000, std::sort Time: 0.00000, Featurization Time: 0.00000
+======================== ENERGY SUMMARY (Simulation 1) =========================
+ *** INITIAL STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      0.00000 (0.00000 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+ *** CREATE MOLECULE STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -13510.42239 (-16249.31311 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -2626.02718 (-3158.38667 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      0.00000 (0.00000 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        53.18351 (63.96509 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     -139.16786 (-167.38057 [K])
+Total Energy:               -16222.43393 (-19511.11525 [K])
+========================================================================
+ *** RUNNING DELTA_E (CREATE MOLECULE - INITIAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -13510.42239 (-16249.31311 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -2626.02718 (-3158.38667 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        53.18351 (63.96509 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     -139.16786 (-167.38057 [K])
+Total Energy:               -16222.43393 (-19511.11525 [K])
+========================================================================
+ *** CHECK DELTA_E (CREATE MOLECULE - INITIAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -13510.42239 (-16249.31311 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -2626.02718 (-3158.38667 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        53.18351 (63.96509 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     -139.16786 (-167.38057 [K])
+Total Energy:               -16222.43393 (-19511.11525 [K])
+========================================================================
+ *** FINAL STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -7474.44333 (-8989.69451 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -2439.66654 (-2934.24619 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      0.00000 (0.00000 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        28.76126 (34.59187 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     -40.61367 (-48.84705 [K])
+Total Energy:               -9925.96228 (-11938.19588 [K])
+========================================================================
+ *** RUNNING DELTA_E (FINAL - CREATE MOLECULE) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          6035.97906 (7259.61860 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 186.36064 (224.14047 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -24.42225 (-29.37323 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     98.55419 (118.53352 [K])
+Total Energy:               6296.47165 (7572.91936 [K])
+========================================================================
+ *** CHECK DELTA_E (RUNNING FINAL - CREATE MOLECULE) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          6035.97906 (7259.61860 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 186.36064 (224.14047 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -24.42225 (-29.37323 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     98.55419 (118.53352 [K])
+Total Energy:               6296.47165 (7572.91936 [K])
+========================================================================
+ *** ENERGY DRIFT (CPU FINAL - RUNNING FINAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -0.00000 (-0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -0.00000 (-0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+ *** GPU DRIFT (GPU FINAL - CPU FINAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -0.00000 (-0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -0.00000 (-0.00000 [K])
+========================================================================
+================================================================================
+======================== PRODUCTION PHASE AVERAGE ENERGIES (Simulation 1) =========================
+ *** PRODUCTION PHASE AVERAGE ENERGY *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          10073.35372 (12115.46715 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 1430.30832 (1720.26655 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     111.76896 (134.42724 [K])
+Total Energy:               11615.43099 (13970.16093 [K])
+========================================================================
+ *** PRODUCTION PHASE AVERAGE ENERGY ERRORBAR *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          703.59218 (846.22741 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 241.21234 (290.11194 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+Tail Correction Energy:     5.13351 (6.17420 [K])
+Total Energy:               949.93804 (1142.51355 [K])
+========================================================================
+================================================================================
+DNN Rejection Summary:
+Translation+Rotation: 0
+Reinsertion: 0
+Insertion: 0
+Deletion: 0
+SingleSwap: 0
+DNN Drift Summary:
+Translation+Rotation: 0.00000
+Reinsertion: 0.00000
+Insertion: 0.00000
+Deletion: 0.00000
+SingleSwap: 0.00000
+Summary for simulation 1
+PseudoAtom Type: C_co2[0], #: 97
+PseudoAtom Type: O_co2[1], #: 194

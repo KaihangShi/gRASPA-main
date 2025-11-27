@@ -7,6 +7,8 @@
 #include <cstdlib>
 #include <random>
 #include <optional>
+
+//#include "axpy.h"
 //###PATCH_LCLIN_DATA_STRUCT_H###//
 
 //###PATCH_ALLEGRO_DATA_STRUCT_H###//
@@ -33,7 +35,7 @@ enum INTERACTION_TYPES {HH = 0, HG, GG};
 enum RESTART_FILE_TYPES {RASPA_RESTART = 0, LAMMPS_DATA};
 
 //Zhao's note: For the stage of evaluating total energy of the system//
-enum ENERGYEVALSTAGE {INITIAL = 0, CREATEMOL, FINAL, CREATEMOL_DELTA, DELTA, CREATEMOL_DELTA_CHECK, DELTA_CHECK, DRIFT, GPU_DRIFT, AVERAGE, AVERAGE_ERR};
+enum ENERGYEVALSTAGE {INITIAL = 0, CREATEMOL, FINAL, CREATEMOL_DELTA, DELTA, CREATEMOL_DELTA_CHECK, DELTA_CHECK, DRIFT, GPU_DRIFT, AVERAGE, AVERAGE_ERR, WIDOM_AVG, WIDOM_ERR};
 
 struct EnergyComplex
 {
@@ -54,7 +56,7 @@ struct Units
   double TimeUnit          = {1e-12};
   double LengthUnit        = {1e-10};
   double energy_to_kelvin  = {1.2027242847};
-  double BoltzmannConstant = {1.38e-23};
+  double BoltzmannConstant = {1.380649e-23};
   double Avogadro          = {6.02214076e23};  // NIST standards [1/mol]
   double gas_constant      = {8.314462618}; // NIST standards [J/mol/K]
 };
@@ -64,11 +66,14 @@ struct Gibbs
   bool    DoGibbs = false;
   double  GibbsBoxProb  = 0.0;
   double  GibbsXferProb = 0.0;
-  double  MaxGibbsBoxChange = 0.1;
-  double  GibbsTime={0.0};
-  double2 GibbsBoxStats;
-  double2 GibbsXferStats;
-  double2 TempGibbsBoxStats = {0.0, 0.0};
+  double  GibbsTime=0.0;
+  double  TotalVolume = 0.0;
+  double TargetAccRatioVolumeChange = 0.5;
+
+  double MaxGibbsBoxChange = 0.1;
+  int2 GibbsBoxStats = {0, 0};
+  int2 TotalGibbsBoxStats = {0, 0};
+  int2 GibbsXferStats = {0, 0};
 };
 
 struct LAMBDA
@@ -141,7 +146,7 @@ struct TMMC
       case TRANSLATION: case ROTATION: case REINSERTION:
       {
         if(RejectOutofBound && ((N > MaxMacrostate) || (N < MinMacrostate))) return;
-        CMatrix[BinLocation].y += Pacc; //If for GCMC, the Pacc for these moves is always 1. should check for this//
+        CMatrix[BinLocation].y += 1.0; //If for GCMC, the Pacc for these moves is always 1. should check for this//
         ln_g[BinLocation]      += WLFactor; 
         WLBias[BinLocation]     = -ln_g[N]; //WL Bias//
         Histogram[BinLocation] ++;
@@ -155,7 +160,7 @@ struct TMMC
         //if(OldN > CMatrix.size()) printf("At the limit, OldN: %zu, N: %zu, NewN: %zu\n", OldN, N, NewN);
         if(RejectOutofBound && ((N + 1) > MaxMacrostate))
         {
-          Histogram[N] ++; 
+          Histogram[BinLocation] ++; 
           return;
         }
         Histogram[NewBinLocation] ++;
@@ -360,10 +365,10 @@ struct TMMC
     }
   }
   //Determine whether to reject the move if it move out of the bounds//
-  void TreatAccOutofBound(bool& Accept, size_t N, int MoveType)
+  void TreatAccOutofBound(double& Pacc, size_t N, int MoveType)
   {
     if(!DoTMMC) return;
-    if(!Accept || !RejectOutofBound) return; //if the move is already rejected, no need to reject again//
+    if(!RejectOutofBound) return;
     switch(MoveType)
     {
       case TRANSLATION: case ROTATION: case REINSERTION:
@@ -373,12 +378,12 @@ struct TMMC
       }
       case INSERTION: case SINGLE_INSERTION: 
       {
-        if(RejectOutofBound && (N + 1) > MaxMacrostate) Accept = false;
+        if(RejectOutofBound && (N + 1) > MaxMacrostate) Pacc = 0.0;
         break;
       }
       case DELETION: case SINGLE_DELETION:
       {
-        if(RejectOutofBound && (N - 1) < MinMacrostate) Accept = false;
+        if(RejectOutofBound && (N - 1) < MinMacrostate) Pacc = 0.0;
         break;
       }
     }
@@ -402,219 +407,6 @@ struct TMMC
     std::fill(lnpi.begin(), lnpi.end(), 0.0);
     std::fill(TMBias.begin(), TMBias.end(), 1.0);
   }
-};
-
-//Zhao's note: keep track of the Rosenbluth weights during the simulation//
-struct RosenbluthWeight
-{
-  double3 Total          = {0.0, 0.0, 0.0};
-  double3 WidomInsertion = {0.0, 0.0, 0.0};
-  double3 Insertion      = {0.0, 0.0, 0.0};
-  double3 Deletion       = {0.0, 0.0, 0.0};
-  //NOTE: DO NOT RECORD FOR REINSERTIONS, SINCE THE DELETION PART OF REINSERTION IS MODIFIED//
-};
-
-struct Move_Statistics
-{
-  //Translation Move//
-  double TranslationProb        =0.0;
-  double RotationProb           =0.0;
-  double SpecialRotationProb    =0.0;
-  double WidomProb              =0.0;
-  double SwapProb               =0.0;
-  double ReinsertionProb        =0.0;
-  double IdentitySwapProb       =0.0;
-  double CBCFProb               =0.0;
-  double TotalProb              =0.0;
-  //Translation Move//
-  int TranslationAccepted = 0; //zeroed when max translation updated 
-  int TranslationTotal = 0;    //zeroed when max translation updated
-  int CumTranslationAccepted = 0; //Cumulative
-  int CumTranslationTotal = 0;
-  double TranslationAccRatio = 0.0;
-  //Rotation Move//
-  int RotationAccepted = 0;    //zeroed when max rotation updated
-  int RotationTotal = 0;       //zeroed when max rotation updated
-  int CumRotationAccepted = 0; //Cumulative
-  int CumRotationTotal = 0;
-  double RotationAccRatio = 0;
-  //Special Rotation Move//
-  int SpecialRotationAccepted = 0;
-  int SpecialRotationTotal = 0;
-  double SpecialRotationAccRatio = 0;
-  //Insertion Move//
-  size_t InsertionTotal = 0;
-  size_t InsertionAccepted = 0;
-  //Deletion Move//
-  size_t DeletionTotal = 0;
-  size_t DeletionAccepted = 0;
-  //Reinsertion Move//
-  size_t ReinsertionTotal = 0;
-  size_t ReinsertionAccepted = 0;
-  //CBCFSwap Move//
-  size_t CBCFTotal = 0;
-  size_t CBCFAccepted = 0;
-  size_t CBCFInsertionTotal = 0;
-  size_t CBCFInsertionAccepted = 0;
-  size_t CBCFLambdaTotal = 0;
-  size_t CBCFLambdaAccepted = 0;
-  size_t CBCFDeletionTotal = 0;
-  size_t CBCFDeletionAccepted = 0;
-  //Identity Swap Move//
-  std::vector<size_t>IdentitySwap_Total_TO;
-  std::vector<size_t>IdentitySwap_Acc_TO;
-  size_t IdentitySwapAddAccepted=0;
-  size_t IdentitySwapAddTotal=0;
-  size_t IdentitySwapRemoveAccepted=0;
-  size_t IdentitySwapRemoveTotal=0;
-
-  size_t BlockID = 0; //Keep track of the current Block for Averages//
-  std::vector<double2>MolAverage;
-  //x: average; y: average^2; z: Number of Widom insertion performed//
-  std::vector<RosenbluthWeight>Rosen; //vector over Nblocks//
-  void NormalizeProbabilities()
-  {
-    //Zhao's note: the probabilities here are what we defined in simulation.input, raw values//
-    TotalProb+=TranslationProb;
-    TotalProb+=RotationProb;
-    TotalProb+=SpecialRotationProb;
-    TotalProb+=WidomProb;
-    TotalProb+=ReinsertionProb;
-    TotalProb+=IdentitySwapProb;
-    TotalProb+=SwapProb;
-    TotalProb+=CBCFProb;
-    
-    if(TotalProb > 1e-10)
-    {
-      //printf("TotalProb: %.5f\n", TotalProb);
-      TranslationProb    /=TotalProb;
-      RotationProb       /=TotalProb;
-      SpecialRotationProb/=TotalProb;
-      WidomProb          /=TotalProb;
-      SwapProb           /=TotalProb;
-      CBCFProb           /=TotalProb;
-      ReinsertionProb    /=TotalProb;
-      IdentitySwapProb   /=TotalProb;
-      TotalProb = 1.0;
-    }
-    RotationProb        += TranslationProb;
-    SpecialRotationProb += RotationProb;
-    WidomProb           += SpecialRotationProb;
-    ReinsertionProb     += WidomProb;
-    IdentitySwapProb    += ReinsertionProb;
-    CBCFProb            += IdentitySwapProb;
-    SwapProb            += CBCFProb;
-  }
-  void PrintProbabilities()
-  {
-    printf("==================================================\n");
-    printf("ACCUMULATED Probabilities:\n");
-    printf("Translation Probability:      %.5f\n", TranslationProb);
-    printf("Rotation Probability:         %.5f\n", RotationProb);
-    printf("Special Rotation Probability: %.5f\n", SpecialRotationProb);
-    printf("Widom Probability:            %.5f\n", WidomProb);
-    printf("Reinsertion Probability:      %.5f\n", ReinsertionProb);
-    printf("Identity Swap Probability:    %.5f\n", IdentitySwapProb);
-    printf("CBCF Swap Probability:        %.5f\n", CBCFProb);
-    printf("Swap Probability:             %.5f\n", SwapProb);
-    printf("Sum of Probabilities:         %.5f\n", TotalProb);
-    printf("==================================================\n");
-  }
-  void RecordRosen(double R, int MoveType)
-  {
-    if(MoveType != INSERTION && MoveType != DELETION && MoveType != WIDOM) return;
-    double R2 = R * R;
-    Rosen[BlockID].Total.x += R;
-    Rosen[BlockID].Total.y += R * R;
-    Rosen[BlockID].Total.z += 1.0;
-    if(MoveType == INSERTION)
-    {
-      Rosen[BlockID].Insertion.x += R;
-      Rosen[BlockID].Insertion.y += R * R;
-      Rosen[BlockID].Insertion.z += 1.0;
-    }
-    else if(MoveType == DELETION)
-    {
-      Rosen[BlockID].Deletion.x += R;
-      Rosen[BlockID].Deletion.y += R * R;
-      Rosen[BlockID].Deletion.z += 1.0;
-    }
-    else if(MoveType == WIDOM)
-    {
-      Rosen[BlockID].WidomInsertion.x += R;
-      Rosen[BlockID].WidomInsertion.y += R * R;
-      Rosen[BlockID].WidomInsertion.z += 1.0;
-    }
-  }
-  void ClearRosen(size_t BlockID)
-  {
-    Rosen[BlockID].Total          = {0.0, 0.0, 0.0};
-    Rosen[BlockID].Insertion      = {0.0, 0.0, 0.0};
-    Rosen[BlockID].Deletion       = {0.0, 0.0, 0.0};
-    Rosen[BlockID].WidomInsertion = {0.0, 0.0, 0.0};
-  }
-  void Record_Move_Total(int MoveType)
-  {
-    switch(MoveType)
-    {
-      case TRANSLATION: {TranslationTotal++; break; }
-      case ROTATION: {RotationTotal++; break; }
-      case SPECIAL_ROTATION: {SpecialRotationTotal++; break; }
-      case INSERTION: case SINGLE_INSERTION: {InsertionTotal++; break; }
-      case DELETION:  case SINGLE_DELETION:  {DeletionTotal++; break; }
-    }
-  }
-  void Record_Move_Accept(int MoveType)
-  {
-    switch(MoveType)
-    {
-      case TRANSLATION: {TranslationAccepted++; break; }
-      case ROTATION: {RotationAccepted++; break; }
-      case SPECIAL_ROTATION: {SpecialRotationAccepted++; break; }
-      case INSERTION: case SINGLE_INSERTION: {InsertionAccepted++; break; }
-      case DELETION:  case SINGLE_DELETION:  {DeletionAccepted++; break; }
-    }
-  }
-};
-
-struct SystemEnergies
-{
-  double CreateMol_running_energy={0.0};
-  double running_energy   = {0.0};
-  //Total Energies//
-  double InitialEnergy    = {0.0};
-  double CreateMolEnergy  = {0.0};
-  double FinalEnergy      = {0.0};
-  //VDW//
-  double InitialVDW       = {0.0};
-  double CreateMolVDW     = {0.0};
-  double FinalVDW         = {0.0};
-  //Real Part Coulomb//
-  double InitialReal      = {0.0};
-  double CreateMolReal    = {0.0};
-  double FinalReal        = {0.0};
-  //Ewald Energy//
-  double InitialEwaldE    = {0.0};
-  double CreateMolEwaldE  = {0.0};
-  double FinalEwaldE      = {0.0};
-  //HostGuest Ewald//
-  double InitialHGEwaldE  = {0.0};
-  double CreateMolHGEwaldE= {0.0};
-  double FinalHGEwaldE    = {0.0};
-  //Tail Correction//
-  double InitialTailE     = {0.0};
-  double CreateMolTailE   = {0.0};
-  double FinalTailE       = {0.0};
-  //DNN Energy//
-  double InitialDNN       = {0.0};
-  double CreateMolDNN     = {0.0};
-  double FinalDNN         = {0.0};
-};
-
-struct Tail
-{
-  bool   UseTail = {false};
-  double Energy  = {0.0};
 };
 
 //Temporary energies for a move//
@@ -674,21 +466,262 @@ struct MoveEnergy
   };
   void print()
   {
-    printf("HHVDW: %.5f, HHReal: %.5f, HGVDW: %.5f, HGReal: %.5f, GGVDW: %.5f, GGReal: %.5f, HHEwaldE: %.5f, HGEwaldE: %.5f, GGEwaldE: %.5f, TailE: %.5f, DNN_E: %.5f\n", HHVDW, HHReal, HGVDW, HGReal, GGVDW, GGReal, HHEwaldE, HGEwaldE, GGEwaldE, TailE, DNN_E);
+    printf("HHVDW: %.5f, HHReal: %.5f, HGVDW: %.5f, HGReal: %.5f, GGVDW: %.5f, GGReal: %.5f, HHEwaldE: %.5f,\n HGEwaldE: %.5f,\n GGEwaldE: %.5f, TailE: %.5f, DNN_E: %.5f\n", HHVDW, HHReal, HGVDW, HGReal, GGVDW, GGReal, HHEwaldE, HGEwaldE, GGEwaldE, TailE, DNN_E);
     printf("Stored HGVDW: %.5f, Stored HGReal: %.5f, Stored HGEwaldE: %.5f\n", storedHGVDW, storedHGReal, storedHGEwaldE);
   };
-  double DNN_Correction() //Using DNN energy to replace HGVDW, HGReal and HGEwaldE//
+  void DNN_Replace_Energy()
   {
-    double correction = DNN_E - HGVDW - HGReal - HGEwaldE;
-    storedHGVDW = HGVDW; 
+    storedHGVDW = HGVDW;
     storedHGReal= HGReal;
     storedHGEwaldE  = HGEwaldE;
-    HGVDW = 0.0; 
+    HGVDW = 0.0;
     HGReal= 0.0;
     HGEwaldE = 0.0;
+  }
+  double DNN_Correction() //Using DNN energy to replace HGVDW, HGReal and HGEwaldE//
+  {
+    double correction = DNN_E - storedHGVDW - storedHGReal - storedHGEwaldE;
     return correction;
   };
 };
+
+//Zhao's note: keep track of the Rosenbluth weights during the simulation//
+struct RosenbluthWeight
+{
+  double3 Total          = {0.0, 0.0, 0.0};
+  double3 WidomInsertion = {0.0, 0.0, 0.0};
+  double3 Insertion      = {0.0, 0.0, 0.0};
+  double3 Deletion       = {0.0, 0.0, 0.0};
+  //NOTE: DO NOT RECORD FOR REINSERTIONS, SINCE THE DELETION PART OF REINSERTION IS MODIFIED//
+  MoveEnergy widom_energy;
+};
+
+struct Move_Statistics
+{
+  //Translation Move//
+  double TranslationProb        =0.0;
+  double RotationProb           =0.0;
+  double SpecialRotationProb    =0.0;
+  double WidomProb              =0.0;
+  double SwapProb               =0.0;
+  double VolumeMoveProb         =0.0;
+  double GibbsSwapProb          =0.0;
+  double ReinsertionProb        =0.0;
+  double IdentitySwapProb       =0.0;
+  double CBCFProb               =0.0;
+  double GibbsVolumeMoveProb    =0.0;
+  double TotalProb              =0.0;
+  //Translation Move//
+  int TranslationAccepted = 0; //zeroed when max translation updated 
+  int TranslationTotal = 0;    //zeroed when max translation updated
+  int CumTranslationAccepted = 0; //Cumulative
+  int CumTranslationTotal = 0;
+  double TranslationAccRatio = 0.0;
+  //Rotation Move//
+  int RotationAccepted = 0;    //zeroed when max rotation updated
+  int RotationTotal = 0;       //zeroed when max rotation updated
+  int CumRotationAccepted = 0; //Cumulative
+  int CumRotationTotal = 0;
+  double RotationAccRatio = 0;
+  //Special Rotation Move//
+  int SpecialRotationAccepted = 0;
+  int SpecialRotationTotal = 0;
+  double SpecialRotationAccRatio = 0;
+  //Insertion Move//
+  size_t InsertionTotal = 0;
+  size_t InsertionAccepted = 0;
+  //Deletion Move//
+  size_t DeletionTotal = 0;
+  size_t DeletionAccepted = 0;
+  //Reinsertion Move//
+  size_t ReinsertionTotal = 0;
+  size_t ReinsertionAccepted = 0;
+  //CBCFSwap Move//
+  size_t CBCFTotal = 0;
+  size_t CBCFAccepted = 0;
+  size_t CBCFInsertionTotal = 0;
+  size_t CBCFInsertionAccepted = 0;
+  size_t CBCFLambdaTotal = 0;
+  size_t CBCFLambdaAccepted = 0;
+  size_t CBCFDeletionTotal = 0;
+  size_t CBCFDeletionAccepted = 0;
+  //Identity Swap Move//
+  std::vector<size_t>IdentitySwap_Total_TO;
+  std::vector<size_t>IdentitySwap_Acc_TO;
+  size_t IdentitySwapAddAccepted=0;
+  size_t IdentitySwapAddTotal=0;
+  size_t IdentitySwapRemoveAccepted=0;
+  size_t IdentitySwapRemoveTotal=0;
+
+  size_t BlockID = 0; //Keep track of the current Block for Averages//
+  std::vector<double2>MolAverage;
+  //Cross terms for each component with other components: Na x Nb, for here, Na is fixed//
+  //2 dimensions: Nb (component b) x Nblocks//
+  std::vector<std::vector<double>>MolSQPerComponent;
+  //x: average; y: average^2; z: Number of Widom insertion performed//
+  std::vector<RosenbluthWeight>Rosen; //vector over Nblocks//
+
+  MoveEnergy WidomEnergy;
+  MoveEnergy WidomEnergy_ERR;
+
+  void NormalizeProbabilities()
+  {
+    //Zhao's note: the probabilities here are what we defined in simulation.input, raw values//
+    TotalProb+=TranslationProb;
+    TotalProb+=RotationProb;
+    TotalProb+=SpecialRotationProb;
+    TotalProb+=WidomProb;
+    TotalProb+=ReinsertionProb;
+    TotalProb+=IdentitySwapProb;
+    TotalProb+=SwapProb;
+    TotalProb+=VolumeMoveProb;
+    TotalProb+=GibbsSwapProb;
+    TotalProb+=CBCFProb;
+    TotalProb+=GibbsVolumeMoveProb;
+    if(TotalProb > 1e-10)
+    {
+      //printf("TotalProb: %.5f\n", TotalProb);
+      TranslationProb    /=TotalProb;
+      RotationProb       /=TotalProb;
+      SpecialRotationProb/=TotalProb;
+      WidomProb          /=TotalProb;
+      SwapProb           /=TotalProb;
+      GibbsSwapProb      /=TotalProb;
+      CBCFProb           /=TotalProb;
+      ReinsertionProb    /=TotalProb;
+      IdentitySwapProb   /=TotalProb;
+      GibbsVolumeMoveProb/=TotalProb;
+      TotalProb = 1.0;
+    }
+    RotationProb        += TranslationProb;
+    SpecialRotationProb += RotationProb;
+    WidomProb           += SpecialRotationProb;
+    ReinsertionProb     += WidomProb;
+    IdentitySwapProb    += ReinsertionProb;
+    CBCFProb            += IdentitySwapProb;
+    SwapProb            += CBCFProb;
+    VolumeMoveProb      += SwapProb;
+    GibbsSwapProb       += VolumeMoveProb;
+    GibbsVolumeMoveProb += GibbsSwapProb;
+  }
+  void PrintProbabilities()
+  {
+    printf("==================================================\n");
+    printf("ACCUMULATED Probabilities:\n");
+    printf("Translation Probability:      %.5f\n", TranslationProb);
+    printf("Rotation Probability:         %.5f\n", RotationProb);
+    printf("Special Rotation Probability: %.5f\n", SpecialRotationProb);
+    printf("Widom Probability:            %.5f\n", WidomProb);
+    printf("Reinsertion Probability:      %.5f\n", ReinsertionProb);
+    printf("Identity Swap Probability:    %.5f\n", IdentitySwapProb);
+    printf("CBCF Swap Probability:        %.5f\n", CBCFProb);
+    printf("Swap Probability:             %.5f\n", SwapProb);
+    printf("Volume Probability:           %.5f\n", VolumeMoveProb);
+    printf("Gibbs Swap Probability:       %.5f\n", GibbsSwapProb);
+    printf("Gibbs Volume Probability:     %.5f\n", GibbsVolumeMoveProb);
+    printf("Sum of Probabilities:         %.5f\n", TotalProb);
+    printf("==================================================\n");
+  }
+  void RecordRosen(double R, int MoveType)
+  {
+    if(MoveType != INSERTION && MoveType != DELETION && MoveType != WIDOM) return;
+    double R2 = R * R;
+    Rosen[BlockID].Total.x += R;
+    Rosen[BlockID].Total.y += R * R;
+    Rosen[BlockID].Total.z += 1.0;
+    if(MoveType == INSERTION)
+    {
+      Rosen[BlockID].Insertion.x += R;
+      Rosen[BlockID].Insertion.y += R * R;
+      Rosen[BlockID].Insertion.z += 1.0;
+    }
+    else if(MoveType == DELETION)
+    {
+      Rosen[BlockID].Deletion.x += R;
+      Rosen[BlockID].Deletion.y += R * R;
+      Rosen[BlockID].Deletion.z += 1.0;
+    }
+    else if(MoveType == WIDOM)
+    {
+      Rosen[BlockID].WidomInsertion.x += R;
+      Rosen[BlockID].WidomInsertion.y += R * R;
+      Rosen[BlockID].WidomInsertion.z += 1.0;
+    }
+  }
+  void ClearRosen(size_t BlockID)
+  {
+    Rosen[BlockID].Total          = {0.0, 0.0, 0.0};
+    Rosen[BlockID].Insertion      = {0.0, 0.0, 0.0};
+    Rosen[BlockID].Deletion       = {0.0, 0.0, 0.0};
+    Rosen[BlockID].WidomInsertion = {0.0, 0.0, 0.0};
+  }
+  void Record_Move_Total(int MoveType)
+  {
+    switch(MoveType)
+    {
+      case TRANSLATION: {TranslationTotal++; break; }
+      case ROTATION: {RotationTotal++; break; }
+      case SPECIAL_ROTATION: {SpecialRotationTotal++; break; }
+      case INSERTION: case SINGLE_INSERTION: {InsertionTotal++; break; }
+      case DELETION:  case SINGLE_DELETION:  {DeletionTotal++; break; }
+      case REINSERTION: {ReinsertionTotal++; break; }
+    }
+  }
+  void Record_Move_Accept(int MoveType)
+  {
+    switch(MoveType)
+    {
+      case TRANSLATION: {TranslationAccepted++; break; }
+      case ROTATION: {RotationAccepted++; break; }
+      case SPECIAL_ROTATION: {SpecialRotationAccepted++; break; }
+      case INSERTION: case SINGLE_INSERTION: {InsertionAccepted++; break; }
+      case DELETION:  case SINGLE_DELETION:  {DeletionAccepted++; break; }
+      case REINSERTION: {ReinsertionAccepted++; break; }
+    }
+  }
+};
+
+struct SystemEnergies
+{
+  double CreateMol_running_energy={0.0};
+  double running_energy   = {0.0};
+  //Total Energies//
+  double InitialEnergy    = {0.0};
+  double CreateMolEnergy  = {0.0};
+  double FinalEnergy      = {0.0};
+  //VDW//
+  double InitialVDW       = {0.0};
+  double CreateMolVDW     = {0.0};
+  double FinalVDW         = {0.0};
+  //Real Part Coulomb//
+  double InitialReal      = {0.0};
+  double CreateMolReal    = {0.0};
+  double FinalReal        = {0.0};
+  //Ewald Energy//
+  double InitialEwaldE    = {0.0};
+  double CreateMolEwaldE  = {0.0};
+  double FinalEwaldE      = {0.0};
+  //HostGuest Ewald//
+  double InitialHGEwaldE  = {0.0};
+  double CreateMolHGEwaldE= {0.0};
+  double FinalHGEwaldE    = {0.0};
+  //Tail Correction//
+  double InitialTailE     = {0.0};
+  double CreateMolTailE   = {0.0};
+  double FinalTailE       = {0.0};
+  //DNN Energy//
+  double InitialDNN       = {0.0};
+  double CreateMolDNN     = {0.0};
+  double FinalDNN         = {0.0};
+};
+
+struct Tail
+{
+  bool   UseTail = {false};
+  double Energy  = {0.0};
+};
+
+
 /*
 __host__ MoveEnergy MoveEnergy_Multiply(MoveEnergy A, MoveEnergy B)
 {
@@ -774,18 +807,19 @@ struct FRAMEWORK_COMPONENT_LISTS
 struct PseudoAtomDefinitions //Always a host struct, never on the device
 {
   std::vector<std::string> Name;
-  std::vector<std::string> Symbol;
+  std::vector<std::string> Symbol; //Symbol name for each pseudo-atom
+  std::vector<std::string> UniqueSymbol; //all the unique Symbol list //
   std::vector<size_t> SymbolIndex; //It has the size of the number of pseudo atoms, it tells the ID of the symbol for the pseudo-atoms, e.g., CO2->C->2
   std::vector<double> oxidation;
   std::vector<double> mass;
   std::vector<double> charge;
   std::vector<double> polar; //polarizability
-  size_t MatchSymbolTypeFromSymbolName(std::string& SymbolName)
+  size_t MatchUniqueSymbolTypeFromSymbolName(std::string& SymbolName)
   {
-    size_t SymbolIdx = 0;
-    for(size_t i = 0; i < Symbol.size(); i++)
+    size_t SymbolIdx = UniqueSymbol.size();
+    for(size_t i = 0; i < UniqueSymbol.size(); i++)
     {
-      if(SymbolName == Symbol[i]) 
+      if(SymbolName == UniqueSymbol[i])
       {
         SymbolIdx = i; break;
       }
@@ -831,44 +865,146 @@ struct Boxsize
   Complex* AdsorbateEik;
   Complex* FrameworkEik;
   Complex* tempEik;
+  Complex* tempFrameworkEik;
 
   double*  Cell;
   double*  InverseCell;
-  double   Pressure;
   double   Volume;
   double   ReciprocalCutOff;
   double   Prefactor;
   double   Alpha;
   double   tol1; //For Ewald, see read_Ewald_Parameters_from_input function//
+  
   bool     Cubic;
-  bool     ExcludeHostGuestEwald = false;
   bool     UseLAMMPSEwald = false;
   int3     kmax;
 };
 //###PATCH_ALLEGRO_H###//
 
+struct CBMC_Variables
+{
+  int MoveType = CBMC_INSERTION;
+  double Rosenbluth = 0.0;
+  double StoredR = 0.0;
+  size_t  selectedTrial = 0.0;
+  size_t selectedTrialOrientation = 0;
+  size_t start_position = 0;
+  bool SuccessConstruction = false;
+  MoveEnergy FirstBeadEnergy;
+  MoveEnergy ChainEnergy;
+  void clear()
+  {
+    MoveType = CBMC_INSERTION;
+    StoredR = 0.0;
+    selectedTrial = 0;
+    selectedTrialOrientation = 0;
+    start_position = 0;
+    SuccessConstruction = false;
+    FirstBeadEnergy.zero();
+    ChainEnergy.zero();
+  }
+};
+
+//Zhao's note: we are breaking moves into different parts, 
+//so we can use some middle-storage//
+struct MoveTempStorage
+{
+  //Move Selection//
+  //Need random number, selected box, selected molecule, selected component//
+  size_t component    = 0;
+  size_t molecule     = 0;
+  int    MoveType     = TRANSLATION;
+
+  //For identity_swap//
+  size_t temp_component=0;
+  size_t temp_molecule =0;
+
+  //within the move//
+  bool   Overlap= false;
+  bool   CheckOverlap= true;
+  bool   Do_New = false;
+  bool   Do_Old = false;
+  size_t start_position = 0;
+  size_t selectedTrial = 0;
+  size_t selectedTrialOrientation = 0;
+
+  bool   Accept = false;
+  double Pacc   = 0.0;
+  size_t New_Index = 0;
+  size_t Old_Index = 0;
+
+  //Some other variables for moves, system-specific//
+  double preFactor = 0.0;
+  size_t UpdateLocation = 0;
+  //Insertion/Deletion Scale//
+  double2 Scale = {1.0, 1.0};
+  bool previous_step = false;
+
+  void Initialize()
+  {
+    component    = 0;
+    molecule     = 0;
+    MoveType     = TRANSLATION;
+
+    Overlap= false;
+    CheckOverlap= true;
+    Do_New = false;
+    Do_Old = false;
+    start_position = 0;
+    selectedTrial = 0;
+    selectedTrialOrientation = 0;
+
+    Accept = false;
+    Pacc   = 0.0;
+    New_Index = 0;
+    Old_Index = 0;
+    
+    preFactor = 0.0;
+    UpdateLocation = 0;
+    Scale = {1.0, 1.0};
+    previous_step = false;
+  }
+};
+
+//###Struct to contain almost all data on the CPU for the simulation###//
 struct Components
 {
-  size_t  Total_Components;                           // Number of Components in the system (including framework)
   int3    NComponents;                                // Total components (x), Framework Components (y), Guest Components (z)
   int3    NumberofUnitCells;
   size_t  MoviesEvery = 5000;                         // Write Movies (LAMMPS data file) every X MC Steps/Cycles
   size_t  PrintStatsEvery = 5000;                     // Write instantaneous loading and energy to screen every X MC Steps/Cycles
 
-  size_t  Nblock={5};                                 // Number of Blocks for block averages
-  size_t  CURRENTCYCLE={0};
-  double  DNNPredictTime={0.0}; 
-  double  DNNFeatureTime={0.0};
-  double  DNNGPUTime={0.0};
-  double  DNNSortTime={0.0};
-  double  DNNstdsortTime={0.0};
-  double  DNNFeaturizationTime={0.0};
+  size_t  Nblock=5;                                 // Number of Blocks for block averages
+  size_t  CURRENTCYCLE=0;
+  double  DNNPredictTime=0.0; 
+  double  DNNFeatureTime=0.0;
+  double  DNNGPUTime=0.0;
+  double  DNNSortTime=0.0;
+  double  DNNstdsortTime=0.0;
+  double  DNNFeaturizationTime=0.0;
   size_t  TotalNumberOfMolecules;                     // Total Number of Molecules (including framework)
   size_t  NumberOfFrameworks;                         // Total Number of framework species, usually 1.
-  double  Temperature={0.0};
+  double  Temperature=0.0;
+  double  Pressure=0.0;                               // In internal unit
+  double  Pressure_Pa=0.0;                            // In units of Pascal (simulation.input unit)//
   double  Beta;                                       // Inverse Temperature 
 
+  double3* tempMolStorage;                            // temporary storage for reinsertion move//
+
+  size_t  EnergyEvalTimes = 0;
+
   bool*   flag;                                       // flags for checking overlaps (on host), device version in Simulations struct//
+  double* host_array;
+  //MC CBMC/Calculation variables//
+  std::vector<size_t>Trialindex;
+  std::vector<double>ExpRosen;
+  std::vector<double>Rosen;
+  std::vector<double>ShiftedBoltzmannFactors;
+  std::vector<MoveEnergy>TrialEnergies;
+  double MaxRosen = 0.0; double SumRosen=0.0;
+
+  size_t EikAllocateSize = 0;
+  size_t tempEikAllocateSize = 0;
 
   std::vector<FRAMEWORK_COMPONENT_LISTS>FrameworkComponentDef;
 
@@ -881,6 +1017,29 @@ struct Components
   std::vector<MoveEnergy> BookKeepEnergy_SQ;
   MoveEnergy AverageEnergy;
   MoveEnergy AverageEnergy_Errorbar;
+
+  //NPT VOLUME MOVE//
+  bool   PerformVolumeMove      = false;
+  int    VolumeMoveAttempts     = 0;
+  int    VolumeMoveAccepted     = 0;
+  int    VolumeMoveTotalAttempts= 0;
+  int    VolumeMoveTotalAccepted= 0;
+  double VolumeMoveMaxChange    = 0.025;
+  double VolumeMoveProbability  = 0.0;
+  double VolumeMoveTargetAccRatio = 0.5;
+  double VolumeMoveTime = 0.0;
+  std::vector<double2>VolumeAverage;
+  std::vector<std::vector<double2>>DensityPerComponent;
+
+  std::vector<double>Compressibility;            //Compressibility for each component, calculated when PR-EOS is used//
+  std::vector<double>AmountOfExcessMolecules;    //For excess loading//
+  std::vector<std::vector<double2>>ExcessLoading; //Average excess loadings for adsorbates//
+  
+  double HeliumVoidFraction = 0.0;
+  double ExcessVolume       = 0.0;
+
+  double createmol_energy = 0.0; //total create_mol phase energy, used when computing heat of adsorption//
+  //std::vector<double2>EnergyAverage;
   /*
   //Zhao's note: do not use pass by ref for DeltaE
   void Gather_Averages_MoveEnergy(int Cycles, int Blocksize, MoveEnergy DeltaE)
@@ -918,10 +1077,10 @@ struct Components
     cudaMemcpy(TempSystem.Type,      &GPU_System.Type[start],      size * sizeof(size_t),  cudaMemcpyDeviceToHost);
     cudaMemcpy(TempSystem.MolID,     &GPU_System.MolID[start],     size * sizeof(size_t),  cudaMemcpyDeviceToHost);
   }
-  MoveEnergy tempdeltaE;
   MoveEnergy CreateMoldeltaE;
   MoveEnergy deltaE;
-  double  FrameworkEwald=0.0;
+  double  FrameworkEwald=0.0;        //calculated at every stage (initial, create molecule, final)
+  double  InitialFrameworkEwald=0.0; //calculated ONLY at initial stage, then stored//
   bool    HasTailCorrection = false;                // An overall flag for tail correction
   bool    ReadRestart = false;                      // Whether to use restart files //Zhao's note: this can be either RASPA-2-type Restart file or LAMMPS data file //
   int     RestartInputFileType = RASPA_RESTART;          // can choose from: RASPA_RESTART or LAMMPS_DATA (see enum at the beginning of this file)
@@ -955,8 +1114,9 @@ struct Components
   size_t* device_InverseIndexList;                    // device_pointer for knowing which pair of interaction is stored in where
   bool*   ConsiderThisAdsorbateAtom;                  // device pointer
   double* device_Distances;                           // device_pointer for storing pair-wise distances//
-  
-  std::vector<double2>EnergyAverage;                  // Booking-keeping Sums and Sums of squared values for energy
+ 
+  std::vector<std::vector<double>> EnergyTimesNumberOfMolecule; // Book-keeping Energy times the number of molecules for heat of adsorption
+ 
   std::vector<bool>   hasPartialCharge;               // Whether this component has partial charge
   std::vector<bool>   hasfractionalMolecule;          // Whether this component has fractional molecules
   std::vector<LAMBDA> Lambda;                         // Vector of Lambda struct
@@ -977,6 +1137,10 @@ struct Components
   std::vector<double3> MaxTranslation;
   std::vector<double3> MaxRotation;
   std::vector<double3> MaxSpecialRotation;
+  //Some CBCF variables//
+  std::vector<size_t> CBCFPerformed;
+  size_t WLSampled     = 0;
+  size_t WLAdjusted    = 0;
   std::vector<double>Tc;                              // Critical Temperature of the component
   std::vector<double>Pc;                              // Critical Pressure of the component
   std::vector<double>Accentric;                       // Accentric Factor of the component
@@ -993,6 +1157,7 @@ struct Components
   std::vector<std::complex<double>> AdsorbateEik;        // Stored Ewald Vectors for Adsorbate
   std::vector<std::complex<double>> FrameworkEik;        // Stored Ewald Vectors for Framework
   std::vector<std::complex<double>> tempEik;             // Ewald Vector for temporary storage
+  size_t StructureFactor_Multiplier = 2;                 // Add extra structure factor storage for volume moves//
   size_t MatchMoleculeNameToComponentID(std::string Name)
   {
     for(size_t i = 0; i < MoleculeName.size(); i++)
@@ -1028,6 +1193,40 @@ struct Components
         break;
     }
   }
+
+  //CBMC temporary variables//
+  //for example, for RXMC, you may have multiple molecules running CBMC//
+  std::vector<CBMC_Variables> CBMC_New; size_t CBMC_New_Index = 0;
+  std::vector<CBMC_Variables> CBMC_Old; size_t CBMC_Old_Index = 0;
+
+  //Some other variables for moves, system-specific//
+  MoveTempStorage TempVal;
+
+  //TMMC bias//
+  void ApplyTMMCBias_UpdateCMatrix(double& Pacc, int MoveType)
+  {
+    size_t& SelectedComponent = TempVal.component;
+    double NMol = NumberOfMolecule_for_Component[SelectedComponent];
+    if(MoveType == SINGLE_INSERTION || MoveType == SINGLE_DELETION || MoveType == INSERTION || MoveType == DELETION)
+    {
+      if(hasfractionalMolecule[SelectedComponent]) NMol--;
+
+      //Update TMMC collection matrices//
+      Tmmc[SelectedComponent].Update(Pacc, NMol, MoveType);
+
+      Tmmc[SelectedComponent].ApplyWLBias(Pacc, NMol, MoveType);
+      Tmmc[SelectedComponent].ApplyTMBias(Pacc, NMol, MoveType);
+    
+      //TMMC Acceptance, if out of bound, Pacc = 0.0 (then the move will be rejected always)//
+      Tmmc[SelectedComponent].TreatAccOutofBound(Pacc, NMol, MoveType);
+    }
+    else
+    {
+      Tmmc[SelectedComponent].Update(1.0, NMol, MoveType);
+    }
+  }
+
+  FILE* OUTPUT = stderr;
 };
 
 
@@ -1037,13 +1236,12 @@ struct Simulations //For multiple simulations//
   Atoms*  d_a;                  // Pointer For Atom Data in the Simulation Box //
   Atoms   Old;                  // Temporary data storage for Old Configuration //
   Atoms   New;                  // Temporary data storage for New Configuration //
+  Atoms   Temp;                 // Temporary storage (for xfering data and accepting move) //
   int2*   ExcludeList;          // Atoms to exclude during energy calculations: x: component, y: molecule-ID (may need to add z and make it int3, z: atom-ID)
   double* Blocksum;             // Block sums for partial reduction //
   bool*   device_flag;          // flags for overlaps on the device //
   size_t  start_position;       // Start position for reading data in d_a when proposing a trial position for moves //
-  size_t  Nblocks;              // Number of blocks for energy calculation //
-  size_t  TotalAtoms;           // Number of Atoms in total for this simulation //
-  bool    AcceptedFlag;         // Acceptance flag for every simulation // 
+  size_t  Nblocks;              // Number of blocks for energy calculation, NOT block averages! //
   Boxsize Box;                  // Each simulation (system) has its own box //
 };
 
@@ -1051,21 +1249,34 @@ struct Simulations //For multiple simulations//
 
 struct WidomStruct
 {
-  bool                UseGPUReduction;              // For calculating the energies for each bead
-  bool                Useflag;                      // For using flags (for skipping reduction)
-  size_t              NumberWidomTrials;            // Number of Trial Positions for the first bead //
-  size_t              NumberWidomTrialsOrientations;// Number of Trial Orientations 
-  size_t              WidomFirstBeadAllocatesize;   //space allocated for WidomFirstBeadResult
+  bool                UseGPUReduction;                  // For calculating the energies for each bead
+  bool                Useflag;                          // For using flags (for skipping reduction)
+  size_t              NumberWidomTrials = 8;            // Number of Trial Positions for the first bead //
+  size_t              NumberWidomTrialsOrientations = 8;// Number of Trial Orientations 
+  size_t              WidomFirstBeadAllocatesize;       //space allocated for WidomFirstBeadResult
 };
+
+static __global__ void Aaccess_device_random(double3* device_random)
+{
+  device_random[0] = {2.3, 4.5, 6.7};
+  printf("device_random[0] = %.5f %.5f %.5f\n", device_random[0].x, device_random[0].y, device_random[0].z);
+}
+
 
 struct RandomNumber
 {
   double3* host_random;
   double3* device_random;
+  int      RANDOMSEED = 0;
   size_t   randomsize;
-  size_t   offset={0};
-  size_t   Rounds={0};
-  void ResetRandom()
+  size_t   offset=0;
+  size_t   Rounds=0;
+  void AllocateRandom() //Allocate space for random numbers on cpu//
+  {
+    host_random = (double3*) malloc(randomsize*sizeof(double3));
+    host_random[0] = {1.0, 1.0, 0.5};
+  }
+  void ResetRandom() //Regenerates random numbers on cpu, then transfer to gpu//
   {
     offset = 0;
     for (size_t i = 0; i < randomsize; i++) 
@@ -1073,6 +1284,12 @@ struct RandomNumber
       host_random[i].x = Get_Uniform_Random();
       host_random[i].y = Get_Uniform_Random();
       host_random[i].z = Get_Uniform_Random();
+      /*
+      if(i < 100)
+      {
+        printf("INDEX: %zu, RANDOM: %.5f %.5f %.5f\n", i, host_random[i].x, host_random[i].y, host_random[i].z);
+      }
+      */
     }
 
     for(size_t i = randomsize * 3; i < 1000000; i++) Get_Uniform_Random();
@@ -1080,12 +1297,121 @@ struct RandomNumber
     cudaMemcpy(device_random, host_random, randomsize * sizeof(double3), cudaMemcpyHostToDevice);
     Rounds ++;
   }
-  void Check(size_t change)
+  
+  void DeviceRandom() //Allocate space on gpu, generate random numbers//
+  {
+    cudaMalloc(&device_random, randomsize * sizeof(double3));
+    ResetRandom();
+    Aaccess_device_random<<<1,1>>>(device_random);
+    cudaMemcpy(host_random, device_random, randomsize * sizeof(double3), cudaMemcpyDeviceToHost);
+  }
+  
+  void Check(size_t change) //check the usage of random numbers, if used up, regenerate//
   {
     if((offset + change) >= randomsize) ResetRandom();
   }
-  void Update(size_t change)
+  void Update(size_t change) //update usage of random numbers//
   {
     offset += change;
   }
+  void Setup(size_t SIZE)
+  {
+    std::srand(RANDOMSEED); //Zhao's note: RANDOMSEED is read when reading the input file//
+    randomsize = SIZE;
+    AllocateRandom();
+    DeviceRandom();
+    Rounds = 0;
+  }
 };
+
+struct Atom_FF //Atom definitions, epsilon, sigma, charge//
+{
+  std::string Name;
+  double epsilon;
+  double sigma;
+  bool   shift = false;
+  bool   tail  = false;
+};
+
+struct Input_Container
+{
+  std::vector<Atom_FF>AtomFF;
+  std::vector<double>Mix_Epsilon;
+  std::vector<double>Mix_Sigma;
+  std::vector<double>Mix_Shift;
+  std::vector<Tail>Mix_Tail; //See Tail Struct: a bool and a double//
+  std::vector<double>Mix_Z;
+  std::vector<int>Mix_Type; //Forcefield types, e.g. LJ//
+  double CutOffVDW = 12.0 * 12.0;
+  double CutOffCoul= 12.0 * 12.0;
+  bool    VDWRealBias = true; //By default, the CBMC moves use VDW + Real Biasing//
+  double  OverlapCriteria;
+
+  bool    noCharges;
+  double  EwaldPrecision = 1e-6;
+};
+
+struct Variables
+{
+  //Some other important variables/keywords for input//
+  int NumberOfInitializationCycles = 0;
+  int NumberOfEquilibrationCycles  = 0;
+  int NumberOfProductionCycles     = 0;
+  int Cycles = 0; //Current cycle//
+
+  bool RunOneByOne = true;
+  bool RunTogether = false;
+
+  size_t StructureFactor_Multiplier = 2; //Add extra structure factor storage for volume moves//
+
+  size_t Allocate_space_Adsorbate = 0;
+
+  size_t MaxStepPerCycle = 0;
+  bool SetMaxStep = false;
+  int SimulationMode = INITIALIZATION;
+  std::string Mode   = "INITIALIZATION";
+  int BlockAverageSize = 1; //# of cycle/steps each block has//
+  //Simulation Structs//
+  Units Constants; //Physical constants for the simulation//
+
+  Input_Container Input;
+
+  ForceField FF;
+  std::vector<double>TEST;
+  std::vector<std::vector<double>>Ttwo;
+  void set_TEST(const std::vector<double>& new_data) 
+  {
+    TEST = new_data;
+  }
+  const std::vector<double>& get_TEST() const
+  {
+    return TEST;
+  }
+  ForceField device_FF;
+  PseudoAtomDefinitions PseudoAtoms;
+  Simulations* Sims;
+  RandomNumber Random;
+  Components TempComponents; //template components
+  WidomStruct TempWidom;     //template widom
+  std::vector<Components> SystemComponents; //Propagate from TempComponents;
+  std::vector<WidomStruct> Widom;           //Propagate from TempWidom;
+  std::vector<Boxsize>Box;
+
+  Gibbs GibbsStatistics;  //Gibbs Volume + Xfer moves stats
+
+  double RandomNumber;
+  double systemId;
+
+  //MC_MOVES MOVES;
+};
+
+/*
+//PYBIND11 STUFF//
+template<typename T>
+py::list Convert_Pointer_To_PyList(size_t size, T* point)
+{
+  py::list temp;
+  for(size_t i = 0; i < size; i++) temp.append(point[i]);
+  return temp;
+}
+*/

@@ -10,8 +10,15 @@
 #include "read_data.h"
 //###PATCH_LCLIN_INCLUDE_HEADER###//
 
-__global__ void Initialize_DNN_Positions(Atoms* d_a, Atoms New, Atoms Old, size_t Oldsize, size_t Newsize, size_t SelectedComponent, size_t Location, size_t chainsize, int MoveType, size_t CYCLE)
+__global__ void Initialize_DNN_Positions(Atoms* d_a, Atoms New, Atoms Old, double3* temp, size_t Oldsize, size_t Newsize, size_t SelectedComponent, size_t Location, size_t chainsize, int MoveType, size_t CYCLE)
 {
+  size_t ij = blockIdx.x * blockDim.x + threadIdx.x;
+
+  if(ij < (Newsize + Oldsize))
+  {
+    Initialize_Copy_Positions_Together(d_a, New, Old, temp, Oldsize, Newsize, SelectedComponent, Location, chainsize, MoveType);
+  }
+  /*
   //Zhao's note: need to think about changing this boolean to switch//
   if(MoveType == TRANSLATION || MoveType == ROTATION || MoveType == SINGLE_INSERTION || MoveType == SINGLE_DELETION) // Translation/Rotation/single_insertion/single_deletion //
   {
@@ -53,6 +60,8 @@ __global__ void Initialize_DNN_Positions(Atoms* d_a, Atoms New, Atoms Old, size_
       Old.scaleCoul[i]     = d_a[SelectedComponent].scaleCoul[Location + i];
     }
   }
+  */
+
   /*
   if(CYCLE == 145) 
   {
@@ -62,7 +71,7 @@ __global__ void Initialize_DNN_Positions(Atoms* d_a, Atoms New, Atoms Old, size_
   */
 }
 
-void Prepare_DNN_InitialPositions(Atoms*& d_a, Atoms& New, Atoms& Old, Components& SystemComponents, size_t SelectedComponent, int MoveType, size_t Location)
+void Prepare_DNN_InitialPositions(Atoms*& d_a, Atoms& New, Atoms& Old, double3* temp, Components& SystemComponents, size_t SelectedComponent, int MoveType, size_t Location)
 {
   size_t Oldsize = 0; size_t Newsize = 0; size_t chainsize = 0;
   switch(MoveType)
@@ -90,8 +99,11 @@ void Prepare_DNN_InitialPositions(Atoms*& d_a, Atoms& New, Atoms& Old, Component
     }
     case REINSERTION: // Reinsertion //
     {
-      throw std::runtime_error("Use the Special Function for Reinsertion");
-      //break;
+      Oldsize   = SystemComponents.Moleculesize[SelectedComponent];
+      Newsize   = SystemComponents.Moleculesize[SelectedComponent];
+      chainsize = SystemComponents.Moleculesize[SelectedComponent];
+      //throw std::runtime_error("Use the Special Function for Reinsertion");
+      break;
     }
     case IDENTITY_SWAP:
     {
@@ -120,7 +132,9 @@ void Prepare_DNN_InitialPositions(Atoms*& d_a, Atoms& New, Atoms& Old, Component
       break;
     }
   }
-  Initialize_DNN_Positions<<<1,1>>>(d_a, New, Old, Oldsize, Newsize, SelectedComponent, Location, chainsize, MoveType, SystemComponents.CURRENTCYCLE);
+  //Initialize_DNN_Positions<<<1,1>>>(d_a, New, Old, Oldsize, Newsize, SelectedComponent, Location, chainsize, MoveType, SystemComponents.CURRENTCYCLE);
+  size_t Nblock = 0; size_t Nthread = 0; Setup_threadblock(Oldsize + Newsize, Nblock, Nthread);
+  Initialize_DNN_Positions<<<Nblock,Nthread>>>(d_a, New, Old, SystemComponents.tempMolStorage, Oldsize, Newsize, SelectedComponent, Location, chainsize, MoveType, SystemComponents.CURRENTCYCLE);
 }
 
 __global__ void Initialize_DNN_Positions_Reinsertion(double3* temp, Atoms* d_a, Atoms Old, size_t Oldsize, size_t Newsize, size_t realpos, size_t SelectedComponent)
@@ -173,15 +187,13 @@ double DNN_Prediction_Move(Components& SystemComponents, Simulations& Sims, size
   }
   case TRANSLATION: case ROTATION: case SINGLE_INSERTION: case SINGLE_DELETION:
   {
-    bool Do_New = true; bool Do_Old = true;
-    if(MoveType == SINGLE_INSERTION) Do_Old = false;
-    if(MoveType == SINGLE_DELETION)  Do_New = false;
     double DNN_New = 0.0; double DNN_Old = 0.0;
     //###PATCH_ALLEGRO_SINGLE###//
     //###PATCH_LCLIN_SINGLE###//
     return DNN_New - DNN_Old;
   }
   }
+  return 0.0;
 }
 
 double DNN_Prediction_Reinsertion(Components& SystemComponents, Simulations& Sims, size_t SelectedComponent, double3* temp)
@@ -271,4 +283,33 @@ void WriteOutliers(Components& SystemComponents, Simulations& Sim, int MoveType,
   for(size_t i = 0; i < size; i++)
     textrestartFile << SystemComponents.TempSystem.pos[i].x << " " << SystemComponents.TempSystem.pos[i].y << " " << SystemComponents.TempSystem.pos[i].z << " " << SystemComponents.TempSystem.Type[i] << " " << Move << " " << E.DNN_E << " " << Correction << '\n';
   textrestartFile.close();
+}
+
+bool Check_DNN_Drift(Variables& Vars, size_t systemId, MoveEnergy& tot)
+{ 
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations& Sims            = Vars.Sims[systemId];
+  int&    MoveType             = SystemComponents.TempVal.MoveType;
+
+  bool REJECT = false; 
+  double correction = tot.DNN_Correction(); //If use DNN, HGVDWReal and HGEwaldE are zeroed//
+  if(fabs(correction) > SystemComponents.DNNDrift) //If there is a huge drift in the energy correction between DNN and Classical HostGuest//
+  { 
+    //printf("TRANSLATION/ROTATION: Bad Prediction, reject the move!!!\n");
+    switch(MoveType)
+    {
+      case TRANSLATION: case ROTATION:
+      {
+        SystemComponents.TranslationRotationDNNReject ++; break;
+      }
+      case SINGLE_INSERTION: case SINGLE_DELETION:
+      {
+        SystemComponents.SingleSwapDNNReject ++; break;
+      }
+    }
+    WriteOutliers(SystemComponents, Sims, NEW, tot, correction); //Print New Locations//
+    WriteOutliers(SystemComponents, Sims, OLD, tot, correction); //Print Old Locations//
+    REJECT = true;
+  } 
+  return REJECT;
 }

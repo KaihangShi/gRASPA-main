@@ -1,0 +1,619 @@
+MinMax size: 432
+DONE Reading Model Info from simulation.input file
+Setting Maximum Number of Steps for a Cycle, Max Step = 1
+-------------------------------------------------------
+device_random[0] = 2.30000 4.50000 6.70000
+==========================================
+====== Preparing Simulation box 0 ======
+==========================================
+Parsing [1] Component
+-------------- READING AdsorbateComponent 0 (CO2) --------------
+==================================================
+ACCUMULATED Probabilities:
+Translation Probability:      0.25000
+Rotation Probability:         0.50000
+Special Rotation Probability: 0.50000
+Widom Probability:            0.50000
+Reinsertion Probability:      0.75000
+Identity Swap Probability:    0.75000
+CBCF Swap Probability:        0.75000
+Swap Probability:             1.00000
+Volume Probability:           1.00000
+Gibbs Swap Probability:       1.00000
+Gibbs Volume Probability:     1.00000
+Sum of Probabilities:         1.00000
+==================================================
+-------------- END OF READING Component 0 (CO2) --------------
+================FUGACITY COEFFICIENT CALCULATION================
+Checking: Current Fugacity Coeff for 1 component: 1.00000
+Every Adsorbate Component has fugacity coefficient assigned, skip EOS calculation!
+Rosen capacity: 10
+----------------- MEMORY ALLOCAION STATUS -----------------
+System allocate_sizes are: 2430, 10240
+Component allocate_sizes are: 2430, 10240
+Allocated 6 double3 for reinsertion!
+Allocated Blocksum size: 16001, vdw_real size: 16001, fourier_size: 0
+------------------------------------------------------------
+------------------- SIMULATION BOX PARAMETERS -----------------
+Pressure:        0.00006
+Box Volume:      60603.00368
+Box Beta:        0.00617
+Box Temperature: 195.00000
+---------------------------------------------------------------
+Atom 0, Consider? true
+Atom 1, Consider? true
+Atom 2, Consider? true
+-------------- Preparing DNN Interaction Types --------------
+AdsorbateDNN Types 4
+AdsorbateDNN Types 5
+TypeA-B [4-0], Number: 270
+TypeA-B [4-1], Number: 810
+TypeA-B [4-2], Number: 1080
+TypeA-B [4-3], Number: 270
+TypeA-B [5-0], Number: 270
+TypeA-B [5-1], Number: 810
+TypeA-B [5-2], Number: 1080
+TypeA-B [5-3], Number: 270
+ConsiderThisATom? 1
+ConsiderThisATom? 1
+ConsiderThisATom? 1
+count: 0, TypeA-B: [4-2], InteractionIndex: 2
+count: 1, TypeA-B: [5-2], InteractionIndex: 6
+count: 2, TypeA-B: [5-2], InteractionIndex: 6
+count: 3, TypeA-B: [4-2], InteractionIndex: 2
+count: 4, TypeA-B: [5-2], InteractionIndex: 6
+count: 5, TypeA-B: [5-2], InteractionIndex: 6
+count: 6, TypeA-B: [4-2], InteractionIndex: 2
+count: 7, TypeA-B: [5-2], InteractionIndex: 6
+count: 8, TypeA-B: [5-2], InteractionIndex: 6
+count: 9, TypeA-B: [4-2], InteractionIndex: 2
+count: 10, TypeA-B: [5-2], InteractionIndex: 6
+count: 11, TypeA-B: [5-2], InteractionIndex: 6
+count: 12, TypeA-B: [4-2], InteractionIndex: 2
+count: 13, TypeA-B: [5-2], InteractionIndex: 6
+count: 14, TypeA-B: [5-2], InteractionIndex: 6
+Interaction [0], Amount [270]
+Interaction [1], Amount [810]
+Interaction [2], Amount [1080]
+Interaction [3], Amount [270]
+Interaction [4], Amount [540]
+Interaction [5], Amount [1620]
+Interaction [6], Amount [2160]
+Interaction [7], Amount [540]
+test_count: 0, TypeA-B: [4-2], Where it is stored: 1080
+test_count: 1, TypeA-B: [5-2], Where it is stored: 4590
+test_count: 2, TypeA-B: [5-2], Where it is stored: 4591
+test_count: 3, TypeA-B: [4-2], Where it is stored: 1081
+test_count: 4, TypeA-B: [5-2], Where it is stored: 4592
+test_count: 5, TypeA-B: [5-2], Where it is stored: 4593
+test_count: 6, TypeA-B: [4-2], Where it is stored: 1082
+test_count: 7, TypeA-B: [5-2], Where it is stored: 4594
+test_count: 8, TypeA-B: [5-2], Where it is stored: 4595
+test_count: 9, TypeA-B: [4-2], Where it is stored: 1083
+test_count: 10, TypeA-B: [5-2], Where it is stored: 4596
+test_count: 11, TypeA-B: [5-2], Where it is stored: 4597
+test_count: 12, TypeA-B: [4-2], Where it is stored: 1084
+test_count: 13, TypeA-B: [5-2], Where it is stored: 4598
+test_count: 14, TypeA-B: [5-2], Where it is stored: 4599
+Listsize: 7290
+Size of the device Distance list: 7290
+======================== CALCULATING INITIAL STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: 0.00000; Real: 0.00000
+Guest-Guest VDW: 0.00000; Real: 0.00000
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: 0.00000, Real: 0.00000
+Compoent [1-1], VDW: 0.00000, Real: 0.00000
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 0.00000, Host-Host Fourier: 44714.15321, Framework-Guest Fourier: 0.00000
+Component: 0, SelfAtomE: 19974912.89818 (24024312.82741 kJ/mol)
+Component: 1, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 19382380.03079 (23311659.15831 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+HostEwald took 0.23857 sec
+Ewald Summation (total energy) on the CPU took 0.23858 secs
+Component 0, Intra Exclusion Energy: -19382380.03079 (-23311659.15831 kJ/mol)
+Component 0, Atom Self Exclusion Energy: 19974912.89818 (24024312.82741 kJ/mol)
+DEBUG: comp: 0, IntraE: -19382380.03079, SelfE: 19974912.89818
+Component 1, Intra Exclusion Energy: -12971.30320 (-15600.90136 kJ/mol)
+Component 1, Atom Self Exclusion Energy: 12993.77350 (15627.92694 kJ/mol)
+DEBUG: comp: 1, IntraE: -12971.30320, SelfE: 12993.77350
+******   Allocating Ewald WaveVectors + StructureFactors (INITIAL STAGE ONLY)   ******
+Allocated 87480 116640 97200 space for eikxyz
+Structure Factor 0 is 0.00000 0.00000
+Structure Factor 1 is 0.00000 0.00000
+Structure Factor 2 is 0.00000 0.00000
+Structure Factor 3 is 0.00000 0.00000
+Structure Factor 4 is 0.00000 0.00000
+Structure Factor 5 is 0.00000 0.00000
+Structure Factor 6 is 0.00000 0.00000
+Structure Factor 7 is 0.00000 0.00000
+Structure Factor 8 is 0.00000 0.00000
+Structure Factor 9 is 0.00000 0.00000
+****** DONE Allocating Ewald WaveVectors + StructureFactors(INITIAL STAGE ONLY) ******
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 3933, GPU SF: 3933
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 7, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 8, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 9, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: -0.00000 imag: -0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: -0.00000 imag: -0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00001 secs
+Ewald Summation (total energy) on the GPU took 0.00277 secs
+Total GPU Energy: 
+HHVDW: 0.00000, HHReal: 0.00000, HGVDW: 0.00000, HGReal: 0.00000, GGVDW: 0.00000, GGReal: 0.00000, HHEwaldE: -0.00000,
+ HGEwaldE: 0.00000,
+ GGEwaldE: 0.00000, TailE: 0.00000, DNN_E: 0.00000
+Stored HGVDW: 0.00000, Stored HGReal: 0.00000, Stored HGEwaldE: 0.00000
+====================== DONE CALCULATING INITIAL STAGE ENERGY ======================
+Component 1, Need to create 0 full molecule
+======================== CALCULATING CREATE_MOLECULE STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: 0.00000; Real: 0.00000
+Guest-Guest VDW: 0.00000; Real: 0.00000
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: 0.00000, Real: 0.00000
+Compoent [1-1], VDW: 0.00000, Real: 0.00000
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 0.00000, Host-Host Fourier: 44714.15321, Framework-Guest Fourier: 0.00000
+Component: 0, SelfAtomE: 19974912.89818 (24024312.82741 kJ/mol)
+Component: 1, SelfAtomE: 0.00000 (0.00000 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 19382380.03079 (23311659.15831 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 0.00000 (0.00000 kJ/mol)
+HostEwald took 0.23480 sec
+Ewald Summation (total energy) on the CPU took 0.23480 secs
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 3933, GPU SF: 3933
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 7, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 8, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 9, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: -0.00000 imag: -0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: -0.00000 imag: -0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00000 secs
+Ewald Summation (total energy) on the GPU took 0.00387 secs
+Total GPU Energy: 
+HHVDW: 0.00000, HHReal: 0.00000, HGVDW: 0.00000, HGReal: 0.00000, GGVDW: 0.00000, GGReal: 0.00000, HHEwaldE: -0.00000,
+ HGEwaldE: 0.00000,
+ GGEwaldE: 0.00000, TailE: 0.00000, DNN_E: 0.00000
+Stored HGVDW: 0.00000, Stored HGReal: 0.00000, Stored HGEwaldE: 0.00000
+====================== DONE CALCULATING CREATE_MOLECULE STAGE ENERGY ======================
+============================================
+== END OF PREPARATION, SIMULATION STARTS! ==
+============================================
+Running Simulation Boxes in SERIAL, currently [0] box; pres: 1000.00000 [Pa], temp: 195.00000 [K]
+==================================
+== RUNNING INITIALIZATION PHASE ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+Box 0, Volume: 60603.00368
+Total Volume: 60603.00368
+INITIALIZATION Cycle: 0, 0 Adsorbate Molecules, Total Energy: -0.00000  ||  Component 0 [MgMOF74-small_unitcell.cif], 1 Molecules  ||  Component 1 [CO2], 0 Molecules  ||  
+number of distances [0]: 270
+number of distances [1]: 810
+number of distances [2]: 1080
+number of distances [3]: 270
+number of distances [4]: 540
+number of distances [5]: 1620
+number of distances [6]: 2160
+number of distances [7]: 540
+number of distances [0]: 270
+number of distances [1]: 810
+number of distances [2]: 1080
+number of distances [3]: 270
+number of distances [4]: 540
+number of distances [5]: 1620
+number of distances [6]: 2160
+number of distances [7]: 540
+INITIALIZATION Cycle: 5000, 85 Adsorbate Molecules, Total Energy: -217799.08621  ||  Component 0 [MgMOF74-small_unitcell.cif], 1 Molecules  ||  Component 1 [CO2], 85 Molecules  ||  
+======================== MOVE STATISTICS FOR COMPONENT [1] (CO2) ========================
+=====================TRANSLATION MOVES=====================
+Translation Performed: 2327
+Translation Accepted: 67
+Max Translation: 1.2969775393, 1.7027312169, 1.4745554133
+===========================================================
+=====================ROTATION MOVES========================
+Rotation Performed: 2364
+Rotation Accepted: 1067
+Max Rotation: 0.2948472553, 0.2948472553, 0.2948472553
+===========================================================
+=====================SWAP MOVES=====================
+Insertion Performed:   1287
+Insertion Accepted:    259
+Deletion Performed:    1268
+Deletion Accepted:     119
+Reinsertion Performed: 2511
+Reinsertion Accepted:  116
+====================================================
+=====================IDENTITY SWAP MOVES=====================
+=============================================================
+================================================================================================
+===============================
+== INITIALIZATION PHASE ENDS ==
+===============================
+Running Simulation Boxes in SERIAL, currently [0] box; pres: 1000.00000 [Pa], temp: 195.00000 [K]
+==================================
+== RUNNING EQUILIBRATION PHASE ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+===============================
+== EQUILIBRATION PHASE ENDS ==
+===============================
+Running Simulation Boxes in SERIAL, currently [0] box; pres: 1000.00000 [Pa], temp: 195.00000 [K]
+==================================
+==  RUNNING PRODUCTION PHASE   ==
+==================================
+CBMC Uses 10 trial positions and 10 trial orientations
+===============================
+== PRODUCTION PHASE ENDS ==
+===============================
+Work took 9.097776 seconds
+========================
+== END OF SIMULATION! ==
+========================
+======================================
+CHECKING FINAL ENERGY FOR SYSTEM [0]
+======================================
+======================== CALCULATING FINAL STAGE ENERGY ========================
+****** Calculating VDW + Real Energy (CPU) ******
+Host-Host   VDW: 0.00000; Real: 0.00000
+Host-Guest  VDW: -177193.63181; Real: -125222.27041
+Guest-Guest VDW: -16977.90560; Real: -7294.98296
+********** PRINTING COMPONENT ENERGIES**********
+Compoent [0-0], VDW: 0.00000, Real: 0.00000
+Compoent [0-1], VDW: -177193.63181, Real: -125222.27041
+Compoent [1-1], VDW: -16977.90560, Real: -7294.98296
+****** Calculating Ewald Energy (CPU) ******
+CPU Guest-Guest Fourier: 2874.88043, Host-Host Fourier: 44714.15321, Framework-Guest Fourier: -7002.22354
+Component: 0, SelfAtomE: 19974912.89818 (24024312.82741 kJ/mol)
+Component: 1, SelfAtomE: 1819128.28998 (2187909.77134 kJ/mol)
+Component: 0, Intra-Molecular ExclusionE: 19382380.03079 (23311659.15831 kJ/mol)
+Component: 1, Intra-Molecular ExclusionE: 1815982.44805 (2184126.19086 kJ/mol)
+HostEwald took 0.24932 sec
+Ewald Summation (total energy) on the CPU took 0.24932 secs
+ ****** CHECKING StructureFactors (SF) Stored on CPU vs. GPU ****** 
+CPU SF: 3933, GPU SF: 3933
+StructureFactor 0, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 1, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 2, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 3, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 4, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 5, CPU: 0.00000 0.00000, GPU: 0.00000 0.00000
+StructureFactor 6, CPU: 2.48900 5.04659, GPU: 2.48900 5.04659
+StructureFactor 7, CPU: 4.70205 4.49278, GPU: 4.70205 4.49278
+StructureFactor 8, CPU: -4.02381 -2.81991, GPU: -4.02381 -2.81991
+StructureFactor 9, CPU: -0.75246 0.16206, GPU: -0.75246 0.16206
+ ****** CHECKING Framework StructureFactors Stored on CPU ****** 
+Framework Structure Factor 0, real: 0.00000 imag: 0.00000
+Framework Structure Factor 1, real: 0.00000 imag: 0.00000
+Framework Structure Factor 2, real: 0.00000 imag: 0.00000
+Framework Structure Factor 3, real: 0.00000 imag: 0.00000
+Framework Structure Factor 4, real: 0.00000 imag: 0.00000
+Framework Structure Factor 5, real: 0.00000 imag: 0.00000
+Framework Structure Factor 6, real: -0.00000 imag: -0.00000
+Framework Structure Factor 7, real: 0.00000 imag: 0.00000
+Framework Structure Factor 8, real: -0.00000 imag: -0.00000
+Framework Structure Factor 9, real: 0.00000 imag: 0.00000
+VDW + Real on the GPU took 0.00054 secs
+Ewald Summation (total energy) on the GPU took 0.00269 secs
+Total GPU Energy: 
+HHVDW: 0.00000, HHReal: 0.00000, HGVDW: 0.00000, HGReal: 0.00000, GGVDW: -16977.90560, GGReal: -7294.98296, HHEwaldE: -0.00000,
+ HGEwaldE: 0.00000,
+ GGEwaldE: -270.96150, TailE: 0.00000, DNN_E: -345237.09475
+Stored HGVDW: -177193.63181, Stored HGReal: -125222.27041, Stored HGEwaldE: -7002.22354
+====================== DONE CALCULATING FINAL STAGE ENERGY ======================
+======================================
+Random Numbers Regenerated 0 times, offset: 143250, randomsize: 333334
+DNN Feature Preparation Time: 6.25452, DNN Prediction Time: 1.57488
+DNN GPU Time: 0.03322, DNN Sort Time: 6.24272, std::sort Time: 5.58625, Featurization Time: 0.64832
+======================== ENERGY SUMMARY (Simulation 0) =========================
+ *** INITIAL STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      -547818.71417 (-658874.87115 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      -547818.71417 (-658874.87115 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -0.00000 (-0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -0.00000 (-0.00000 [K])
+========================================================================
+ *** CREATE MOLECULE STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      -547818.71417 (-658874.87115 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      -547818.71417 (-658874.87115 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -0.00000 (-0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -0.00000 (-0.00000 [K])
+========================================================================
+ *** RUNNING DELTA_E (CREATE MOLECULE - INITIAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+ *** CHECK DELTA_E (CREATE MOLECULE - INITIAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+ *** FINAL STAGE *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -16977.90560 (-20419.73937 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -7294.98296 (-8773.85316 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+ --> Total Ewald [Host-Host]:
+      -547818.71417 (-658874.87115 [K])
+ --> Initial Ewald [Host-Host] (excluded):
+      -547818.71417 (-658874.87115 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -270.96150 (-325.89198 [K])
+DNN Energy:                 -345237.09475 (-415225.03783 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             -177193.63181 (-213115.08408 [K])
+     Real Coulomb:    -125222.27041 (-150607.86560 [K])
+     Ewald:           -7002.22354 (-8421.74430 [K])
+     Total:           -309418.12576 (-372144.69398 [K])
+ --> DNN - Classical: -35818.96899 (-43080.34386 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -369780.94480 (-444744.52234 [K])
+========================================================================
+ *** RUNNING DELTA_E (FINAL - CREATE MOLECULE) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -16977.90560 (-20419.73937 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -7294.98296 (-8773.85316 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -270.96150 (-325.89197 [K])
+DNN Energy:                 -345237.10079 (-415225.04510 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             -177193.63181 (-213115.08408 [K])
+     Real Coulomb:    -125222.27041 (-150607.86560 [K])
+     Ewald:           -7002.22354 (-8421.74430 [K])
+     Total:           -309418.12576 (-372144.69398 [K])
+ --> DNN - Classical: -35818.97503 (-43080.35112 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -369780.95084 (-444744.52960 [K])
+========================================================================
+ *** CHECK DELTA_E (RUNNING FINAL - CREATE MOLECULE) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -16977.90560 (-20419.73937 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -7294.98296 (-8773.85316 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -270.96150 (-325.89198 [K])
+DNN Energy:                 -345237.09475 (-415225.03783 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             -177193.63181 (-213115.08408 [K])
+     Real Coulomb:    -125222.27041 (-150607.86560 [K])
+     Ewald:           -7002.22354 (-8421.74430 [K])
+     Total:           -309418.12576 (-372144.69398 [K])
+ --> DNN - Classical: -35818.96899 (-43080.34386 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -369780.94480 (-444744.52234 [K])
+========================================================================
+ *** ENERGY DRIFT (CPU FINAL - RUNNING FINAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: -0.00000 (-0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 -0.00604 (-0.00726 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             -0.00000 (-0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           -0.00000 (-0.00000 [K])
+     Total:           -0.00000 (-0.00000 [K])
+ --> DNN - Classical: -0.00604 (-0.00726 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               -0.00604 (-0.00726 [K])
+========================================================================
+ *** GPU DRIFT (GPU FINAL - CPU FINAL) *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          -0.00000 (-0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        -0.00000 (-0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    -0.00000 (-0.00000 [K])
+     Ewald:           -0.00000 (-0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: -0.00000 (-0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+================================================================================
+======================== PRODUCTION PHASE AVERAGE ENERGIES (Simulation 0) =========================
+ *** PRODUCTION PHASE AVERAGE ENERGY *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+ *** PRODUCTION PHASE AVERAGE ENERGY ERRORBAR *** 
+========================================================================
+VDW [Host-Host]:            0.00000 (0.00000 [K])
+VDW [Host-Guest]:           0.00000 (0.00000 [K])
+VDW [Guest-Guest]:          0.00000 (0.00000 [K])
+Real Coulomb [Host-Host]:   0.00000 (0.00000 [K])
+Real Coulomb [Host-Guest]:  0.00000 (0.00000 [K])
+Real Coulomb [Guest-Guest]: 0.00000 (0.00000 [K])
+Ewald [Host-Host]:          0.00000 (0.00000 [K])
+Ewald [Host-Guest]:         0.00000 (0.00000 [K])
+Ewald [Guest-Guest]:        0.00000 (0.00000 [K])
+DNN Energy:                 0.00000 (0.00000 [K])
+ --> Stored Classical Host-Guest Interactions: 
+     VDW:             0.00000 (0.00000 [K])
+     Real Coulomb:    0.00000 (0.00000 [K])
+     Ewald:           0.00000 (0.00000 [K])
+     Total:           0.00000 (0.00000 [K])
+ --> DNN - Classical: 0.00000 (0.00000 [K])
+Tail Correction Energy:     0.00000 (0.00000 [K])
+Total Energy:               0.00000 (0.00000 [K])
+========================================================================
+================================================================================
+DNN Rejection Summary:
+Translation+Rotation: 0
+Reinsertion: 0
+Insertion: 0
+Deletion: 0
+SingleSwap: 0
+DNN Drift Summary:
+Translation+Rotation: 0.00000
+Reinsertion: 3896411.37154
+Insertion: 1649705.28761
+Deletion: 461001.36156
+SingleSwap: 0.00000
+Summary for simulation 0
+PseudoAtom Type: Mg[0], #: 270
+PseudoAtom Type: O[1], #: 810
+PseudoAtom Type: C[2], #: 1080
+PseudoAtom Type: H[3], #: 270
+PseudoAtom Type: C_co2[4], #: 140
+PseudoAtom Type: O_co2[5], #: 280
+
+===========================
+==    END OF PROGRAM!    ==
+== PRINTING MEMORY USAGE ==
+===========================
+Total Program Size: 14611 MB
+Resident Set Size: 353 MB
+Shared Pages: 235 MB
+Text (code): 0 MB
+Data + Stack: 1001 MB

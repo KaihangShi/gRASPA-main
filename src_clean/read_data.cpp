@@ -106,7 +106,7 @@ void FindIfInputIsThere(std::string& InputCommand, std::string& exepath)
   }
   if(!exist)
   {
-    printf("%s Input Command Not Found!!!!\n", InputCommand.c_str());
+    //printf("%s Input Command Not Found!!!!\n", InputCommand.c_str());
     throw std::runtime_error("Program Abort due to Unfound Input Command!");
   }
   file.close();
@@ -139,13 +139,13 @@ void Check_Inputs_In_read_data_cpp(std::string& exepath)
 
   std::vector<int> RequiredInput_Index(RequiredInputs.size(), -1);
 
-  printf("Checking if all inputs are defined\n");
+  //printf("Checking if all inputs are defined\n");
   std::vector<std::string> termsScannedLined{};
   //Zhao's note: Hard-coded executable name//
   termsScannedLined = split(exepath, '/');
   exepath = "/";
   for(size_t i = 0 ; i < termsScannedLined.size() - 1; i++) exepath = exepath + termsScannedLined[i] + "/";
-  printf("True path of exe is %s\n", exepath.c_str());
+  //printf("True path of exe is %s\n", exepath.c_str());
   std::string str;
   std::ifstream file("simulation.input");
   size_t counter = 0;
@@ -169,7 +169,7 @@ void Check_Inputs_In_read_data_cpp(std::string& exepath)
   {
     if(RequiredInput_Index[i] == -1)
     {
-      printf("Cannot find *** %s *** keyword in simulation.input file!\n", RequiredInputs[i].c_str());
+      //printf("Cannot find *** %s *** keyword in simulation.input file!\n", RequiredInputs[i].c_str());
       throw std::runtime_error("Required Keyword Not Found! Abort!!!!");
     }
   }
@@ -184,7 +184,7 @@ bool caseInSensStringCompare(const std::string& str1, const std::string& str2)
 void Check_Component_size(Components& SystemComponents)
 {
   size_t referenceVal = SystemComponents.MoleculeName.size();
-  //printf("reference size: %zu\n", referenceVal);
+  ////printf("reference size: %zu\n", referenceVal);
   if(SystemComponents.Moleculesize.size() != referenceVal)                   throw std::runtime_error("Moleculesize does not match! reference: " + std::to_string(referenceVal) + " Vector: " + std::to_string(SystemComponents.Moleculesize.size()));
   if(SystemComponents.NumberOfMolecule_for_Component.size() != referenceVal) throw std::runtime_error("NumberOfMolecule_for_Component does not match!");
   if(SystemComponents.MolFraction.size() != referenceVal)                    throw std::runtime_error("MolFraction does not match!");
@@ -197,7 +197,7 @@ void Check_Component_size(Components& SystemComponents)
   if(SystemComponents.hasfractionalMolecule.size() != referenceVal)          throw std::runtime_error("HasFractionalMolecule (boolean vector) not match!");
   if(SystemComponents.Lambda.size() != referenceVal)                         throw std::runtime_error("Lambda (fractional component vector) not match!");
   if(SystemComponents.Tmmc.size() != referenceVal)                         throw std::runtime_error("Tmmc (TMMC vector) not match!");
-  //printf("CreateMolecule size: %zu\n", SystemComponents.NumberOfCreateMolecules.size());
+  ////printf("CreateMolecule size: %zu\n", SystemComponents.NumberOfCreateMolecules.size());
   if(SystemComponents.NumberOfCreateMolecules.size() != referenceVal)        throw std::runtime_error("Molecules need to create not match!");
 }
 
@@ -216,40 +216,31 @@ void read_number_of_sims_from_input(size_t *NumSims, bool *SingleSim)
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
         tempsingle = true;
-        printf("running only one simulation\n");
+        //printf("running only one simulation\n");
       }
     }
     if (str.find("NumberOfSimulations", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
       sscanf(termsScannedLined[1].c_str(), "%zu", &tempnum);
-      printf("There are %zu simulations\n", tempnum);
+      //printf("There are %zu simulations\n", tempnum);
     }
   }
   *NumSims = tempnum; *SingleSim = tempsingle;
   file.close();
 }
 
-void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges, int *InitializationCycles, int *EquilibrationCycles, int *ProductionCycles, size_t *NumberOfTrialPositions, size_t *NumberOfTrialOrientations, double *Pressure, double *Temperature, size_t *AllocateSize, bool *ReadRestart, int *RANDOMSEED, bool *SameFrameworkEverySimulation, int3& NumberOfComponents)
+void read_simulation_input(Variables& Vars, bool *ReadRestart, bool *SameFrameworkEverySimulation)
 {
-  bool tempGPU = false; bool tempflag = false; bool nochargeflag = true;  //Ignore the changes if the chargemethod is not specified
-  //bool tempDualPrecision = false;
-
   bool tempRestart = false;  //Whether we read restart file or not
 
-  int initializationcycles=1; int equilibrationcycles=0; int productioncycles=0;
-  size_t widom = 8;
-  double temp = 0.0;
   std::vector<std::string> termsScannedLined{};
   std::string str;
   std::ifstream file("simulation.input");
-  int counter=0; size_t tempallocspace=0; size_t widom_orientation = 8;
-  double pres = 0.0;
+  int counter=0;
 
   size_t tempNComp = 0; 
-
-  // Zhao's note: setup random seed in this function //
-  double randomseed = 0.0;
+  int3& NComponents = Vars.TempComponents.NComponents;
 
   bool tempSameFrameworkEverySimulation = true;
   bool tempSeparateFramework = false;
@@ -262,7 +253,7 @@ void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges
       Split_Tab_Space(termsScannedLined, str);
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
-        tempGPU = true;
+        Vars.TempWidom.UseGPUReduction = true;
       }
     }
     if (str.find("Useflag", 0) != std::string::npos)
@@ -270,77 +261,68 @@ void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges
       Split_Tab_Space(termsScannedLined, str);
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
-        tempflag = true;
+        Vars.TempWidom.Useflag = true;
       }
     }
   
     if (str.find("RandomSeed", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      randomseed = std::stoi(termsScannedLined[1]);
-      printf("Random Seed is %d\n", randomseed);
+      Vars.Random.RANDOMSEED = std::stoi(termsScannedLined[1]);
+      //printf("Random Seed is %d\n", Vars.Random.RANDOMSEED);
     }
 
     if (str.find("AdsorbateAllocateSpace", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%zu", &tempallocspace);
-      printf("Allocate space for adsorbate is %zu\n", tempallocspace);
+      sscanf(termsScannedLined[1].c_str(), "%zu", &Vars.Allocate_space_Adsorbate);
+      //printf("Allocate space for adsorbate is %zu\n", Vars.Allocate_space_Adsorbate);
     }
     if (str.find("NumberOfInitializationCycles", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%d", &initializationcycles);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      sscanf(termsScannedLined[1].c_str(), "%d", &Vars.NumberOfInitializationCycles);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     if (str.find("NumberOfEquilibrationCycles", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%d", &equilibrationcycles);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      sscanf(termsScannedLined[1].c_str(), "%d", &Vars.NumberOfEquilibrationCycles);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     if (str.find("NumberOfProductionCycles", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%d", &productioncycles);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      sscanf(termsScannedLined[1].c_str(), "%d", &Vars.NumberOfProductionCycles);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     if (str.find("NumberOfTrialPositions", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%zu", &widom);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      sscanf(termsScannedLined[1].c_str(), "%zu", &Vars.TempWidom.NumberWidomTrials);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     if (str.find("NumberOfTrialOrientations", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[1].c_str(), "%zu", &widom_orientation);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      sscanf(termsScannedLined[1].c_str(), "%zu", &Vars.TempWidom.NumberWidomTrialsOrientations);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     //Zhao's note: Move it somewhere else//
     if (str.find("NumberOfBlocks", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      //printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
+      ////printf("line is %u, there are %zu Framework Atoms\n", counter, NumberFrameworkAtom);
     }
     if (str.find("Pressure", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      pres=std::stod(termsScannedLined[1]);
+      Vars.TempComponents.Pressure=std::stod(termsScannedLined[1]);
     }
     if (str.find("Temperature", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      temp=std::stod(termsScannedLined[1]);
-    }
-    if (str.find("ChargeMethod", 0) != std::string::npos)
-    {
-      Split_Tab_Space(termsScannedLined, str);
-      if(caseInSensStringCompare(termsScannedLined[1], "Ewald"))
-      {
-        nochargeflag = false;
-        printf("USE EWALD SUMMATION FOR CHARGE\n");
-      }
+      Vars.TempComponents.Temperature=std::stod(termsScannedLined[1]);
     }
     if (str.find("RestartFile", 0) != std::string::npos)
     {
@@ -348,7 +330,7 @@ void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
         tempRestart = true;
-        printf("USE CONFIGURATION FROM RESTARTINITIAL FILE\n");
+        //printf("USE CONFIGURATION FROM RESTARTINITIAL FILE\n");
       }
     }
     if (str.find("DifferentFrameworks", 0) != std::string::npos)
@@ -373,7 +355,7 @@ void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
         tempSeparateFramework = true;
-        printf("NEED TO SEPARATE FRAMEWORK COMPONENTS\n");
+        //printf("NEED TO SEPARATE FRAMEWORK COMPONENTS\n");
       }
     }
     //If we need to separate framework species, then read the following//
@@ -384,27 +366,21 @@ void read_simulation_input(bool *UseGPUReduction, bool *Useflag, bool *noCharges
       if(str.find("NumberofFrameworkComponents", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
-        NumberOfComponents.y = std::stoi(termsScannedLined[1]);
-        printf("THERE ARE %zu SEPARATE FRAMEWORK COMPONENTS\n", NumberOfComponents.y);
+        NComponents.y = std::stoi(termsScannedLined[1]);
+        //printf("THERE ARE %zu SEPARATE FRAMEWORK COMPONENTS\n", NComponents.y);
       }
     }
     if(counter>200) break;
   }
-  *UseGPUReduction=tempGPU; *Useflag=tempflag; *noCharges = nochargeflag;
-  *InitializationCycles=initializationcycles; *EquilibrationCycles=equilibrationcycles; *ProductionCycles=productioncycles;
-  *NumberOfTrialPositions=widom; *NumberOfTrialOrientations=widom_orientation;
-  *Pressure = pres; *Temperature = temp;
-  *AllocateSize  = tempallocspace;
   *ReadRestart   = tempRestart;
-  *RANDOMSEED    = randomseed;
   *SameFrameworkEverySimulation = tempSameFrameworkEverySimulation;
-  NumberOfComponents.z = tempNComp; //z component is the adsorbate components//
-  NumberOfComponents.x = tempNComp + NumberOfComponents.y;
-  //printf("Finished Checking Number of Components, There are %zu framework, %zu Adsorbates, %zu total Components\n", NumberOfComponents.y, NumberOfComponents.z, NumberOfComponents.x);
+  NComponents.z = tempNComp; //z component is the adsorbate components//
+  NComponents.x = tempNComp + NComponents.y;
+  ////printf("Finished Checking Number of Components, There are %zu framework, %zu Adsorbates, %zu total Components\n", NComponents.y, NComponents.z, NComponents.x);
   file.close();
 }
 
-void read_Gibbs_Stats(Gibbs& GibbsStatistics, bool& SetMaxStep, size_t& MaxStepPerCycle)
+void read_Gibbs_and_Cycle_Stats(Variables& Vars, bool& SetMaxStep, size_t& MaxStepPerCycle)
 {
   size_t counter = 0;
   double temp = 0.0;
@@ -421,18 +397,18 @@ void read_Gibbs_Stats(Gibbs& GibbsStatistics, bool& SetMaxStep, size_t& MaxStepP
       temp=std::stod(termsScannedLined[1]);
       if(temp > 0)
       {
-        GibbsStatistics.DoGibbs = true;
-        GibbsStatistics.GibbsBoxProb = temp;
+        Vars.GibbsStatistics.DoGibbs = true;
+        Vars.GibbsStatistics.GibbsBoxProb = temp;
       }
     }
-    if (str.find("GibbsSwapProbability", 0) != std::string::npos)
+    if (str.find("NPTVolumeChangeProbability", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
       temp=std::stod(termsScannedLined[1]);
       if(temp > 0)
       {
-        GibbsStatistics.DoGibbs = true;
-        GibbsStatistics.GibbsXferProb = temp;
+        Vars.TempComponents.PerformVolumeMove = true;
+        Vars.TempComponents.VolumeMoveProbability = temp;
       }
     }
     if (str.find("UseMaxStep", 0) != std::string::npos)
@@ -448,7 +424,14 @@ void read_Gibbs_Stats(Gibbs& GibbsStatistics, bool& SetMaxStep, size_t& MaxStepP
       Split_Tab_Space(termsScannedLined, str);
       sscanf(termsScannedLined[1].c_str(), "%zu", &MaxStepPerCycle);
       if(MaxStepPerCycle == 0) throw std::runtime_error("Max Steps per Cycle must be greater than ZERO!");
-    }  
+    }
+
+    if (str.find("StructureFactor_Multiplier", 0) != std::string::npos)
+    {
+      Split_Tab_Space(termsScannedLined, str);
+      sscanf(termsScannedLined[1].c_str(), "%zu", &Vars.StructureFactor_Multiplier);
+    }
+    
     if(counter>200) break;
   }
   if(SetMaxStep) 
@@ -459,25 +442,34 @@ void read_Gibbs_Stats(Gibbs& GibbsStatistics, bool& SetMaxStep, size_t& MaxStepP
   {
     printf("Running Cycles in the Normal Way\n");
   }
-  GibbsStatistics.GibbsBoxStats  = {0.0, 0.0};
-  GibbsStatistics.GibbsXferStats = {0.0, 0.0};
+  Vars.GibbsStatistics.GibbsBoxStats  = {0, 0};
+  Vars.GibbsStatistics.GibbsXferStats = {0, 0};
   file.close();
 }
 
-void read_FFParams_from_input(ForceField& FF, double& precision)
+void read_FFParams_from_input(Input_Container& Input)
 {
   std::vector<std::string> termsScannedLined{};
   std::string str;
 
   double tempOverlap = 1.0e6; double tempvdwcut = 12.0; double tempcoulcut = 12.0;
   double tempprecision = 1.0e-6;
+  bool tempnoCharges = true;
   //double tempalpha = 0.26506; //Zhao's note: here we used alpha equal to the preset value from raspa3. Need to revisit RASPA-2 for the exact calculation of alpha.
-  std::vector<double> Cell(5);
   //Zhao's note: Using the heuresitic equation for converting Ewald Precision to alpha.
 
   std::ifstream file("simulation.input");
   while (std::getline(file, str))
   {
+    if (str.find("ChargeMethod", 0) != std::string::npos)
+    {
+      Split_Tab_Space(termsScannedLined, str);
+      if(caseInSensStringCompare(termsScannedLined[1], "Ewald"))
+      {
+        tempnoCharges = false;
+        //printf("USE EWALD SUMMATION FOR CHARGE\n");
+      }
+    }
     if (str.find("OverlapCriteria", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
@@ -504,30 +496,33 @@ void read_FFParams_from_input(ForceField& FF, double& precision)
       Split_Tab_Space(termsScannedLined, str);
       if(caseInSensStringCompare(termsScannedLined[1], "LJ_And_Real_Biasing"))
       {
-        FF.VDWRealBias = true; //By default, it is using LJ + Real Biasing
+        Input.VDWRealBias = true; //By default, it is using LJ + Real Biasing
       }
       else if(caseInSensStringCompare(termsScannedLined[1], "LJ_Biasing"))
       {
-        FF.VDWRealBias = false;
+        Input.VDWRealBias = false;
       }
     }
-    if (str.find("Component", 0) != std::string::npos) //When it reads component, skip//
+    if (str.find("Component ", 0) != std::string::npos) //When it reads component, skip//
       break;
   }
   //read FF array
-  FF.OverlapCriteria   = tempOverlap;
-  FF.CutOffVDW         = tempvdwcut*tempvdwcut;
-  FF.CutOffCoul        = tempcoulcut*tempcoulcut;
-  precision            = tempprecision;
+  Input.OverlapCriteria   = tempOverlap;
+  Input.CutOffVDW         = tempvdwcut*tempvdwcut;
+  Input.CutOffCoul        = tempcoulcut*tempcoulcut;
+  Input.EwaldPrecision    = tempprecision;
+  Input.noCharges         = tempnoCharges;
   file.close();
 }
 
 void ReadFrameworkComponentMoves(Move_Statistics& MoveStats, Components& SystemComponents, size_t comp)
 {
   if(SystemComponents.NComponents.y <= 1)
-  { printf("Only one Framework Component, No moves assigned\n"); return;}
+  { //printf("Only one Framework Component, No moves assigned\n"); 
+    return;
+  }
   if(comp >= SystemComponents.NComponents.y) return;
-  printf("Checking Framework Moves for Framework Component %zu\n", comp);
+  //printf("Checking Framework Moves for Framework Component %zu\n", comp);
   std::string FrameworkComponentName = "Framework_Component_ " + std::to_string(comp); //Separate with a space, add a _ to avoid confusion with Adsorbate species//
 
   std::vector<std::string> termsScannedLined{};
@@ -545,9 +540,13 @@ void ReadFrameworkComponentMoves(Move_Statistics& MoveStats, Components& SystemC
     start_counter++;
   }
 
-  if(!FOUND){printf("%s not found in simulation.input\n", FrameworkComponentName.c_str()); return;}
+  if(!FOUND)
+  {
+    //printf("%s not found in simulation.input\n", FrameworkComponentName.c_str()); 
+    return;
+  }
   
-  printf("%s starts at line number %zu\n", start_string.c_str(), start_counter);
+  //printf("%s starts at line number %zu\n", start_string.c_str(), start_counter);
 
   file.clear();
   file.seekg(0);
@@ -560,7 +559,7 @@ void ReadFrameworkComponentMoves(Move_Statistics& MoveStats, Components& SystemC
     if (str.find(FrameworkComponentName, 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      printf("Found Framework_Component %s in simulation.input file\n", std::to_string(comp).c_str());
+      //printf("Found Framework_Component %s in simulation.input file\n", std::to_string(comp).c_str());
     }
     if (str.find("TranslationProbability", 0) != std::string::npos)
     {
@@ -576,7 +575,7 @@ void ReadFrameworkComponentMoves(Move_Statistics& MoveStats, Components& SystemC
     {
       Split_Tab_Space(termsScannedLined, str);
       MoveStats.SpecialRotationProb=std::stod(termsScannedLined[1]);
-      printf("WARNING: Special Rotations are rotations with pre-set Rotation Axes, Rotation Axes, Angles are needed to define in def files for %s !\n", FrameworkComponentName.c_str());
+      //printf("WARNING: Special Rotations are rotations with pre-set Rotation Axes, Rotation Axes, Angles are needed to define in def files for %s !\n", FrameworkComponentName.c_str());
     }
     //Try to add reinsertion move here//
     if (str.find("ReinsertionProbability", 0) != std::string::npos)
@@ -586,7 +585,8 @@ void ReadFrameworkComponentMoves(Move_Statistics& MoveStats, Components& SystemC
     }
     if (str.find("END_OF_Framework_Component_" + std::to_string(comp), 0) != std::string::npos)
     {
-      printf("Reach the end of %s\n", FrameworkComponentName.c_str()); break;
+      //printf("Reach the end of %s\n", FrameworkComponentName.c_str()); 
+      break;
     } 
     counter ++;
   }
@@ -602,7 +602,7 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
   double tempalpha = 0.26506; //Zhao's note: here we used alpha equal to the preset value from raspa3. Need to revisit RASPA-2 for the exact calculation of alpha.
   // Zhao's note: use the Ewald method in LAMMPS, need full control of alpha and kvectors //
   bool Ewald_UseLAMMPS_Setup = false; //Default using RASPA-2's setup (automatic, heurestic)
-  printf("----------------EWALD SUMMATION SETUP-----------------\n");
+  //printf("----------------EWALD SUMMATION SETUP-----------------\n");
   //Zhao's note: add controls if the users want to use specified ewald parameters//
   std::vector<std::string> termsScannedLined{};
   std::string str;
@@ -638,7 +638,7 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
       if (str.find("Ewald_kvectors", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
-        printf("termsScannedLined.size(): %zu\n", termsScannedLined.size());
+        //printf("termsScannedLined.size(): %zu\n", termsScannedLined.size());
         if(termsScannedLined.size() != 4)
         {
           throw std::runtime_error("Need 3 values provided for the Ewald kvectors! Check your input\n");
@@ -653,7 +653,7 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
     if(AlphaFound && kvecFound)
     {
       Box.UseLAMMPSEwald = true;
-      printf("Using LAMMPS Setup for Ewald, need to specify both Alpha and number of kvectors in simulation.input file\n");
+      //printf("Using LAMMPS Setup for Ewald, need to specify both Alpha and number of kvectors in simulation.input file\n");
       //Calculate Reciprocal cutoff
       double lx = Box.Cell[0];
       double ly = Box.Cell[4];
@@ -661,8 +661,8 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
       double xy = 0.0; //Box.Cell[3];
       double xz = 0.0; //Box.Cell[6];
       double yz = 0.0; //Box.Cell[7];
-      //printf("Box Vals: %.5f %.5f %.5f\n %.5f %.5f %.5f\n %.5f %.5f %.5f\n", Box.Cell[0], Box.Cell[1], Box.Cell[2], Box.Cell[3], Box.Cell[4], Box.Cell[5], Box.Cell[6], Box.Cell[7], Box.Cell[8]);
-      //printf("xy: %.5f, xz: %.5f, yz: %.5f\n", xy, xz, yz);
+      ////printf("Box Vals: %.5f %.5f %.5f\n %.5f %.5f %.5f\n %.5f %.5f %.5f\n", Box.Cell[0], Box.Cell[1], Box.Cell[2], Box.Cell[3], Box.Cell[4], Box.Cell[5], Box.Cell[6], Box.Cell[7], Box.Cell[8]);
+      ////printf("xy: %.5f, xz: %.5f, yz: %.5f\n", xy, xz, yz);
       double ux = 2*M_PI/lx;
       double uy = 2*M_PI*(-xy)/lx/ly;
       double uz = 2*M_PI*(xy*yz - ly*xz)/lx/ly/lz;
@@ -678,7 +678,7 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
   }
   else //Doing the RASPA-2 way of automatically calculate alpha and kvecs using Precision
   {
-    printf("Using RASPA-2 way, need to specify the Precision of Ewald\n");
+    //printf("Using RASPA-2 way, need to specify the Precision of Ewald\n");
     double tol = sqrt(fabs(log(precision*CutOffCoul)));
     tempalpha  = sqrt(fabs(log(precision*CutOffCoul*tol)))/CutOffCoul;
     double tol1= sqrt(-log(precision*CutOffCoul*pow(2.0*tol*tempalpha, 2)));
@@ -689,11 +689,11 @@ void read_Ewald_Parameters_from_input(double CutOffCoul, Boxsize& Box, double pr
     Box.kmax.y = std::round(0.25 + Box.Cell[4] * tempalpha * tol1/M_PI);
     Box.kmax.z = std::round(0.25 + Box.Cell[8] * tempalpha * tol1/M_PI);
     Box.ReciprocalCutOff = pow(1.05*static_cast<double>(MAX3(Box.kmax.x, Box.kmax.y, Box.kmax.z)), 2);
-    printf("tol: %.5f, tol1: %.5f\n", tol, tol1);
+    //printf("tol: %.5f, tol1: %.5f\n", tol, tol1);
   } 
-  printf("ALpha is %.5f, Prefactor: %.5f\n", Box.Alpha, Box.Prefactor);
-  printf("kmax: %d %d %d, ReciprocalCutOff: %.5f\n", Box.kmax.x, Box.kmax.y, Box.kmax.z, Box.ReciprocalCutOff);
-  printf("------------------------------------------------------\n");
+  //printf("ALpha is %.5f, Prefactor: %.5f\n", Box.Alpha, Box.Prefactor);
+  //printf("kmax: %d %d %d, ReciprocalCutOff: %.5f\n", Box.kmax.x, Box.kmax.y, Box.kmax.z, Box.ReciprocalCutOff);
+  //printf("------------------------------------------------------\n");
   file.close();
 }
 
@@ -745,19 +745,20 @@ double Mixing_rule_Sigma(double sig1, double sig2)
 }
 //Zhao's note: read force field definition first, then read pseudo-atoms
 //The type numbering is determined in here, then used in pseudo_atoms.def
-void ForceFieldParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
+//void ForceFieldParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
+void ForceFieldParser(Input_Container& Input, PseudoAtomDefinitions& PseudoAtom)
 {
+  Input.AtomFF = std::vector<Atom_FF>();
   std::string scannedLine; std::string str;
   std::vector<std::string> termsScannedLined{};
   size_t counter = 0;
   std::ifstream FFMixfile("force_field_mixing_rules.def");
   size_t NumberOfDefinitions = 0;
-  bool shifted = false; bool tail = false;
   //Temporary vectors for storing the data
-  std::vector<double>Epsilon; std::vector<double>Sigma;
   // Some other temporary values
-  double ep = 0.0; double sig = 0.0;
-  printf("------------------PARSING FORCE FIELD MIXING RULES----------------\n");
+  bool shifted = false; bool tail = false;
+  Atom_FF AtomFF; //placeholder for temp values to push back//
+  //printf("------------------PARSING FORCE FIELD MIXING RULES----------------\n");
   // First read the pseudo atom file
   while (std::getline(FFMixfile, str))
   {
@@ -773,7 +774,6 @@ void ForceFieldParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
       if(termsScannedLined[0] == "yes")
       {
         tail = true; //Zhao's note: not implemented
-        throw std::runtime_error("Tail correction not implemented YET...");
       }
     }
     else if(counter == 5) // read number of force field definitions
@@ -781,68 +781,52 @@ void ForceFieldParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
       Split_Tab_Space(termsScannedLined, str);
       sscanf(termsScannedLined[0].c_str(), "%zu", &NumberOfDefinitions);
       if (NumberOfDefinitions <= 0) throw std::runtime_error("Incorrect amount of force field definitions");
-      if (NumberOfDefinitions > 100) printf("There are A LOT OF Definitions. Do you need all of them? Okay...\n");
+      //if (NumberOfDefinitions > 100) //printf("There are A LOT OF Definitions. Do you need all of them? Okay...\n");
     }
     else if(counter >= 7) // read data for each force field definition
     {
-      printf("%s\n", str.c_str());
+      //printf("%s\n", str.c_str());
       Split_Tab_Space(termsScannedLined, str);
+
       PseudoAtom.Name.push_back(termsScannedLined[0]);
-      ep = std::stod(termsScannedLined[2]);
-      sig= std::stod(termsScannedLined[3]);
-      Epsilon.push_back(ep);
-      Sigma.push_back(sig);
+
+      AtomFF.Name    = termsScannedLined[0];
+      AtomFF.epsilon = std::stod(termsScannedLined[2]);
+      AtomFF.sigma   = std::stod(termsScannedLined[3]);
+      AtomFF.shift   = shifted;
+      AtomFF.tail    = tail;
+      
+      Input.AtomFF.push_back(AtomFF);
     }
     counter++;
     if(counter==7+NumberOfDefinitions) break; //in case there are extra empty rows, Zhao's note: I am skipping the mixing rule, assuming Lorentz-Berthelot
   }
-  printf("------------------------------------------------------------------\n");
-  //Do mixing rule (assuming Lorentz-Berthelot)
-  //Declare some temporary arrays
-  std::vector<double>Mix_Epsilon; std::vector<double>Mix_Sigma; std::vector<double>Mix_Shift; 
-  std::vector<double>Mix_Z; //temporary third array
-  std::vector<int>Mix_Type; //Force Field Type (Zhao's note: assuming zero, which is Lennard-Jones)
-  double temp_ep = 0.0; double temp_sig = 0.0;
-  for(size_t i = 0; i < NumberOfDefinitions; i++)
-  {
-    for(size_t j = 0; j < NumberOfDefinitions; j++)
-    {
-      temp_ep = Mixing_Rule_Epsilon(Epsilon[i], Epsilon[j])/1.20272430057; //Zhao's note: caveat here: need to do full energy conversion
-      temp_sig= Mixing_rule_Sigma(Sigma[i], Sigma[j]);
-      Mix_Epsilon.push_back(temp_ep);
-      Mix_Sigma.push_back(temp_sig);
-      if(shifted)
-      {
-        Mix_Shift.push_back(Get_Shifted_Value(temp_ep, temp_sig, FF.CutOffVDW));
-      }
-      else
-      {
-        Mix_Shift.push_back(0.0);
-      }
-      if(tail){
-      throw std::runtime_error("Tail correction not implemented YET in force_field_mixing_rules.def, use the overwritting file force_field.def instead...");} 
-      Mix_Z.push_back(0.0);
-      Mix_Type.push_back(0);
-    }
-  }
-  //For checking if mixing rule terms are correct//
-  printf("----- MIXED VDW PARAMETERS -----\n");
-  for(size_t i = 0; i < Mix_Shift.size(); i++)
-  {
-    size_t ii = i/NumberOfDefinitions; size_t jj = i%NumberOfDefinitions;
-    if(ii <= jj) printf("i: %zu, ii: %zu, jj: %zu, Name_i: %s, Name_j: %s, ep: %.10f, sig: %.10f, shift: %.10f\n", i,ii,jj,PseudoAtom.Name[ii].c_str(), PseudoAtom.Name[jj].c_str(), Mix_Epsilon[i], Mix_Sigma[i], Mix_Shift[i]);
-  }
-  printf("----- END OF MIXED VDW PARAMETERS -----\n");
-  
-  FF.epsilon = convert1DVectortoArray(Mix_Epsilon);
-  FF.sigma   = convert1DVectortoArray(Mix_Sigma);
-  FF.z       = convert1DVectortoArray(Mix_Z);
-  FF.shift   = convert1DVectortoArray(Mix_Shift);
-  FF.FFType  = convert1DVectortoArray(Mix_Type);
-  FF.size    = NumberOfDefinitions;
+  //printf("------------------------------------------------------------------\n");
   FFMixfile.close();
 }
 
+static inline double GetTailCorrectionValue(double epsilon, double sigma, double cutoff)
+{
+  //double scaling = 1.0; Zhao's note: Need more care about fractional molecules with tail corrections
+  double arg1 = epsilon;
+  double arg2 = sigma * sigma * sigma;
+  double rr = sqrt(cutoff);
+  double term1= pow(arg2, 4) / (9.0 * pow(rr, 9)); //sigma^12/(9*r^9)
+  double term2= pow(arg2, 2) / (3.0 * pow(rr, 3)); //sigma^6 /(3*r^3)
+  double val = 16.0 * 3.14159265358979323846 / 2.0 * arg1 * (term1 - term2);
+  return val;
+}
+
+static inline void PrepareTailCorrection(size_t i, size_t j, size_t NPseudoAtoms, std::vector<Tail>& TempTail, std::vector<double>& Mix_Epsilon, std::vector<double>& Mix_Sigma, double cutoff)
+{
+  size_t IJ_Forward = i * NPseudoAtoms + j;
+  size_t IJ_Reverse = j * NPseudoAtoms + i;
+  TempTail[IJ_Forward].UseTail= true;
+  TempTail[IJ_Forward].Energy = GetTailCorrectionValue(Mix_Epsilon[IJ_Forward], Mix_Sigma[IJ_Forward], cutoff);
+  if(i!=j) TempTail[IJ_Reverse] = TempTail[IJ_Forward];
+  //printf("TypeI: %zu, TypeJ: %zu, NPseudoAtoms: %zu, Energy: %.5f\n", i, j, NPseudoAtoms, TempTail[IJ_Forward].Energy);
+}
+/*
 static inline size_t GetTypeForPseudoAtom(PseudoAtomDefinitions& PseudoAtom, std::string& AtomName)
 {
   bool Found = false;
@@ -859,33 +843,29 @@ static inline size_t GetTypeForPseudoAtom(PseudoAtomDefinitions& PseudoAtom, std
   if(!Found){throw std::runtime_error("Overwriting terms are not Found in Pseudo atoms!!! [" + AtomName + "]");}
   return AtomTypeInt;
 }
-
-static inline double GetTailCorrectionValue(size_t IJ, ForceField& FF)
+*/
+static inline size_t GetTypeFromFFName(Input_Container& Input, std::string& AtomName)
 {
-  //double scaling = 1.0; Zhao's note: Need more care about fractional molecules with tail corrections
-  double arg1 = FF.epsilon[IJ];
-  double sigma= FF.sigma[IJ];
-  double arg2 = sigma * sigma * sigma;
-  double rr = sqrt(FF.CutOffVDW);
-  double term1= pow(arg2, 4) / (9.0 * pow(rr, 9)); //sigma^12/(9*r^9)
-  double term2= pow(arg2, 2) / (3.0 * pow(rr, 3)); //sigma^6 /(3*r^3)
-  double val = 16.0 * 3.14159265358979323846 / 2.0 * arg1 * (term1 - term2);
-  return val;
+  bool Found = false;
+  size_t AtomTypeInt = 0;
+  for(size_t j = 0; j < Input.AtomFF.size(); j++)
+  {
+    if(AtomName == Input.AtomFF[j].Name)
+    {
+      AtomTypeInt = j;
+      Found = true;
+      break;
+    }
+  }
+  if(!Found){throw std::runtime_error("Overwriting terms are not Found in Pseudo atoms!!! [" + AtomName + "]");}
+  return AtomTypeInt;
 }
 
-static inline void PrepareTailCorrection(size_t i, size_t j, std::vector<Tail>& TempTail, PseudoAtomDefinitions& PseudoAtom, ForceField& FF)
-{
-  size_t IJ_Forward = i * FF.size + j;
-  size_t IJ_Reverse = j * FF.size + i;
-  TempTail[IJ_Forward].UseTail= true;
-  TempTail[IJ_Forward].Energy = GetTailCorrectionValue(IJ_Forward, FF);
-  if(i!=j) TempTail[IJ_Reverse] = TempTail[IJ_Forward];
-  printf("TypeI: %zu, TypeJ: %zu, FF.size: %zu, Energy: %.5f\n", i, j, FF.size, TempTail[IJ_Forward].Energy);
-}
+
 //Function for Overwritten tail corrections
 //For now, it only considers tail correction//
 //Add overwritting LJ//
-void OverWrite_Mixing_Rule(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
+void OverWrite_Mixing_Rule(Input_Container& Input)
 {
   std::string scannedLine; std::string str;
   std::vector<std::string> termsScannedLined{};
@@ -911,7 +891,7 @@ void OverWrite_Mixing_Rule(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
   std::filesystem::path pathfile = std::filesystem::path("force_field.def");
   if (!std::filesystem::exists(pathfile))
   {
-    printf("Force Field OverWrite file not found\n");
+    //printf("Force Field OverWrite file not found\n");
     return;
   }
   
@@ -932,8 +912,8 @@ void OverWrite_Mixing_Rule(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
     }
     counter ++;
   }
-  printf("----- OVERWRITTING VDW PARAMETERS -----\n");
-  printf("There are %zu overwritting entries, starting from line %zu\n", Noverwrite, startline);
+  //printf("----- OVERWRITTING VDW PARAMETERS -----\n");
+  //printf("There are %zu overwritting entries, starting from line %zu\n", Noverwrite, startline);
   if(Noverwrite == 0) 
   {
     return;
@@ -941,71 +921,68 @@ void OverWrite_Mixing_Rule(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
   OverWritefile.clear();
   OverWritefile.seekg(0);
 
+  size_t FFsize = Input.AtomFF.size();
+
   counter = 0;
   while (std::getline(OverWritefile, str))
   {
-    printf("counter: %zu, %s, shifted: %s\n", counter, (counter >= (startline+3) && counter < (3 + startline + Noverwrite)) ? "true" : "false", shifted ? "true" : "false");
+    //printf("counter: %zu, %s, shifted: %s\n", counter, (counter >= (startline+3) && counter < (3 + startline + Noverwrite)) ? "true" : "false", shifted ? "true" : "false");
     if(counter >= (startline+3) && counter < (3 + startline + Noverwrite))
     {
-      printf("cutting string: %s\n", str.c_str());
+      //printf("cutting string: %s\n", str.c_str());
       Split_Tab_Space(termsScannedLined, str);
       if(termsScannedLined.size() == 5) //5 entries = LJ mixing rule parameter length
       {
         //Ow Hw lennard-jones 1.0 1.0
-        printf("Overwritting parameters for VDW (lennard-jones): %s and %s\n", termsScannedLined[0].c_str(), termsScannedLined[1].c_str());
-        size_t typeI = GetTypeForPseudoAtom(PseudoAtom, termsScannedLined[0]);
-        size_t typeJ = GetTypeForPseudoAtom(PseudoAtom, termsScannedLined[1]);
+        //printf("Overwritting parameters for VDW (lennard-jones): %s and %s\n", termsScannedLined[0].c_str(), termsScannedLined[1].c_str());
+        size_t typeI = GetTypeFromFFName(Input, termsScannedLined[0]);
+        size_t typeJ = GetTypeFromFFName(Input, termsScannedLined[1]);
 
         double temp_ep = std::stod(termsScannedLined[3])/1.20272430057; //K -> 10J/mol
         double temp_sig= std::stod(termsScannedLined[4]);               //Angstroem
-        FF.epsilon[typeI * FF.size + typeJ] = temp_ep;
-        FF.epsilon[typeJ * FF.size + typeI] = temp_ep;
-        FF.sigma[typeI * FF.size + typeJ] = temp_sig;
-        FF.sigma[typeJ * FF.size + typeI] = temp_sig;
+       
+        Input.Mix_Epsilon[typeI * FFsize + typeJ] = temp_ep;
+        Input.Mix_Epsilon[typeJ * FFsize + typeI] = temp_ep;
+        Input.Mix_Sigma[typeI * FFsize + typeJ] = temp_sig;
+        Input.Mix_Sigma[typeJ * FFsize + typeI] = temp_sig;
         if(shifted)
         {
-          FF.shift[typeI * FF.size + typeJ] = Get_Shifted_Value(temp_ep, temp_sig, FF.CutOffVDW);
-          FF.shift[typeJ * FF.size + typeI] = Get_Shifted_Value(temp_ep, temp_sig, FF.CutOffVDW);
+          Input.Mix_Shift[typeI * FFsize + typeJ] = Get_Shifted_Value(temp_ep, temp_sig, Input.CutOffVDW);
+          Input.Mix_Shift[typeJ * FFsize + typeI] = Get_Shifted_Value(temp_ep, temp_sig, Input.CutOffVDW);
         }
       }
     }
     counter ++;
   }
-  printf("----- MIXED VDW PARAMETERS (WITH OVERWRITTEN TERMS) -----\n");
-  for(size_t ii = 0; ii < FF.size; ii++)
-    for(size_t jj = 0; jj < FF.size; jj++)
+  //printf("----- MIXED VDW PARAMETERS (WITH OVERWRITTEN TERMS) [10 J/mol, Angstroem]-----\n");
+  for(size_t ii = 0; ii < FFsize; ii++)
+    for(size_t jj = 0; jj < FFsize; jj++)
     {
-      if(ii <= jj) printf("ii: %zu, jj: %zu, Name_i: %s, Name_j: %s, ep: %.10f, sig: %.10f, shift: %.10f\n", ii,jj,PseudoAtom.Name[ii].c_str(), PseudoAtom.Name[jj].c_str(), FF.epsilon[ii * FF.size + jj], FF.sigma[ii * FF.size + jj], FF.shift[ii * FF.size + jj]);
+      //if(ii <= jj) //printf("ii: %zu, jj: %zu, Name_i: %s, Name_j: %s, ep: %.10f, sig: %.10f, shift: %.10f\n", ii,jj,Input.AtomFF[ii].Name.c_str(), Input.AtomFF[jj].Name.c_str(), Input.Mix_Epsilon[ii * FFsize + jj], Input.Mix_Sigma[ii * FFsize + jj], Input.Mix_Shift[ii * FFsize + jj]);
     }
-  printf("----- END OF MIXED VDW PARAMETERS (WITH OVERWRITTEN TERMS) -----\n");
+  //printf("----- END OF MIXED VDW PARAMETERS (WITH OVERWRITTEN TERMS) -----\n");
   OverWritefile.clear();
   OverWritefile.seekg(0);
   OverWritefile.close();
 }
 
-void OverWriteTailCorrection(Components& SystemComponents, ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
+void OverWriteTailCorrection(Input_Container& Input)
 {
-  size_t FFsize = FF.size; 
   std::string scannedLine; std::string str;
   std::vector<std::string> termsScannedLined{};
   size_t counter = 0;
   size_t OverWriteSize = 0;
   size_t typeI; size_t typeJ;
-  std::vector<Tail>TempTail(FFsize * FFsize);
+  std::vector<Tail>& TempTail = Input.Mix_Tail;
+
   std::ifstream OverWritefile("force_field.def");
   std::filesystem::path pathfile = std::filesystem::path("force_field.def");
   if (!std::filesystem::exists(pathfile))
   {
-    printf("Force Field OverWrite file not found\n");
-    SystemComponents.HasTailCorrection = false;
-    SystemComponents.TailCorrection = TempTail;
+    //printf("Force Field OverWrite file not found\n");
     return;
   }
-  else
-  { 
-    SystemComponents.HasTailCorrection = true;
-  } 
-  printf("----------------FORCE FIELD OVERWRITTEN (TAIL CORRECTION) PARAMETERS----------------\n");
+  //printf("----------------FORCE FIELD OVERWRITTEN (TAIL CORRECTION) PARAMETERS----------------\n");
   while (std::getline(OverWritefile, str))
   { 
     if(counter == 1) //read OverWriteSize
@@ -1020,21 +997,96 @@ void OverWriteTailCorrection(Components& SystemComponents, ForceField& FF, Pseud
       if(termsScannedLined.size() != 4) throw std::runtime_error("Tail Correction Overwrite need 4 terms for each entry! Check your force_field.def file!");
       if(termsScannedLined[3] == "yes") //Use Tail Correction or not//
       {
-        typeI = GetTypeForPseudoAtom(PseudoAtom, termsScannedLined[0]);
-        typeJ = GetTypeForPseudoAtom(PseudoAtom, termsScannedLined[1]);
-        PrepareTailCorrection(typeI, typeJ, TempTail, PseudoAtom, FF);
+        typeI = GetTypeFromFFName(Input, termsScannedLined[0]);
+        typeJ = GetTypeFromFFName(Input, termsScannedLined[1]);
+        PrepareTailCorrection(typeI, typeJ, Input.AtomFF.size(), TempTail, Input.Mix_Epsilon, Input.Mix_Sigma, Input.CutOffVDW);
       }
     }
     counter ++;    if(counter==3 + OverWriteSize) break; //in case there are extra empty rows, Zhao's note: I am skipping the mixing rule, assuming Lorentz-Berthelot
   }
-  printf("------------------------------------------------------------------------------------\n");
+  //printf("------------------------------------------------------------------------------------\n");
   //Eliminate the terms that do not have tail corrections//
-  for(size_t i = 0; i < TempTail.size(); i++)
-    SystemComponents.TailCorrection.push_back(TempTail[i]);
   OverWritefile.close();
 }
 
-void read_movies_stats_print(Components& SystemComponents)
+//LJ, shift, and tail, General mixing rule//
+void ForceField_Processing(Input_Container& Input)
+{
+  size_t NumberOfDefinitions = Input.AtomFF.size();
+  //Re-initialize values//
+  Input.Mix_Epsilon = std::vector<double>();
+  Input.Mix_Sigma   = std::vector<double>();
+  Input.Mix_Shift   = std::vector<double>();
+  Input.Mix_Tail    = std::vector<Tail>(NumberOfDefinitions * NumberOfDefinitions);
+
+  //Do mixing rule (assuming Lorentz-Berthelot)
+  //Declare some temporary arrays
+  std::vector<int>Mix_Type; //Force Field Type (Zhao's note: assuming zero, which is Lennard-Jones)
+  double temp_ep = 0.0; double temp_sig = 0.0;
+  for(size_t i = 0; i < NumberOfDefinitions; i++)
+  {
+    for(size_t j = 0; j < NumberOfDefinitions; j++)
+    {
+      double eps_i = Input.AtomFF[i].epsilon;
+      double eps_j = Input.AtomFF[j].epsilon;
+      double sig_i = Input.AtomFF[i].sigma;
+      double sig_j = Input.AtomFF[j].sigma;
+      temp_ep = Mixing_Rule_Epsilon(eps_i, eps_j)/1.20272430057; //Zhao's note: caveat here: need to do full energy conversion
+      temp_sig= Mixing_rule_Sigma(sig_i, sig_j);
+      Input.Mix_Epsilon.push_back(temp_ep);
+      Input.Mix_Sigma.push_back(temp_sig);
+
+      if(Input.AtomFF[i].shift && Input.AtomFF[j].shift)
+      {
+        Input.Mix_Shift.push_back(Get_Shifted_Value(temp_ep, temp_sig, Input.CutOffVDW));
+      }
+      else
+      {
+        Input.Mix_Shift.push_back(0.0);
+      }
+      //If atom i needs tail correction OR atom j needs tail correction OR specifically interaction IJ needs it//
+      if(Input.AtomFF[i].tail && Input.AtomFF[j].tail)
+      {
+        PrepareTailCorrection(i, j, Input.AtomFF.size(), Input.Mix_Tail, Input.Mix_Epsilon, Input.Mix_Sigma, Input.CutOffVDW);
+      }
+      Input.Mix_Z.push_back(0.0);
+      Input.Mix_Type.push_back(0);
+    }
+  }
+  //For checking if mixing rule terms are correct//
+  //printf("----- MIXED VDW PARAMETERS -----\n");
+  //for(size_t i = 0; i < Input.Mix_Shift.size(); i++)
+  //{
+    //size_t ii = i/NumberOfDefinitions; size_t jj = i%NumberOfDefinitions;
+    //if(ii <= jj) //printf("i: %zu, ii: %zu, jj: %zu, Name_i: %s, Name_j: %s, ep: %.10f, sig: %.10f, shift: %.10f\n", i,ii,jj,Input.AtomFF[ii].Name.c_str(), Input.AtomFF[jj].Name.c_str(), Input.Mix_Epsilon[i], Input.Mix_Sigma[i], Input.Mix_Shift[i]);
+  //}
+  //printf("----- END OF MIXED VDW PARAMETERS -----\n");
+}
+
+void Copy_InputLoader_Data(Variables& Vars)
+{
+  Vars.FF.epsilon = convert1DVectortoArray(Vars.Input.Mix_Epsilon);
+  Vars.FF.sigma   = convert1DVectortoArray(Vars.Input.Mix_Sigma);
+  Vars.FF.z       = convert1DVectortoArray(Vars.Input.Mix_Z);
+  Vars.FF.shift   = convert1DVectortoArray(Vars.Input.Mix_Shift);
+  Vars.FF.FFType  = convert1DVectortoArray(Vars.Input.Mix_Type);
+  Vars.FF.size    = Vars.Input.AtomFF.size();
+
+  Vars.FF.noCharges   = Vars.Input.noCharges;
+  Vars.FF.CutOffVDW   = Vars.Input.CutOffVDW;
+  Vars.FF.CutOffCoul  = Vars.Input.CutOffCoul;
+  Vars.FF.VDWRealBias = Vars.Input.VDWRealBias;
+  Vars.FF.OverlapCriteria = Vars.Input.OverlapCriteria;
+  
+  //Copy Tail Corrections//
+  for(size_t j = 0; j < Vars.Input.Mix_Tail.size(); j++)
+    if(Vars.Input.Mix_Tail[j].UseTail) 
+      Vars.TempComponents.HasTailCorrection = true;
+  Vars.TempComponents.TailCorrection    = Vars.Input.Mix_Tail;
+}
+
+
+void read_movies_stats_print(Components& SystemComponents, size_t sim)
 {
   std::vector<std::string> termsScannedLined{};
   std::string str;
@@ -1052,39 +1104,65 @@ void read_movies_stats_print(Components& SystemComponents)
       Split_Tab_Space(termsScannedLined, str);
       sscanf(termsScannedLined[1].c_str(), "%zu", &SystemComponents.PrintStatsEvery);
     }
+    if (str.find("SaveOutputToFile", 0) != std::string::npos)
+    {
+      Split_Tab_Space(termsScannedLined, str);
+      if(caseInSensStringCompare(termsScannedLined[1], "yes"))
+      {
+        std::filesystem::path cwd = std::filesystem::current_path();
+        std::filesystem::path directoryName = cwd / "Output/";
+        std::filesystem::create_directories(directoryName);
+        std::string FILENAME = directoryName.string() + "System_"+\
+                               std::to_string(sim) +"_"+\
+                               SystemComponents.MoleculeName[0] +"_"+\
+                               std::to_string(SystemComponents.NumberofUnitCells.x)+"_"+\
+                               std::to_string(SystemComponents.NumberofUnitCells.y)+"_"+\
+                               std::to_string(SystemComponents.NumberofUnitCells.z)+"_"+\
+                               std::to_string(SystemComponents.Temperature) + "_" +\
+                               std::to_string(SystemComponents.Pressure) + ".data";
+
+        SystemComponents.OUTPUT = fopen(FILENAME.c_str(), "w");
+        if(SystemComponents.OUTPUT == nullptr)
+        {
+          throw std::runtime_error("FAIL TO OPEN" + FILENAME + "\n");
+        }
+      }
+    }
   }
-  printf("Writing Movies every %zu MC step(s) or cycle(s)\n", SystemComponents.MoviesEvery);
-  printf("Printing Loadings and energies every %zu MC step(s) or cycle(s)\n", SystemComponents.PrintStatsEvery);
+  //printf("Writing Movies every %zu MC step(s) or cycle(s)\n", SystemComponents.MoviesEvery);
+  //printf("Printing Loadings and energies every %zu MC step(s) or cycle(s)\n", SystemComponents.PrintStatsEvery);
+  if(SystemComponents.OUTPUT != stderr) //printf("Saving Output to File!\n");
   file.close();
 }
 
 
-void PseudoAtomParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
+void PseudoAtomParser(PseudoAtomDefinitions& PseudoAtom)
 {
   std::string scannedLine; std::string str;
   std::vector<std::string> termsScannedLined{};
   size_t counter = 0;
   std::ifstream PseudoAtomfile("pseudo_atoms.def");
-  size_t NumberOfPseudoAtoms = 0; 
+  size_t NumberOfPseudoAtoms = 0;
   // First read the pseudo atom file
   while (std::getline(PseudoAtomfile, str))
   {
     if(counter == 1) //read number definitions
     {
       Split_Tab_Space(termsScannedLined, str);
-      sscanf(termsScannedLined[0].c_str(), "%zu", &NumberOfPseudoAtoms);
+      sscanf(termsScannedLined[0].c_str(), "%zu", &NumberOfPseudoAtoms); //printf("THERE ARE %zu PSEUDO ATOMS\n", NumberOfPseudoAtoms);
       if (NumberOfPseudoAtoms <= 0) throw std::runtime_error("Incorrect amount of pseudo-atoms");//DON'T DO TOO FEW
-      if (NumberOfPseudoAtoms > 100) printf("You are using A LOT OF pseudo atom definitions. Do you need so many? Okay...\n");
-      if (NumberOfPseudoAtoms != FF.size) throw std::runtime_error("Number of VDW and pseudo-atom definitions don't match!"); 
+      //if (NumberOfPseudoAtoms > 100) //printf("You are using A LOT OF pseudo atom definitions. Do you need so many? Okay...\n");
     }
     else if(counter >= 3) // read data for each pseudo atom
     {
       Split_Tab_Space(termsScannedLined, str);
       if(termsScannedLined[0] != PseudoAtom.Name[counter-3]) throw std::runtime_error("Order of pseudo-atom and force field definition don't match!");
+
       PseudoAtom.Symbol.push_back(termsScannedLined[2]);
-      //Match 1-to-1 list of pseudo_atom type and symbol type//
-      size_t SymbolIdx = PseudoAtom.MatchSymbolTypeFromSymbolName(termsScannedLined[2]);
-      PseudoAtom.SymbolIndex.push_back(SymbolIdx);
+      //size_t SymbolIdx = PseudoAtom.MatchUniqueSymbolTypeFromSymbolName(termsScannedLined[2]);
+      //if(SymbolIdx >= PseudoAtom.UniqueSymbol.size()) PseudoAtom.UniqueSymbol.push_back(termsScannedLined[2]);
+
+      //PseudoAtom.SymbolIndex.push_back(SymbolIdx);
       PseudoAtom.oxidation.push_back(std::stod(termsScannedLined[4]));
       PseudoAtom.mass.push_back(std::stod(termsScannedLined[5]));
       PseudoAtom.charge.push_back(std::stod(termsScannedLined[6]));
@@ -1094,11 +1172,26 @@ void PseudoAtomParser(ForceField& FF, PseudoAtomDefinitions& PseudoAtom)
     if(counter==3+NumberOfPseudoAtoms) break; //in case there are extra empty rows
   }
   //print out the values
-  printf("-------------PARSING PSEUDO ATOMS FILE-------------\n");
+  //printf("-------------PARSING PSEUDO ATOMS FILE-------------\n");
   for (size_t i = 0; i < NumberOfPseudoAtoms; i++)
-    printf("Name: %s, %.5f, %.5f, %.5f, %.5f\n", PseudoAtom.Name[i].c_str(), PseudoAtom.oxidation[i], PseudoAtom.mass[i], PseudoAtom.charge[i], PseudoAtom.polar[i]);
-  printf("---------------------------------------------------\n");
+    //printf("Name: %s, %.5f, %.5f, %.5f, %.5f\n", PseudoAtom.Name[i].c_str(), PseudoAtom.oxidation[i], PseudoAtom.mass[i], PseudoAtom.charge[i], PseudoAtom.polar[i]);
+  //printf("---------------------------------------------------\n");
   PseudoAtomfile.close();
+}
+
+void PseudoAtomProcessing(Variables& Vars)
+{
+  PseudoAtomDefinitions& PseudoAtom = Vars.PseudoAtoms;
+  size_t NumberOfPseudoAtoms = Vars.PseudoAtoms.Name.size();
+  if (NumberOfPseudoAtoms != Vars.FF.size) throw std::runtime_error("Number of VDW and pseudo-atom definitions don't match!");
+  for(size_t i = 0; i < NumberOfPseudoAtoms; i++)
+  {
+    //Match 1-to-1 list of pseudo_atom type and symbol type//
+    std::string& Symbol = PseudoAtom.Symbol[i];
+    size_t SymbolIdx = PseudoAtom.MatchUniqueSymbolTypeFromSymbolName(Symbol);
+    if(SymbolIdx >= PseudoAtom.UniqueSymbol.size()) PseudoAtom.UniqueSymbol.push_back(Symbol);
+    PseudoAtom.SymbolIndex.push_back(SymbolIdx);
+  }
 }
 
 void remove_number(std::string& s)
@@ -1299,7 +1392,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
   }
   //If label/x/y/z not found, abort the program!//
   if(Label_x_y_z_Charge_Order[0] < 0 || Label_x_y_z_Charge_Order[1] < 0 || Label_x_y_z_Charge_Order[2] < 0 || Label_x_y_z_Charge_Order[3] < 0) throw std::runtime_error("Couldn't find required columns in the CIF file! Abort.");
-  printf("atom_site starts at line %d, and ends at %d\n", atom_site_occurance.x, atom_site_occurance.y);
+  //printf("atom_site starts at line %d, and ends at %d\n", atom_site_occurance.x, atom_site_occurance.y);
   simfile.clear();
   simfile.seekg(0);
 
@@ -1311,7 +1404,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
   int z_location      = Label_x_y_z_Charge_Order[3];
   int Charge_location = Label_x_y_z_Charge_Order[4];
   if(!UseChargeFromCIF) Charge_location = -1; //If we want to use Charge from the pseudo_atoms.def, sed charge_location to -1//
-  printf("label location: %d, xyz location: %d %d %d, charge: %d\n", label_location, x_location, y_location, z_location, Charge_location);
+  //printf("label location: %d, xyz location: %d %d %d, charge: %d\n", label_location, x_location, y_location, z_location, Charge_location);
   std::vector<std::vector<double3>>super_pos;
   std::vector<std::vector<double>>super_scale;
   std::vector<std::vector<double>>super_charge;
@@ -1343,7 +1436,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
     unit_Type.emplace_back();
     unit_MolID.emplace_back();
     unit_AtomIndex.emplace_back();
-    //printf("super_pos size: %zu\n", super_pos.size());
+    ////printf("super_pos size: %zu\n", super_pos.size());
   }
   size_t i = 0;
   ////////////////////////////////////////////////////////////////
@@ -1362,10 +1455,10 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
     //Check when the elements in the line is less than 4, stop when it is less than 4 (it means the atom_site region is over//
     if(termsScannedLined.size() < 4) 
     {
-      //printf("Done reading Atoms in CIF file, there are %d Atoms\n", AtomID);
+      ////printf("Done reading Atoms in CIF file, there are %d Atoms\n", AtomID);
       break;
     }
-    //printf("i: %zu, line: %s, splitted: %s\n", i, str.c_str(), termsScannedLined[0].c_str());
+    ////printf("i: %zu, line: %s, splitted: %s\n", i, str.c_str(), termsScannedLined[0].c_str());
     double3 fpos;
     fpos.x = std::stod(termsScannedLined[x_location]); //fx*=Shift.x; //Divide by the number of UnitCells
     fpos.y = std::stod(termsScannedLined[y_location]); //fy*=Shift.y; 
@@ -1402,7 +1495,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
         break;
       }
     }
-    printf("Atom Count %zu, Component %zu, AtomType %zu (%s), MoleculeID %zu, AtomMass %f\n", AtomCountPerUnitcell, ATOM_COMP, AtomTypeInt, AtomName.c_str(), MoleculeID, AtomMass);
+    //printf("Atom Count %zu, Component %zu, AtomType %zu (%s), MoleculeID %zu, AtomMass %f\n", AtomCountPerUnitcell, ATOM_COMP, AtomTypeInt, AtomName.c_str(), MoleculeID, AtomMass);
     if(!AtomTypeFOUND)throw std::runtime_error("Error: Atom Label [" + AtomName + "] not defined!");
     unit_fpos[ATOM_COMP].push_back(fpos);
     unit_scale[ATOM_COMP].push_back(1.0); //For framework, use 1.0
@@ -1416,7 +1509,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
   }
   //Check total mass of framework components//
   for(size_t asd = 0; asd < totalmass.size(); asd++)
-    printf("component %zu, totalmass: %.5f\n", asd, totalmass[asd]);
+    //printf("component %zu, totalmass: %.5f\n", asd, totalmass[asd]);
   //Zhao's note: Need to sort the atom positions for the framework component to match the order in Framework_Component definition files, see Hilal's example//
   CheckFrameworkComponentAtomOrder(SystemComponents, unit_fpos, unit_scale, unit_charge, unit_scaleCoul, unit_Type, unit_MolID, unit_AtomIndex);
   
@@ -1458,7 +1551,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
             super_MolID[comp].push_back(ActualMolID);
           }
         }
-  printf("Finished Reading Atoms\n");
+  //printf("Finished Reading Atoms\n");
   // initiate overall size of the framework //
   double OverallMass = 0.0;
   for(size_t i = 0; i < SystemComponents.NComponents.y; i++)
@@ -1491,7 +1584,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
     double unitcells = NumberUnitCells.x * NumberUnitCells.y * NumberUnitCells.z;
     //totalmass[i] *= unitcells;
 
-    printf("NMol = %zu, pos_size: %zu, NMol in FrameworkDef: %zu\n", NMol, super_pos[i].size(), NMol_In_Def);
+    //printf("NMol = %zu, pos_size: %zu, NMol in FrameworkDef: %zu\n", NMol, super_pos[i].size(), NMol_In_Def);
 
     if(NMol != NMol_In_Def)
     {
@@ -1511,7 +1604,7 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
     // gather all the mass of the framework //
     OverallMass += totalmass[i];
 
-    printf("Framework Comp [%zu], size: %zu, Molsize: %zu, Allocate_size: %zu, component mass: %f\n", i, super_pos[i].size(), SystemComponents.HostSystem[i].Molsize, SystemComponents.HostSystem[i].Allocate_size, totalmass[i]);
+    //printf("Framework Comp [%zu], size: %zu, Molsize: %zu, Allocate_size: %zu, component mass: %f\n", i, super_pos[i].size(), SystemComponents.HostSystem[i].Molsize, SystemComponents.HostSystem[i].Allocate_size, totalmass[i]);
   }
   for(size_t i = 0; i < super_pos.size(); i++)
   {
@@ -1530,10 +1623,10 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
     SystemComponents.hasPartialCharge.push_back(FrameworkHasPartialCharge);
   }
 
-  printf("------------------CIF FILE SUMMARY------------------\n");
-  printf("CIF FILE IS: %s\n", CIFFile.c_str());
-  printf("Number of Unit Cells: %.2f %.2f %.2f\n", NumberUnitCells.x, NumberUnitCells.y, NumberUnitCells.z);
-  printf("Box size: \n%.5f %.5f %.5f\n%.5f %.5f %.5f\n%.5f %.5f %.5f\n", Box.Cell[0], Box.Cell[1], Box.Cell[2], Box.Cell[3], Box.Cell[4], Box.Cell[5], Box.Cell[6], Box.Cell[7], Box.Cell[8]);
+  //printf("------------------CIF FILE SUMMARY------------------\n");
+  //printf("CIF FILE IS: %s\n", CIFFile.c_str());
+  //printf("Number of Unit Cells: %.2f %.2f %.2f\n", NumberUnitCells.x, NumberUnitCells.y, NumberUnitCells.z);
+  //printf("Box size: \n%.5f %.5f %.5f\n%.5f %.5f %.5f\n%.5f %.5f %.5f\n", Box.Cell[0], Box.Cell[1], Box.Cell[2], Box.Cell[3], Box.Cell[4], Box.Cell[5], Box.Cell[6], Box.Cell[7], Box.Cell[8]);
 
   //Record Number of PseudoAtoms for the Framework//
   for(size_t i = 0; i < TEMPINTTWO.size(); i++)
@@ -1544,24 +1637,24 @@ void CheckFrameworkCIF(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, std::str
       if(TEMPINTTWO[i][j].y == 0) continue;
       TEMPINTTWO[i][j].y *= NumberUnitCells.x * NumberUnitCells.y * NumberUnitCells.z;
       NumberOfPseudoAtoms.push_back(TEMPINTTWO[i][j]);
-      printf("Framework Pseudo Atom[%zu], Name: %s, #: %zu\n", TEMPINTTWO[i][j].x, PseudoAtom.Name[j].c_str(), TEMPINTTWO[i][j].y);
+      //printf("Framework Pseudo Atom[%zu], Name: %s, #: %zu\n", TEMPINTTWO[i][j].x, PseudoAtom.Name[j].c_str(), TEMPINTTWO[i][j].y);
     }
-    printf("NumberOfPseudoAtoms size: %zu\n", NumberOfPseudoAtoms.size());
+    //printf("NumberOfPseudoAtoms size: %zu\n", NumberOfPseudoAtoms.size());
     SystemComponents.NumberOfPseudoAtomsForSpecies.push_back(NumberOfPseudoAtoms);
   }
   for(size_t i = 0; i < SystemComponents.NumberOfPseudoAtomsForSpecies.size(); i++)
     for(size_t j = 0; j < SystemComponents.NumberOfPseudoAtomsForSpecies[i].size(); j++)
     {
-      printf("Framework Component [%zu], Pseudo Atom [%zu], Name: %s, #: %zu\n", i, SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].x, PseudoAtom.Name[SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].x].c_str(), SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].y);
+      //printf("Framework Component [%zu], Pseudo Atom [%zu], Name: %s, #: %zu\n", i, SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].x, PseudoAtom.Name[SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].x].c_str(), SystemComponents.NumberOfPseudoAtomsForSpecies[i][j].y);
     }
-  printf("Overall Mass: %f \n", OverallMass);
+  //printf("Overall Mass: %f \n", OverallMass);
   //Add PseudoAtoms from the Framework to the total PseudoAtoms array//
   for(size_t i = 0; i < SystemComponents.NComponents.y; i++)
     SystemComponents.UpdatePseudoAtoms(INSERTION, i);
 
   SystemComponents.TotalNumberOfMolecules = NMol_Framework; //If there is a framework, framework is counted as a molecule//
   SystemComponents.NumberOfFrameworks = NMol_Framework;
-  printf("----------------------------------------------------\n");
+  //printf("----------------------------------------------------\n");
   //throw std::runtime_error("BREAK!!!!\n");
   simfile.close();
 }
@@ -1586,7 +1679,7 @@ void ReadFrameworkSpeciesDefinitions(Components& SystemComponents)
       continue; //No need for the default framework component
     }
     std::string FileName = "Framework_Component_" + std::to_string(i) + ".def";
-    printf("Reading %s FILE\n", FileName.c_str());
+    //printf("Reading %s FILE\n", FileName.c_str());
     std::filesystem::path pathfile = std::filesystem::path(FileName);
     if (!std::filesystem::exists(pathfile))
     {
@@ -1619,7 +1712,7 @@ void ReadFrameworkSpeciesDefinitions(Components& SystemComponents)
       if (str.find("Atom_Indices_for_Molecule", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
-        printf("size of the indices: %zu\n", termsScannedLined.size() - 2);
+        //printf("size of the indices: %zu\n", termsScannedLined.size() - 2);
         std::vector<size_t>Indices;
         for(size_t j = 2; j < termsScannedLined.size(); j++)
         {
@@ -1632,19 +1725,19 @@ void ReadFrameworkSpeciesDefinitions(Components& SystemComponents)
       }
     }
     file.close();
-    printf("================Framework Component [%zu] Summary================\n", i);
-    printf("Name: %s\n", SystemComponents.MoleculeName[i].c_str());
-    printf("Number of Molecules: %zu\n", SystemComponents.FrameworkComponentDef[i].Number_of_Molecules_for_Framework_component);
-    printf("Number of Atoms per Molecule: %zu\n", SystemComponents.FrameworkComponentDef[i].Number_of_atoms_for_each_molecule);
-    for(size_t j = 0; j < SystemComponents.FrameworkComponentDef[i].Number_of_Molecules_for_Framework_component; j++)
-      for(size_t k = 0; k < SystemComponents.FrameworkComponentDef[i].Number_of_atoms_for_each_molecule; k++)
-        printf("Molecule [%zu], Index: %zu\n", j, SystemComponents.FrameworkComponentDef[i].Atom_Indices_for_Molecule[j][k]);
+    //printf("================Framework Component [%zu] Summary================\n", i);
+    //printf("Name: %s\n", SystemComponents.MoleculeName[i].c_str());
+    //printf("Number of Molecules: %zu\n", SystemComponents.FrameworkComponentDef[i].Number_of_Molecules_for_Framework_component);
+    //printf("Number of Atoms per Molecule: %zu\n", SystemComponents.FrameworkComponentDef[i].Number_of_atoms_for_each_molecule);
+    //for(size_t j = 0; j < SystemComponents.FrameworkComponentDef[i].Number_of_Molecules_for_Framework_component; j++)
+    //  for(size_t k = 0; k < SystemComponents.FrameworkComponentDef[i].Number_of_atoms_for_each_molecule; k++)
+        //printf("Molecule [%zu], Index: %zu\n", j, SystemComponents.FrameworkComponentDef[i].Atom_Indices_for_Molecule[j][k]);
   }
 }
 
 void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t FrameworkIndex, Components& SystemComponents)
 {
-  printf("------------------------PARSING FRAMEWORK DATA------------------------\n");
+  //printf("------------------------PARSING FRAMEWORK DATA------------------------\n");
   bool UseChargesFromCIFFile = false;  //By default, it is using charge from pseudo_atoms.def//
   std::vector<std::string> Names = PseudoAtom.Name;
   //size_t temp = 0;
@@ -1668,7 +1761,7 @@ void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t Frame
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
         UseChargesFromCIFFile = true;
-        printf("Reading Partial Charges from pseudo_atoms.def file\n");
+        //printf("Reading Partial Charges from pseudo_atoms.def file\n");
       }
     }
   }
@@ -1688,7 +1781,7 @@ void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t Frame
       Split_Tab_Space(termsScannedLined, str);
       if((1+FrameworkIndex) >= termsScannedLined.size()) throw std::runtime_error("Not Enough Framework listed in input file...\n");
       Frameworkname = termsScannedLined[1 + FrameworkIndex];
-      printf("Reading Framework %zu, FrameworkName: %s\n", FrameworkIndex, Frameworkname.c_str());
+      //printf("Reading Framework %zu, FrameworkName: %s\n", FrameworkIndex, Frameworkname.c_str());
     }
     if (str.find("UnitCells " + std::to_string(FrameworkIndex), 0) != std::string::npos) // get the molecule name
     {
@@ -1696,7 +1789,7 @@ void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t Frame
       NumberUnitCells.x = std::stod(termsScannedLined[2]);
       NumberUnitCells.y = std::stod(termsScannedLined[3]);
       NumberUnitCells.z = std::stod(termsScannedLined[4]);
-      printf("Reading Framework %zu, UnitCells: %.2f %.2f %.2f\n", FrameworkIndex, NumberUnitCells.x, NumberUnitCells.y, NumberUnitCells.z);
+      //printf("Reading Framework %zu, UnitCells: %.2f %.2f %.2f\n", FrameworkIndex, NumberUnitCells.x, NumberUnitCells.y, NumberUnitCells.z);
       FrameworkFound = true;
       SystemComponents.NumberofUnitCells = {(int) NumberUnitCells.x, (int) NumberUnitCells.y, (int) NumberUnitCells.z};
     }
@@ -1719,7 +1812,7 @@ void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t Frame
 
     ReadFrameworkSpeciesDefinitions(SystemComponents);
     CheckFrameworkCIF(Box, PseudoAtom, FrameworkFile, UseChargesFromCIFFile, NumberUnitCells, SystemComponents);
-    printf("Reading CIF File\n");
+    //printf("Reading CIF File\n");
   }
   else
   {
@@ -1732,9 +1825,9 @@ void ReadFramework(Boxsize& Box, PseudoAtomDefinitions& PseudoAtom, size_t Frame
   //DETERMINE Whether Box is cubic/cuboid or not//
   Box.Cubic = true; // Start with cubic box shape, if any value (non-diagonal) is greater than 0, then set to false //
   if((fabs(Box.Cell[3]) + fabs(Box.Cell[6]) + fabs(Box.Cell[7])) > 1e-10) Box.Cubic = false;
-  if(Box.Cubic)  printf("The Simulation Box is Cubic\n");
-  if(!Box.Cubic) printf("The Simulation Box is NOT Cubic\n");
-  printf("----------------------END OF PARSING FRAMEWORK DATA----------------------\n");
+  if(Box.Cubic)  //printf("The Simulation Box is Cubic\n");
+  if(!Box.Cubic) //printf("The Simulation Box is NOT Cubic\n");
+  //printf("----------------------END OF PARSING FRAMEWORK DATA----------------------\n");
   simfile.close();
 }
 
@@ -1812,11 +1905,12 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
     }
     else if(counter == 9) //read if the molecule is rigid
     {
+      //printf("rigid line: %s\n", str.c_str());
       Split_Tab_Space(termsScannedLined, str);
       if(caseInSensStringCompare(termsScannedLined[0], "rigid"))
       {
         temprigid = true;
-        printf("Adsorbate Component is rigid\n");
+        //printf("Adsorbate Component is rigid\n");
       }
       else
       {
@@ -1848,7 +1942,7 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
       ANumberOfPseudoAtomsForSpecies[AType[atomcount]].x = AType[atomcount];
       ANumberOfPseudoAtomsForSpecies[AType[atomcount]].y ++;
       Acharge[atomcount] = PseudoAtom.charge[AType[atomcount]]; //Determine the charge after determining the type
-      printf("%s, type: %zu, Acharge = %.5f\n", AtomName.c_str(), AType[atomcount], Acharge[atomcount]);
+      //printf("%s, type: %zu, Acharge = %.5f\n", AtomName.c_str(), AType[atomcount], Acharge[atomcount]);
       Amass[atomcount] = PseudoAtom.mass[AType[atomcount]];
       chargesum += PseudoAtom.charge[AType[atomcount]]; 
       masssum   += PseudoAtom.mass[AType[atomcount]];
@@ -1857,7 +1951,7 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
     }
     else if(counter > (13 + temp_molsize +1)) //read bonding information
     {
-      printf("Bonds not implemented. Break\n"); break;
+      //printf("Bonds not implemented. Break\n"); break;
     }
     counter++; 
   }
@@ -1873,7 +1967,7 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
   SystemComponents.rigid.push_back(temprigid);
   if(chargesum > 1e-10)
   {
-    //printf("chargesum = %.50f, ChargeSum = %.5f\n", chargesum, ChargeSum);
+    ////printf("chargesum = %.50f, ChargeSum = %.5f\n", chargesum, ChargeSum);
     throw std::runtime_error("Molecule not neutral, bad\n");
   }
 
@@ -1885,8 +1979,8 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
   Mol.Type      = convert1DVectortoArray(AType);
   Mol.MolID     = convert1DVectortoArray(AMolID);
 
-  for(size_t i = 0; i < Mol.Molsize; i++)
-    printf("Atom [%zu]: Type [%zu], Name: %s, Mass: %f, position: %.5f %.5f %.5f\n", i, Mol.Type[i], PseudoAtom.Name[Mol.Type[i]].c_str(), PseudoAtom.mass[Mol.Type[i]], Mol.pos[i].x, Mol.pos[i].y, Mol.pos[i].z);
+  //for(size_t i = 0; i < Mol.Molsize; i++)
+    //printf("Atom [%zu]: Type [%zu], Name: %s, Mass: %f, position: %.5f %.5f %.5f\n", i, Mol.Type[i], PseudoAtom.Name[Mol.Type[i]].c_str(), PseudoAtom.mass[Mol.Type[i]], Mol.pos[i].x, Mol.pos[i].y, Mol.pos[i].z);
 
   //Remove Elements from ANumberOfPseudoAtomsForSpecies if the ANumberOfPseudoAtomsForSpecies.y = 0
   std::vector<int2>TEMPINTTWO;
@@ -1894,9 +1988,9 @@ void MoleculeDefinitionParser(Atoms& Mol, Components& SystemComponents, std::str
   {
     if(ANumberOfPseudoAtomsForSpecies[i].y == 0) continue;
     TEMPINTTWO.push_back(ANumberOfPseudoAtomsForSpecies[i]);
-    printf("Adsorbate Type[%zu], Name: %s, #: %zu\n", ANumberOfPseudoAtomsForSpecies[i].x, PseudoAtom.Name[i].c_str(), ANumberOfPseudoAtomsForSpecies[i].y);
+    //printf("Adsorbate Type[%zu], Name: %s, #: %zu\n", ANumberOfPseudoAtomsForSpecies[i].x, PseudoAtom.Name[i].c_str(), ANumberOfPseudoAtomsForSpecies[i].y);
   }
-  printf("current adsorbate mass is: %f \n", masssum);
+  //printf("current adsorbate mass is: %f \n", masssum);
   SystemComponents.NumberOfPseudoAtomsForSpecies.push_back(TEMPINTTWO);
   SystemComponents.MolecularWeight.push_back(masssum);
   file.close();
@@ -1966,7 +2060,7 @@ static inline void Read_TMMC_Initial(TMMC& tmmc, std::string& MolName)
   }
   file.clear();
   file.seekg(0);
-  printf("Lines of TMMCInitial file: %d, Histogram size: %d\n", Histogramsize+5, Histogramsize);
+  //printf("Lines of TMMCInitial file: %d, Histogram size: %d\n", Histogramsize+5, Histogramsize);
   if(Histogramsize<= 0) throw std::runtime_error("TMMCInitial size is zero, there is no value written in the file. Check!!!");
   //Check histogram size and bin size//
   //From 0 to 60, there are 61 bins//
@@ -1981,7 +2075,7 @@ static inline void Read_TMMC_Initial(TMMC& tmmc, std::string& MolName)
     Split_Tab_Space(termsScannedLined, str);
     if(counter >= header) //Skip line 5 (column names)
     {
-      //printf("str is: %s\n", str.c_str());
+      ////printf("str is: %s\n", str.c_str());
       //Column names: N NMol Bin CM[-1] CM[0] CM[1] WLBias ln_g TMBias lnpi Forward_lnpi Reverse_lnpi Histogram
       size_t j   = static_cast<size_t>(std::stoi(termsScannedLined[0])); //Bin index//
       //size_t N   = std::stoi(termsScannedLined[1]);
@@ -2003,7 +2097,7 @@ static inline void Read_TMMC_Initial(TMMC& tmmc, std::string& MolName)
   file.close();
 }
 
-void read_component_values_from_simulation_input(Components& SystemComponents, Move_Statistics& MoveStats, size_t AdsorbateComponent, Atoms& Mol, PseudoAtomDefinitions PseudoAtom, size_t Allocate_space)
+void read_component_values_from_simulation_input(Variables& Vars, Components& SystemComponents, Move_Statistics& MoveStats, size_t AdsorbateComponent, Atoms& Mol, PseudoAtomDefinitions PseudoAtom, size_t Allocate_space, size_t BoxIndex)
 {
   //adsorbate component start from zero, but in the code, framework is zero-th component
   //This function also calls MoleculeDefinitionParser//
@@ -2026,7 +2120,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
     if(str.find(start_string, 0) != std::string::npos){break;}
     start_counter++;
   }
-  printf("%s starts at line number %zu\n", start_string.c_str(), start_counter); 
+  //printf("%s starts at line number %zu\n", start_string.c_str(), start_counter); 
   file.clear();
   file.seekg(0); 
   std::string MolName;
@@ -2037,7 +2131,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
   {
     if(str.find(terminate_string, 0) != std::string::npos)
     {
-      printf("Found terminate string [%s]\n", terminate_string.c_str());
+      //printf("Found terminate string [%s]\n", terminate_string.c_str());
       break;
     }
     if(counter >= start_counter) //start reading after touching the starting line number
@@ -2053,50 +2147,57 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
       if (str.find("IdealGasRosenbluthWeight", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
-        idealrosen = std::stod(termsScannedLined[1]); printf("Ideal Chain Rosenbluth Weight: %.5f\n", idealrosen);
+        idealrosen = std::stod(termsScannedLined[1]); //printf("Ideal Chain Rosenbluth Weight: %.5f\n", idealrosen);
       }
       if (str.find("TranslationProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.TranslationProb=std::stod(termsScannedLined[1]);
-        //printf("TranslationProb: %.5f, TotalProb: %.5f\n", TranslationProb, TotalProb);
+        ////printf("TranslationProb: %.5f, TotalProb: %.5f\n", TranslationProb, TotalProb);
       }
       if (str.find("RotationProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.RotationProb=std::stod(termsScannedLined[1]);
-        //printf("RotationProb: %.5f, TotalProb: %.5f\n", RotationProb, TotalProb);
+        ////printf("RotationProb: %.5f, TotalProb: %.5f\n", RotationProb, TotalProb);
       }
       if (str.find("WidomProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.WidomProb=std::stod(termsScannedLined[1]);
-        //printf("WidomProb: %.5f, TotalProb: %.5f\n", WidomProb, TotalProb);
+        ////printf("WidomProb: %.5f, TotalProb: %.5f\n", WidomProb, TotalProb);
       }
       if (str.find("ReinsertionProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.ReinsertionProb=std::stod(termsScannedLined[1]);
-        //printf("ReinsertionProb: %.5f, TotalProb: %.5f\n", ReinsertionProb, TotalProb);
+        ////printf("ReinsertionProb: %.5f, TotalProb: %.5f\n", ReinsertionProb, TotalProb);
       }
       if (str.find("IdentityChangeProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.IdentitySwapProb=std::stod(termsScannedLined[1]);
-        //printf("IdentityChangeProb: %.5f, TotalProb: %.5f\n", IdentitySwapProb, TotalProb);
+        ////printf("IdentityChangeProb: %.5f, TotalProb: %.5f\n", IdentitySwapProb, TotalProb);
       }
       if (str.find("SwapProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.SwapProb=std::stod(termsScannedLined[1]);
-        //printf("SwapProb: %.5f, TotalProb: %.5f\n", SwapProb, TotalProb);
+        ////printf("SwapProb: %.5f, TotalProb: %.5f\n", SwapProb, TotalProb);
       }
+      if (str.find("GibbsParticleXferProbability", 0) != std::string::npos)
+      {
+        Split_Tab_Space(termsScannedLined, str);
+        MoveStats.GibbsSwapProb=std::stod(termsScannedLined[1]);
+        ////printf("GibbsParticleXferProbability: %.5f, TotalProb: %.5f\n", MoveStats.GibbsSwapProb, TotalProb);
+      }
+
       if (str.find("CBCFProbability", 0) != std::string::npos)
       {
         Split_Tab_Space(termsScannedLined, str);
         MoveStats.CBCFProb=std::stod(termsScannedLined[1]);
         temp_hasfracmol=true;
-        //printf("CBCFProb: %.5f, TotalProb: %.5f\n", CBCFProb, TotalProb);
+        ////printf("CBCFProb: %.5f, TotalProb: %.5f\n", CBCFProb, TotalProb);
       }
       //Zhao's note: If using CBCF Move, choose the lambda type//
       if (MoveStats.CBCFProb > 0.0)
@@ -2137,7 +2238,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
         if(caseInSensStringCompare(termsScannedLined[1], "yes"))
         {
           temp_tmmc.DoTMMC = true;
-          printf("TMMC: Running TMMC simulation\n");
+          //printf("TMMC: Running TMMC simulation\n");
         }
       }
       if (str.find("TURN_OFF_CBMC_SWAP", 0) != std::string::npos)
@@ -2146,7 +2247,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
         if(caseInSensStringCompare(termsScannedLined[1], "yes"))
         {
           SystemComponents.SingleSwap = true;
-          printf("SWAP WITH NO CBMC!\n");
+          //printf("SWAP WITH NO CBMC!\n");
         }
       }
       if(temp_tmmc.DoTMMC)
@@ -2167,7 +2268,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
           if(caseInSensStringCompare(termsScannedLined[1], "yes"))
           {
             temp_tmmc.DoUseBias = true;
-            printf("TMMC: Biasing Insertion/Deletions\n");
+            //printf("TMMC: Biasing Insertion/Deletions\n");
           }
         }
         if (str.find("RestartTMMC", 0) != std::string::npos)
@@ -2176,15 +2277,15 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
           if(caseInSensStringCompare(termsScannedLined[1], "yes"))
           {
             temp_tmmc.TMMCRestart = true;
-            printf("Need to Read TMMC stats from TMMC_Initial Folder\n");
-            printf("WARNING: Using TMMCRestart, we thus recommend that you do NOT use Initialization steps, start by Equilibration/Production instead!!!");
+            //printf("Need to Read TMMC stats from TMMC_Initial Folder\n");
+            //printf("WARNING: Using TMMCRestart, we thus recommend that you do NOT use Initialization steps, start by Equilibration/Production instead!!!");
           }
         }
         if (str.find("UpdateTMMCEvery", 0) != std::string::npos)
         {
           Split_Tab_Space(termsScannedLined, str);
           sscanf(termsScannedLined[1].c_str(), "%zu", &temp_tmmc.UpdateTMEvery);
-          printf("TMMC: Bias Updated from component %s every %zu MC Step(s)!\n", MolName.c_str(), temp_tmmc.UpdateTMEvery);
+          //printf("TMMC: Bias Updated from component %s every %zu MC Step(s)!\n", MolName.c_str(), temp_tmmc.UpdateTMEvery);
         }
       }
 
@@ -2218,7 +2319,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
               if(Type == Mol.Type[b])
               {
                 SystemComponents.ConsiderThisAdsorbateAtom[b] = true;
-                printf("AtomName: %s, Type: %zu, b: %zu, Consider? %s\n", AtomName.c_str(), Type, b, SystemComponents.ConsiderThisAdsorbateAtom[b] ? "true" : "false");
+                //printf("AtomName: %s, Type: %zu, b: %zu, Consider? %s\n", AtomName.c_str(), Type, b, SystemComponents.ConsiderThisAdsorbateAtom[b] ? "true" : "false");
               }
             }
           }
@@ -2228,17 +2329,22 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
       if (str.find("CreateNumberOfMolecules", 0) != std::string::npos) // Number of Molecules to create
       {
         Split_Tab_Space(termsScannedLined, str); 
-        sscanf(termsScannedLined[1].c_str(), "%zu", &CreateMolecule);
+        sscanf(termsScannedLined[1 + BoxIndex].c_str(), "%zu", &CreateMolecule);
       }
     }
     counter++;
   }
+  MoveStats.GibbsVolumeMoveProb = Vars.GibbsStatistics.GibbsBoxProb;
+  if(MoveStats.GibbsVolumeMoveProb > 0.0 || MoveStats.GibbsSwapProb > 0.0)
+    Vars.GibbsStatistics.DoGibbs = true;
+  MoveStats.VolumeMoveProb = Vars.TempComponents.VolumeMoveProbability;
+
   MoveStats.NormalizeProbabilities();
   MoveStats.PrintProbabilities();
 
   //Zhao's note: if monatomic molecule has rotation prob, break the program!//
   size_t currentCompsize = SystemComponents.Moleculesize.size();
-  printf("Current processed %zu components\n", currentCompsize);
+  //printf("Current processed %zu components\n", currentCompsize);
   if(SystemComponents.Moleculesize[currentCompsize-1] == 1 && (MoveStats.RotationProb - MoveStats.TranslationProb) > 1e-10)
   {
     throw std::runtime_error("Molecule [" + SystemComponents.MoleculeName[currentCompsize-1] + "] is MONATOMIC, CANNOT DO ROTATION!\n");
@@ -2246,7 +2352,7 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
 
   if(SystemComponents.Moleculesize[currentCompsize-1] > 1 && (MoveStats.RotationProb - MoveStats.TranslationProb) <= 1e-10)
   {
-    printf("Molecule [%s] is POLYATOMIC, WE RECOMMEND USING ROTATION (Currently not using it)!\n", SystemComponents.MoleculeName[currentCompsize-1].c_str());
+    //printf("Molecule [%s] is POLYATOMIC, WE RECOMMEND USING ROTATION (Currently not using it)!\n", SystemComponents.MoleculeName[currentCompsize-1].c_str());
   }
     
   SystemComponents.NumberOfMolecule_for_Component.push_back(0); // Zhao's note: Molecules are created later in main.cpp //
@@ -2318,12 +2424,15 @@ void read_component_values_from_simulation_input(Components& SystemComponents, M
       if(CreateMolecule < temp_tmmc.MinMacrostate || CreateMolecule > temp_tmmc.MaxMacrostate)
         throw std::runtime_error("TMMC: Number of created molecule fall out of the TMMC Macrostate range!");
 
-    printf("TMMC Bias for **Adsorbate** component %zu (%s) is updated every %zu step(s)!\n", AdsorbateComponent, MolName.c_str(), temp_tmmc.UpdateTMEvery);
+    //printf("TMMC Bias for **Adsorbate** component %zu (%s) is updated every %zu step(s)!\n", AdsorbateComponent, MolName.c_str(), temp_tmmc.UpdateTMEvery);
   }
 
   SystemComponents.Lambda.push_back(lambda);
   SystemComponents.Tmmc.push_back(temp_tmmc);
   SystemComponents.NumberOfCreateMolecules.push_back(CreateMolecule);
+  if(BoxIndex > 0) SystemComponents.NumberOfCreateMolecules[1] = CreateMolecule;
+  //printf("CREATE MOL: box %zu, SystemComponents.NumberOfCreateMolecules size: %zu, creating %zu molecules\n", BoxIndex, SystemComponents.NumberOfCreateMolecules.size(), SystemComponents.NumberOfCreateMolecules[1]);
+
   //Finally, check if all values in SystemComponents are set properly//
   Check_Component_size(SystemComponents);
   //Initialize single values for Mol//
@@ -2389,13 +2498,13 @@ void ReadRestartInputFileType(Components& SystemComponents)
       if(caseInSensStringCompare(termsScannedLined[1], "RASPA"))
       {
         SystemComponents.RestartInputFileType = RASPA_RESTART;
-        printf("Using RASPA RESTART FILE as RESTART INPUT STRUCTURE\n");
+        //printf("Using RASPA RESTART FILE as RESTART INPUT STRUCTURE\n");
         break;
       }
       else if(caseInSensStringCompare(termsScannedLined[1], "LAMMPS"))
       {
         SystemComponents.RestartInputFileType = LAMMPS_DATA;
-        printf("Using LAMMPS DATA FILE as RESTART INPUT STRUCTURE\n");
+        //printf("Using LAMMPS DATA FILE as RESTART INPUT STRUCTURE\n");
         break;
       }
       else
@@ -2447,8 +2556,8 @@ static inline size_t ReadLMPDataStartComponent(Components& SystemComponents)
 //3. keyword about which component to start with (sometimes we can skip the framework atoms//
 void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
 {
-  printf("/*----------- READING INITIAL LAMMPS DATA FILE AS INPUT!!! -----------*/\n");
-  printf("/*WARNING: Please make sure that your ATOM TYPES ARE CONSISTENT in Lammps data file and pseudo_atoms.def!!!*/\n");
+  //printf("/*----------- READING INITIAL LAMMPS DATA FILE AS INPUT!!! -----------*/\n");
+  //printf("/*WARNING: Please make sure that your ATOM TYPES ARE CONSISTENT in Lammps data file and pseudo_atoms.def!!!*/\n");
   //Read the starting component to read from the LMPData file, if zero, then the framework 0 component is read, if one, then you start with one and skip zero//
   size_t StartComponent = ReadLMPDataStartComponent(SystemComponents);
 
@@ -2478,8 +2587,8 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
   size_t start_read_line = 0;
   if(SystemComponents.Read_BoxsizeRestart)
   {
-    printf("Reading boxsizes from LMPData Initial file.\n");
-    printf("***WARNING***All box sizes are shifted to start from zero!\n");
+    //printf("Reading boxsizes from LMPData Initial file.\n");
+    //printf("***WARNING***All box sizes are shifted to start from zero!\n");
     bool foundx = false; bool foundy = false; bool foundz = false; bool found_xy_xz_yz = false;
     bool reached_atom_types = false;
     while (std::getline(file, str))
@@ -2526,8 +2635,8 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
     //DETERMINE Whether Box is cubic/cuboid or not//
     Box.Cubic = true; // Start with cubic box shape, if any value (non-diagonal) is greater than 0, then set to false //
     if((fabs(Box.Cell[3]) + fabs(Box.Cell[6]) + fabs(Box.Cell[7])) > 1e-10) Box.Cubic = false;
-    if(Box.Cubic)  printf("The Simulation Box is Cubic\n");
-    if(!Box.Cubic) printf("The Simulation Box is NOT Cubic\n");
+    if(Box.Cubic)  //printf("The Simulation Box is Cubic\n");
+    if(!Box.Cubic) //printf("The Simulation Box is NOT Cubic\n");
     file.clear();
     file.seekg(0);
   }
@@ -2537,12 +2646,12 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
     {
       Split_Tab_Space(termsScannedLined, str);
       total_atoms = static_cast<size_t>(std::stoi(termsScannedLined[0]));
-      printf("Found Number of atoms: %zu\n", total_atoms);
+      //printf("Found Number of atoms: %zu\n", total_atoms);
     }
     if (str.find("Atoms", 0) != std::string::npos)
     {
       start_read_line = counter + 2; 
-      printf("Start from line %zu\n", start_read_line);
+      //printf("Start from line %zu\n", start_read_line);
     }
     else if(start_read_line > 0 && counter >= start_read_line && (atom_count) < total_atoms)
     {
@@ -2563,7 +2672,7 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
     }
     counter ++;
   }
-  printf("Read %zu atoms from LAMMPS\n", pos.size());
+  //printf("Read %zu atoms from LAMMPS\n", pos.size());
   //Try first sort with atomid//
   auto reorder = generate_reorder_lambda(ID, AtomID);
   reorder(AtomID);
@@ -2572,7 +2681,7 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
   reorder(charge);
   reorder(pos);
   //for(size_t i = 0; i < 3; i++)
-  //  printf("index: %zu, atomID: %d, pos.x: %.5f\n", i, AtomID[i], pos[i].x);
+  //  //printf("index: %zu, atomID: %d, pos.x: %.5f\n", i, AtomID[i], pos[i].x);
   //Next step: loop over each component, extract info, fill SystemComponents.HostSystem variable//
   for(size_t comp = StartComponent; comp < SystemComponents.NComponents.x; comp++)
   {
@@ -2585,8 +2694,8 @@ void LMPDataFileParser(Boxsize& Box, Components& SystemComponents)
     auto filtered_charge= filter(charge);
     auto filtered_pos   = filter(pos);
     std::vector<double>filtered_scale(filtered_MolID.size(), 1.0);
-    for(size_t i = 0; i < 3; i++)
-      printf("component: %zu, index: %zu, atomID: %d\n", comp, i, filtered_MolID[i]);
+    //for(size_t i = 0; i < 3; i++)
+      //printf("component: %zu, index: %zu, atomID: %d\n", comp, i, filtered_MolID[i]);
     //Change the MolID, MolID for each component, all starts from zero!//
     size_t NAtomPerComponent = filtered_MolID.size();
     if(NAtomPerComponent % SystemComponents.Moleculesize[comp] != 0) throw std::runtime_error("Check your data file for component " + std::to_string(comp) + ", it is not divisible!!!");
@@ -2654,18 +2763,20 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
   size_t PreviousCompNMol = 0;
   for(size_t i = SystemComponents.NComponents.y; i < SystemComponents.NComponents.x; i++)
   {
-    size_t start = 0; size_t end = 0;
+    size_t start = 0;
     while (std::getline(file, str))
     {
       //find range of the part we need to read// 
       if (str.find("Components " + std::to_string(i - SystemComponents.NComponents.y), 0) != std::string::npos) 
         start = counter;
       if (str.find("Maximum-rotation-change component " + std::to_string(i - SystemComponents.NComponents.y), 0) != std::string::npos)
-      {  end = counter; break; }
+      {  
+        break; 
+      }
     }
     file.clear();
     file.seekg(0);
-    printf("RASPA Restart: Now reading Component Info\n");
+    //printf("RASPA Restart: Now reading Component Info\n");
     //Start reading//
     while (std::getline(file, str))
     {
@@ -2676,7 +2787,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         if(SystemComponents.hasfractionalMolecule[i])
         {
           sscanf(termsScannedLined[3].c_str(), "%zu", &SystemComponents.Lambda[i].FractionalMoleculeID);
-          printf("Fractional Molecule ID: %zu\n", SystemComponents.Lambda[i].FractionalMoleculeID);
+          //printf("Fractional Molecule ID: %zu\n", SystemComponents.Lambda[i].FractionalMoleculeID);
         }
       }
       if(SystemComponents.hasfractionalMolecule[i])
@@ -2685,13 +2796,13 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         {
           Split_Tab_Space(termsScannedLined, str);
           SystemComponents.Lambda[i].WangLandauScalingFactor = std::stod(termsScannedLined[3]);
-          printf("WL Factor: %.5f\n", SystemComponents.Lambda[i].WangLandauScalingFactor);
+          //printf("WL Factor: %.5f\n", SystemComponents.Lambda[i].WangLandauScalingFactor);
         }
         if (str.find("Number-of-biasing-factors component " + std::to_string(i - SystemComponents.NComponents.y), 0) != std::string::npos)
         {
           Split_Tab_Space(termsScannedLined, str);
           sscanf(termsScannedLined[3].c_str(), "%zu", &SystemComponents.Lambda[i].binsize);
-          printf("binsize: %zu\n", SystemComponents.Lambda[i].binsize);
+          //printf("binsize: %zu\n", SystemComponents.Lambda[i].binsize);
           if(SystemComponents.Lambda[i].binsize != SystemComponents.Lambda[i].Histogram.size()) throw std::runtime_error("CFC Bin size don't match!");
         }
         if (str.find("Biasing-factors component " + std::to_string(i - SystemComponents.NComponents.y), 0) != std::string::npos)
@@ -2700,7 +2811,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
           {
             Split_Tab_Space(termsScannedLined, str);
             SystemComponents.Lambda[i].biasFactor[j] = std::stod(termsScannedLined[3 + j]); 
-            printf("Biasing Factor %zu: %.5f\n", j, SystemComponents.Lambda[i].biasFactor[j]);
+            //printf("Biasing Factor %zu: %.5f\n", j, SystemComponents.Lambda[i].biasFactor[j]);
           }
         }
       }
@@ -2724,7 +2835,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
     file.clear(); 
     file.seekg(0);
     //Start reading atom positions and other information//
-    start = 0; end = 0; counter = 0;
+    start = 0; counter = 0;
     while (std::getline(file, str))
     {
       if (str.find("Component: " + std::to_string(i - SystemComponents.NComponents.y), 0) != std::string::npos)
@@ -2733,10 +2844,10 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         start = counter + 2;
         size_t temp; 
         sscanf(termsScannedLined[3].c_str(), "%zu", &temp);
-        printf("Adsorbate Component %zu, #: %zu\n", i, temp);
+        //printf("Adsorbate Component %zu, #: %zu\n", i, temp);
         SystemComponents.NumberOfMolecule_for_Component[i] = temp;
         SystemComponents.TotalNumberOfMolecules += SystemComponents.NumberOfMolecule_for_Component[i];
-        //printf("There are %zu Molecules, molsize = %zu, line is %zu\n", SystemComponents.NumberOfMolecule_for_Component[i], SystemComponents.Moleculesize[i], counter);
+        ////printf("There are %zu Molecules, molsize = %zu, line is %zu\n", SystemComponents.NumberOfMolecule_for_Component[i], SystemComponents.Moleculesize[i], counter);
         break; 
       }
       counter++;
@@ -2776,7 +2887,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         sscanf(termsScannedLined[1].c_str(), "%zu", &MolID[atom]);
         size_t atomid; sscanf(termsScannedLined[2].c_str(), "%zu", &atomid);
         Type[atom] = SystemComponents.HostSystem[i].Type[atomid]; //for every component, the types of atoms for the first molecule is always there, just copy it//
-        //printf("Reading Positions, atom: %zu, xyz: %.5f %.5f %.5f, Type: %zu, MolID: %zu\n", atom, pos[atom].x, pos[atom].y, pos[atom].z, Type[atom], MolID[atom]);
+        ////printf("Reading Positions, atom: %zu, xyz: %.5f %.5f %.5f, Type: %zu, MolID: %zu\n", atom, pos[atom].x, pos[atom].y, pos[atom].z, Type[atom], MolID[atom]);
         //Zhao's note: adjust the MolID from absolute to relative to component//
         MolID[atom] -= PreviousCompNMol;
         //Zhao's note, 051724, Consider adding a wrap/unwrap here//
@@ -2801,7 +2912,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         atom = counter - (start + interval * 3);
         Split_Tab_Space(termsScannedLined, str);
         charge[atom] = std::stod(termsScannedLined[3]);
-        //printf("Reading charge, atom: %zu, charge: %.5f\n", atom, charge[atom]);
+        ////printf("Reading charge, atom: %zu, charge: %.5f\n", atom, charge[atom]);
       }
       //Read scaling and scalingCoul//
       atom=0;
@@ -2820,7 +2931,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
         //Determine the currentBin for the fractional molecule//
         if(tempMOLID == SystemComponents.Lambda[i].FractionalMoleculeID)
         { 
-          printf("Lambda from RestartInitial is: %.100f\n", lambda);
+          //printf("Lambda from RestartInitial is: %.100f\n", lambda);
           //floor/ceil functions
           //double smallEpsilon = 1e-5; //FOR DEBUGGING NUMERICAL ISSUES IN THE FUTURE//
           size_t currentBIN = static_cast<size_t>(lambda/SystemComponents.Lambda[i].delta);
@@ -2828,14 +2939,14 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
           double doubBin = static_cast<double>(currentBIN) * SystemComponents.Lambda[i].delta;
           if(abs(doubBin - lambda) > 1e-3)
           {
-            printf("static cast round off too much!");
+            //printf("static cast round off too much!");
             if((doubBin - lambda) > 1e-3)  currentBIN--;
             if(-(doubBin - lambda) > 1e-3) currentBIN++;
           }
-          printf("CURRENT BIN is %zu\n", currentBIN);
+          //printf("CURRENT BIN is %zu\n", currentBIN);
           SystemComponents.Lambda[i].currentBin = currentBIN;
         }
-        //printf("Reading scaling, atom: %zu, scale: %.5f %.5f\n", atom, scale[atom], scaleCoul[atom]);
+        ////printf("Reading scaling, atom: %zu, scale: %.5f %.5f\n", atom, scale[atom], scaleCoul[atom]);
       }
       counter ++;
     }
@@ -2845,7 +2956,7 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
       SystemComponents.HostSystem[i].charge[j] = charge[j]; 
       SystemComponents.HostSystem[i].scale[j] = scale[j]; SystemComponents.HostSystem[i].scaleCoul[j] = scaleCoul[j]; 
       SystemComponents.HostSystem[i].Type[j] = Type[j]; SystemComponents.HostSystem[i].MolID[j] = MolID[j];
-      //printf("Data for %zu: %.5f %.5f %.5f %.5f %.5f %.5f %zu %zu\n", j, Host_System[i].pos[j].x, Host_System[i].pos[j].y, Host_System[i].pos[j].z, Host_System[i].charge[j], Host_System[i].scale[j], Host_System[i].scaleCoul[j], Host_System[i].Type[j], Host_System[i].MolID[j]);
+      ////printf("Data for %zu: %.5f %.5f %.5f %.5f %.5f %.5f %zu %zu\n", j, Host_System[i].pos[j].x, Host_System[i].pos[j].y, Host_System[i].pos[j].z, Host_System[i].charge[j], Host_System[i].scale[j], Host_System[i].scaleCoul[j], Host_System[i].Type[j], Host_System[i].MolID[j]);
     }
     SystemComponents.HostSystem[i].size = interval;
     SystemComponents.HostSystem[i].Molsize = SystemComponents.Moleculesize[i];
@@ -2855,6 +2966,27 @@ void RestartFileParser(Boxsize& Box, Components& SystemComponents)
   file.close();
 }
 
+// Read ExcessVolume and Helium Void Fraction //
+void ReadVoidFraction(Variables& Vars)
+{
+  std::vector<std::string> termsScannedLined{};
+  std::string str;
+  std::ifstream file("simulation.input");
+  while (std::getline(file, str))
+  {
+    if (str.find("HeliumVoidFraction", 0) != std::string::npos)
+    {
+      Split_Tab_Space(termsScannedLined, str);
+      Vars.TempComponents.HeliumVoidFraction=std::stod(termsScannedLined[1]);
+    }
+    if (str.find("ExcessVolume", 0) != std::string::npos)
+    {
+      Split_Tab_Space(termsScannedLined, str);
+      Vars.TempComponents.ExcessVolume=std::stod(termsScannedLined[1]);
+    }
+  }
+  file.close();
+}
 
 void ReadDNNModelSetup(Components& SystemComponents)
 {
@@ -2869,7 +3001,7 @@ void ReadDNNModelSetup(Components& SystemComponents)
       if(caseInSensStringCompare(termsScannedLined[1], "yes"))
       {
         SystemComponents.UseDNNforHostGuest = true;
-        printf("Using DNN Model\n");
+        //printf("Using DNN Model\n");
       }
       break;
     }
@@ -2885,15 +3017,15 @@ void ReadDNNModelSetup(Components& SystemComponents)
     if (str.find("DNNMethod", 0) != std::string::npos)
     {
       Split_Tab_Space(termsScannedLined, str);
-      printf("Found DNNMethod\n");
+      //printf("Found DNNMethod\n");
       if(caseInSensStringCompare(termsScannedLined[1], "Allegro"))
       {
-        printf("Found Allegro\n");
+        //printf("Found Allegro\n");
         SystemComponents.UseAllegro = true; foundMethod = true;
       }
       else if(caseInSensStringCompare(termsScannedLined[1], "LCLin"))
       {
-        printf("Found LCLin\n");
+        //printf("Found LCLin\n");
         SystemComponents.UseLCLin = true; foundMethod = true;
       }
       else {throw std::runtime_error("CANNOT IDENTIFY DNN MODEL in simulation.input file");}
@@ -2904,12 +3036,12 @@ void ReadDNNModelSetup(Components& SystemComponents)
       if(caseInSensStringCompare(termsScannedLined[1], "kJ_mol"))
       {
         SystemComponents.DNNEnergyConversion = 100.0; //from kJ_mol to 10J_mol
-        DNNUnitFound = true; printf("DNN Model is using kJ/mol as the Energy Unit\n");
+        DNNUnitFound = true; //printf("DNN Model is using kJ/mol as the Energy Unit\n");
       }
       else if(caseInSensStringCompare(termsScannedLined[1], "eV"))
       {
         SystemComponents.DNNEnergyConversion = 9648.53074992579265; //from eV to 10J_mol
-        DNNUnitFound = true; printf("DNN Model is using eV as the Energy Unit\n");
+        DNNUnitFound = true; //printf("DNN Model is using eV as the Energy Unit\n");
       }
       else
       {throw std::runtime_error("Unknown Energy Unit for DNN Model");}

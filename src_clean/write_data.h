@@ -6,13 +6,13 @@
 #include <iomanip>
 
 
-static inline void WriteBox_LAMMPS(Atoms* System, Components SystemComponents, ForceField FF, Boxsize Box, std::ofstream& textrestartFile, std::vector<std::string> AtomNames)
+static inline void WriteBox_LAMMPS(Atoms* System, Components& SystemComponents, ForceField& FF, Boxsize& Box, std::ofstream& textrestartFile, std::vector<std::string>& AtomNames)
 {
   size_t NumberOfAtoms = 0;
   for(size_t i = 0; i < SystemComponents.NComponents.x; i++)
   {
     NumberOfAtoms += SystemComponents.NumberOfMolecule_for_Component[i] * SystemComponents.Moleculesize[i];
-    printf("Printing: Component: %zu [ %s ], NumMol: %zu, Molsize: %zu\n", i, SystemComponents.MoleculeName[i].c_str(), SystemComponents.NumberOfMolecule_for_Component[i], SystemComponents.Moleculesize[i]);
+    fprintf(SystemComponents.OUTPUT, "Printing: Component: %zu [ %s ], NumMol: %zu, Molsize: %zu\n", i, SystemComponents.MoleculeName[i].c_str(), SystemComponents.NumberOfMolecule_for_Component[i], SystemComponents.Moleculesize[i]);
   }
   textrestartFile << "# LAMMPS data file written by WriteLammpsdata function in RASPA(written by Zhao Li)" << '\n';
   textrestartFile << NumberOfAtoms << " atoms" << '\n';
@@ -44,14 +44,14 @@ static inline void WriteBox_LAMMPS(Atoms* System, Components SystemComponents, F
   }
 }
 
-static inline void WriteAtoms_LAMMPS(Atoms* System, Components SystemComponents, Boxsize Box, std::ofstream& textrestartFile, std::vector<std::string> AtomNames)
+static inline void WriteAtoms_LAMMPS(Atoms* System, Components& SystemComponents, Boxsize& Box, std::ofstream& textrestartFile, std::vector<std::string>& AtomNames)
 {
   textrestartFile << '\n' << "Atoms" << '\n' << '\n';
   size_t Atomcount=0; size_t Molcount=0;
   for(size_t i = 0; i < SystemComponents.NComponents.x; i++)
   {
     Atoms Data = System[i];
-    printf("Component %zu, Molsize: %zu\n", i, Data.Molsize);
+    fprintf(SystemComponents.OUTPUT, "Component %zu, Molsize: %zu\n", i, Data.Molsize);
     double3 Wrap_shift;
     for(size_t j = 0; j < Data.size; j++)
     {
@@ -83,7 +83,7 @@ static inline void WriteAtoms_LAMMPS(Atoms* System, Components SystemComponents,
   }
 }
 
-static inline void WriteAtoms_Restart(Atoms* System, Components SystemComponents, std::ofstream& textrestartFile, std::vector<std::string> AtomNames)
+static inline void WriteAtoms_Restart(Atoms* System, Components& SystemComponents, std::ofstream& textrestartFile, std::vector<std::string>& AtomNames)
 {
   textrestartFile << "Reactions: 0" << "\n";
   //size_t Atomcount=0; 
@@ -116,11 +116,11 @@ static inline void WriteAtoms_Restart(Atoms* System, Components SystemComponents
   }
 }
 
-static inline void WriteComponent_Restart(Atoms* System, Components SystemComponents, std::ofstream& textrestartFile, Boxsize& Box)
+static inline void WriteComponent_Restart(Atoms* System, Components& SystemComponents, std::ofstream& textrestartFile, Boxsize& Box)
 {
-  textrestartFile << "Components: " << SystemComponents.Total_Components - SystemComponents.NumberOfFrameworks << " (Adsorbates " << SystemComponents.TotalNumberOfMolecules-SystemComponents.NumberOfFrameworks << ", Cations 0)" << "\n";
+  textrestartFile << "Components: " << SystemComponents.NComponents.x - SystemComponents.NumberOfFrameworks << " (Adsorbates " << SystemComponents.TotalNumberOfMolecules-SystemComponents.NumberOfFrameworks << ", Cations 0)" << "\n";
   textrestartFile << "========================================================================\n"; 
-  for(size_t i = SystemComponents.NumberOfFrameworks; i < SystemComponents.Total_Components; i++)
+  for(size_t i = SystemComponents.NumberOfFrameworks; i < SystemComponents.NComponents.x; i++)
   {
     textrestartFile << "Components 0 (" << SystemComponents.MoleculeName[i] << ") " << "\n";
     int fracID = -1;
@@ -145,7 +145,7 @@ static inline void WriteComponent_Restart(Atoms* System, Components SystemCompon
   }
 }
 
-static inline void WriteCellInfo_Restart(Atoms* System, Components SystemComponents, std::ofstream& textrestartFile, Boxsize& Box)
+static inline void WriteCellInfo_Restart(Atoms* System, Components& SystemComponents, std::ofstream& textrestartFile, Boxsize& Box)
 {
   //size_t Atomcount=0;
   textrestartFile << "Cell info:\n"; 
@@ -208,7 +208,7 @@ static inline void copyFile(const std::string& sourcePath, const std::string& de
 
   if (!source.is_open() || !destination.is_open()) 
   {
-    std::cerr << "Error opening file." << std::endl;
+    std::cerr << "Cannot Open " << sourcePath << " or " << destinationPath << std::endl;
     return; // false;
   }
 
@@ -219,7 +219,7 @@ static inline void copyFile(const std::string& sourcePath, const std::string& de
   //return true;
 }
 
-static inline void create_Restart_file(size_t Cycle, Atoms* System, Components SystemComponents, ForceField FF, Boxsize Box, std::vector<std::string> AtomNames, size_t SystemIndex)
+static inline void create_Restart_file(size_t Cycle, Atoms* System, Components& SystemComponents, ForceField& FF, Boxsize& Box, std::vector<std::string>& AtomNames, size_t SystemIndex)
 {
   std::ofstream textrestartFile{};
   std::string dirname="Restart/System_" + std::to_string(SystemIndex) + "/";
@@ -239,19 +239,19 @@ static inline void create_Restart_file(size_t Cycle, Atoms* System, Components S
   textrestartFile.close();
 }
 
-static inline void WriteAllData(Atoms* System, Components SystemComponents, std::ofstream& textrestartFile, std::vector<std::string> AtomNames, size_t i)
+static inline void WriteAllData(Atoms* System, Components& SystemComponents, std::ofstream& textrestartFile, std::vector<std::string>& AtomNames, size_t i)
 {
   //size_t Atomcount=0;
   Atoms Data = System[i];
   size_t molsize = SystemComponents.Moleculesize[i];
   //First write positions//
-  //printf("Writing AllData for Component %zu, There are %zu atoms, molsize: %zu\n", i, Data.size, molsize);
+  //fprintf(SystemComponents.OUTPUT, "Writing AllData for Component %zu, There are %zu atoms, molsize: %zu\n", i, Data.size, molsize);
   textrestartFile << "x y z charge scale scaleCoul Type" << '\n';
   for(size_t j = 0; j < Data.size; j++)
     textrestartFile << " " << Data.MolID[j] << " " << j - Data.MolID[j]*molsize << " " << Data.pos[j].x << "  " << Data.pos[j].y << "  " << Data.pos[j].z << " " << Data.charge[j] << " " << Data.scale[j] << " " << Data.scaleCoul[j] << " " << Data.Type[j] << '\n';
 }
 
-static inline void Write_All_Adsorbate_data(size_t Cycle, Atoms* System, Components SystemComponents, ForceField FF, Boxsize Box, std::vector<std::string> AtomNames, size_t SystemIndex)
+static inline void Write_All_Adsorbate_data(size_t Cycle, Atoms* System, Components& SystemComponents, ForceField& FF, Boxsize& Box, std::vector<std::string>& AtomNames, size_t SystemIndex)
 {
   //std::ofstream textrestartFile{};
   std::filesystem::path cwd = std::filesystem::current_path();
@@ -272,7 +272,7 @@ static inline void Write_All_Adsorbate_data(size_t Cycle, Atoms* System, Compone
 
 //Zhao's note on 112623, moved the following to fxn_main.h//
 /*
-static inline void Write_Lambda(size_t Cycle, Components SystemComponents, size_t SystemIndex)
+static inline void Write_Lambda(size_t Cycle, Components& SystemComponents, size_t SystemIndex)
 {
   std::ofstream textrestartFile{};
   std::filesystem::path cwd = std::filesystem::current_path();
@@ -284,7 +284,7 @@ static inline void Write_Lambda(size_t Cycle, Components SystemComponents, size_
   std::filesystem::path fileName = cwd /fname;
   std::filesystem::create_directories(directoryName);
   textrestartFile = std::ofstream(fileName, std::ios::out);
-  for(size_t i = 0; i < SystemComponents.Total_Components; i++)
+  for(size_t i = 0; i < SystemComponents.NComponents.x; i++)
   {
     if(SystemComponents.hasfractionalMolecule[i])
     {
@@ -308,7 +308,7 @@ static inline void Write_Lambda(size_t Cycle, Components SystemComponents, size_
   textrestartFile.close();
 }
 
-static inline void Write_TMMC(size_t Cycle, Components SystemComponents, size_t SystemIndex)
+static inline void Write_TMMC(size_t Cycle, Components& SystemComponents, size_t SystemIndex)
 {
   std::ofstream textTMMCFile{};
   std::filesystem::path cwd = std::filesystem::current_path();
@@ -320,7 +320,7 @@ static inline void Write_TMMC(size_t Cycle, Components SystemComponents, size_t 
   std::filesystem::path fileName = cwd /fname;
   std::filesystem::create_directories(directoryName);
   textTMMCFile = std::ofstream(fileName, std::ios::out);
-  for(size_t i = 0; i < SystemComponents.Total_Components; i++)
+  for(size_t i = 0; i < SystemComponents.NComponents.x; i++)
   {
     if(SystemComponents.Tmmc[i].DoTMMC)
     {

@@ -1,7 +1,11 @@
+
 #include "axpy.h"
+
 #include "mc_single_particle.h"
 #include "mc_swap_moves.h"
 #include "mc_box.h"
+
+
 
 #include "write_data.h"
 
@@ -16,10 +20,12 @@
 
 #include <fstream>
 
+//#include <format>
+
 inline void Copy_AtomData_from_Device(Atoms* System, Atoms* d_a, Components& SystemComponents, Boxsize& HostBox, Simulations& Sims)
 {
-  cudaMemcpy(System, d_a, SystemComponents.Total_Components * sizeof(Atoms), cudaMemcpyDeviceToHost);
-  for(size_t ijk=0; ijk < SystemComponents.Total_Components; ijk++)
+  cudaMemcpy(System, d_a, SystemComponents.NComponents.x * sizeof(Atoms), cudaMemcpyDeviceToHost);
+  for(size_t ijk=0; ijk < SystemComponents.NComponents.x; ijk++)
   {
     if(SystemComponents.HostSystem[ijk].Allocate_size != System[ijk].Allocate_size)
     {
@@ -48,32 +54,35 @@ inline void Copy_AtomData_from_Device(Atoms* System, Atoms* d_a, Components& Sys
   HostBox.Cubic = Sims.Box.Cubic;
 }
 
-inline void GenerateRestartMovies(Components& SystemComponents, Simulations& Sims, PseudoAtomDefinitions& PseudoAtom, size_t systemIdx, int SimulationMode)
+inline void GenerateRestartMovies(Variables& Vars, size_t systemId, PseudoAtomDefinitions& PseudoAtom, int SimulationMode)
 {
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations& Sims = Vars.Sims[systemId];
+  Boxsize& HostBox = Vars.Box[systemId];
   //Generate Restart file during the simulation, regardless of the phase
   Atoms device_System[SystemComponents.NComponents.x];
-  Boxsize HostBox;
   Copy_AtomData_from_Device(device_System, Sims.d_a, SystemComponents, HostBox, Sims);
-  create_Restart_file(0, SystemComponents.HostSystem, SystemComponents, SystemComponents.FF, HostBox, PseudoAtom.Name, systemIdx);
-  Write_All_Adsorbate_data(0, SystemComponents.HostSystem, SystemComponents, SystemComponents.FF, HostBox, PseudoAtom.Name, systemIdx);
+  create_Restart_file(0, SystemComponents.HostSystem, SystemComponents, SystemComponents.FF, HostBox, PseudoAtom.Name, systemId);
+  Write_All_Adsorbate_data(0, SystemComponents.HostSystem, SystemComponents, SystemComponents.FF, HostBox, PseudoAtom.Name, systemId);
   //Only generate LAMMPS data movie for production phase
-  if(SimulationMode == PRODUCTION)  create_movie_file(SystemComponents.HostSystem, SystemComponents, HostBox, PseudoAtom.Name, systemIdx);
+  if(SimulationMode == PRODUCTION)  create_movie_file(SystemComponents.HostSystem, SystemComponents, HostBox, PseudoAtom.Name, systemId);
 }
 
 ///////////////////////////////////////////////////////////
 // Wrapper for Performing a move for the selected system //
 ///////////////////////////////////////////////////////////
-inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims, ForceField& FF, RandomNumber& Random, WidomStruct& Widom, double& Rosenbluth, int SimulationMode)
+void Select_Box_Component_Molecule(Variables& Vars, size_t box_index)
 {
-  SystemComponents.CURRENTCYCLE = Cycle;
+  Components& SystemComponents = Vars.SystemComponents[box_index];
+  WidomStruct& Widom = Vars.Widom[box_index];
+  SystemComponents.TempVal.Initialize();
+  size_t& comp                   = SystemComponents.TempVal.component;
+  size_t& SelectedMolInComponent = SystemComponents.TempVal.molecule;
+  
   //Randomly Select an Adsorbate Molecule and determine its Component: MoleculeID --> Component
   //Zhao's note: The number of atoms can be vulnerable, adding throw error here//
   if(SystemComponents.TotalNumberOfMolecules < SystemComponents.NumberOfFrameworks)
     throw std::runtime_error("There is negative number of adsorbates. Break program!");
-
-  size_t comp = 0; // When selecting components, skip the component 0 (because it is the framework)
-  size_t SelectedMolecule = 0; 
-  size_t SelectedMolInComponent = 0;
 
   size_t NumberOfImmobileFrameworkMolecules = 0; size_t ImmobileFrameworkSpecies = 0;
   for(size_t i = 0; i < SystemComponents.NComponents.y; i++)
@@ -88,18 +97,37 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
   }
   SelectedMolInComponent = (size_t) (Get_Uniform_Random() * SystemComponents.NumberOfMolecule_for_Component[comp]);
 
-  MoveEnergy DeltaE;
-  double RANDOMNUMBER = Get_Uniform_Random();
+  Vars.RandomNumber = Get_Uniform_Random();
+}
+void RunMoves(Variables& Vars, size_t box_index, int Cycle)
+{
+  MC_MOVES MOVES;
+
+  Components& SystemComponents = Vars.SystemComponents[box_index];
+  Simulations& Sims = Vars.Sims[box_index];
+  ForceField& FF = Vars.device_FF;
+  //RandomNumber& Random = Vars.Random;
+  WidomStruct& Widom = Vars.Widom[box_index];
+
+  //variables that affects the selection of a move, written into TempVal//
+  Select_Box_Component_Molecule(Vars, box_index);
+  double& RANDOMNUMBER = Vars.RandomNumber;
+  size_t& comp         = SystemComponents.TempVal.component;
+  size_t& SelectedMolInComponent = SystemComponents.TempVal.molecule;
   //printf("Step %zu, selected Comp %zu, Mol %zu, RANDOM: %.5f", Cycle, comp, SelectedMolInComponent, RANDOMNUMBER);
+
+  MoveEnergy DeltaE;
+  int& MoveType = SystemComponents.TempVal.MoveType;
   if(RANDOMNUMBER < SystemComponents.Moves[comp].TranslationProb)
   {
+    MoveType = TRANSLATION;
     //////////////////////////////
     // PERFORM TRANSLATION MOVE //
     //////////////////////////////
     //printf(" Translation\n");
     if(SystemComponents.NumberOfMolecule_for_Component[comp] > 0)
     {
-      DeltaE = SingleBodyMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, TRANSLATION);
+      DeltaE = SingleBodyMove(Vars, box_index);
     }
     else
     {
@@ -108,13 +136,14 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].RotationProb) //Rotation
   {
+    MoveType = ROTATION;
     ///////////////////////////
     // PERFORM ROTATION MOVE //
     ///////////////////////////
     //printf(" Rotation\n");
     if(SystemComponents.NumberOfMolecule_for_Component[comp] > 0)
     {
-      DeltaE = SingleBodyMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, ROTATION);
+      DeltaE = SingleBodyMove(Vars, box_index);
     }
     else
     {
@@ -123,32 +152,37 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].SpecialRotationProb) //Special Rotation for Framework Components
   {
+    MoveType = SPECIAL_ROTATION;
     ///////////////////////////////////
     // PERFORM SPECIAL ROTATION MOVE //
     ///////////////////////////////////
     //printf(" Special Rotation\n");
     if(SystemComponents.NumberOfMolecule_for_Component[comp] > 0)
-      DeltaE = SingleBodyMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, SPECIAL_ROTATION);
+      DeltaE = SingleBodyMove(Vars, box_index);
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].WidomProb)
   {
+    MoveType = WIDOM;
     //////////////////////////////////
     // PERFORM WIDOM INSERTION MOVE //
     //////////////////////////////////
     //printf(" Widom Insertion\n");
-    double2 newScale = SystemComponents.Lambda[comp].SET_SCALE(1.0); //Set scale for full molecule (lambda = 1.0)//
-    /*
-    size_t SelectedTrial=0; bool SuccessConstruction = false; MoveEnergy energy; double StoredR = 0.0;
-    double Rosenbluth=Widom_Move_FirstBead_PARTIAL(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp, CBMC_INSERTION, StoredR, &SelectedTrial, &SuccessConstruction, &energy, newScale);
-    if(SystemComponents.Moleculesize[comp] > 1 && Rosenbluth > 1e-150)
+    double2& newScale = SystemComponents.TempVal.Scale; 
+    newScale = SystemComponents.Lambda[comp].SET_SCALE(1.0); //Set scale for full molecule (lambda = 1.0)//
+    double Rosenbluth = MOVES.INSERTION.WidomMove(Vars, box_index);
+    //Also record move energy (delta energy)
+    //MoveEnergy widom_e = MOVES.INSERTION.energy;
+    //printf("Widom E: "); widom_e.print();
+
+    if(Vars.SimulationMode == PRODUCTION)
     {
-      size_t SelectedFirstBeadTrial = SelectedTrial;
-      Rosenbluth*=Widom_Move_Chain_PARTIAL(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp, CBMC_INSERTION, &SelectedTrial, &SuccessConstruction, &energy, SelectedFirstBeadTrial, newScale); 
-      //Zhao's note: need to add widom insertion data back//
+      size_t blockID = Cycle/Vars.BlockAverageSize;
+      if(blockID >= SystemComponents.Nblock) blockID --;
+      SystemComponents.Moves[comp].BlockID = blockID;
+      SystemComponents.Moves[comp].RecordRosen(Rosenbluth, WIDOM);
+      //weight with Rosenbluth (heavy weight on low (attractive) energy, lower on high energy)
+      SystemComponents.Moves[comp].Rosen[blockID].widom_energy += MOVES.INSERTION.energy * Rosenbluth;
     }
-    */
-    double Rosenbluth = WidomMove(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp, newScale);
-    SystemComponents.Moves[comp].RecordRosen(Rosenbluth, WIDOM);
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].ReinsertionProb)
   {
@@ -156,9 +190,11 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
     // PERFORM REINSERTION MOVE //
     //////////////////////////////
     //printf(" Reinsertion\n");
+    MoveType = REINSERTION;
     if(SystemComponents.NumberOfMolecule_for_Component[comp] > 0)
     {
-      DeltaE = Reinsertion(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp);
+      //DeltaE = Reinsertion(Vars, box_index);
+      DeltaE = MOVES.REINSERTION.Run(Vars, box_index);
     }
     else
     {
@@ -167,8 +203,9 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].IdentitySwapProb)
   {
+    MoveType = IDENTITY_SWAP;
     //printf(" Identity Swap\n");
-    DeltaE = IdentitySwapMove(SystemComponents, Sims, Widom, FF, Random);
+    DeltaE = IdentitySwapMove(Vars, box_index);
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].CBCFProb && SystemComponents.hasfractionalMolecule[comp])
   {
@@ -177,7 +214,7 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
     ///////////////////////
     //printf(" CBCF\n");
     SelectedMolInComponent = SystemComponents.Lambda[comp].FractionalMoleculeID;
-    DeltaE = CBCFMove(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp);
+    DeltaE = CBCFMove(Vars, box_index);
   }
   else if(RANDOMNUMBER < SystemComponents.Moves[comp].SwapProb)
   {
@@ -189,11 +226,14 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
       //printf(" Swap Insertion\n");
       if(!SystemComponents.SingleSwap)
       {
-        DeltaE = Insertion(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp);
+        MoveType = INSERTION;
+        DeltaE = MOVES.INSERTION.Run(Vars, box_index);
+        //DeltaE = Insertion(Vars, box_index);
       }
       else
       {
-        DeltaE = SingleBodyMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, SINGLE_INSERTION);
+        MoveType = SINGLE_INSERTION;
+        DeltaE = SingleBodyMove(Vars, box_index);
         //DeltaE = SingleSwapMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, SINGLE_INSERTION);
       }
     }
@@ -210,40 +250,68 @@ inline void RunMoves(int Cycle, Components& SystemComponents, Simulations& Sims,
         {
           if(!SystemComponents.SingleSwap)
           {
-            DeltaE = Deletion(SystemComponents, Sims, FF, Random, Widom, SelectedMolInComponent, comp);
+            MoveType = DELETION;
+            DeltaE = MOVES.DELETION.Run(Vars, box_index);
+            //DeltaE = Deletion(Vars, box_index);
           }
           else
           {
-            //DeltaE = SingleSwapMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, SINGLE_DELETION);
-            DeltaE = SingleBodyMove(SystemComponents, Sims, Widom, FF, Random, SelectedMolInComponent, comp, SINGLE_DELETION);
+            MoveType = SINGLE_DELETION;
+            DeltaE = SingleBodyMove(Vars, box_index);
           }
         }
         else
         {
+          MoveType = DELETION;
           SystemComponents.Tmmc[comp].Update(0.0, SystemComponents.NumberOfMolecule_for_Component[comp], DELETION);
         }
       }
     }
   }
-  /* //DEBUG//
-  if(Cycle == 4)
+  else if(RANDOMNUMBER < SystemComponents.Moves[comp].VolumeMoveProb)
   {
-    printf("Cycle [%d], Printing DeltaE\n", Cycle);
-    DeltaE.print();
+    //printf(" VOLUME MOVE\n");
+    double start = omp_get_wtime();
+    ForceField& FF = Vars.device_FF;
+    VolumeMove(SystemComponents, Sims, FF);
+    double end = omp_get_wtime();
+    SystemComponents.VolumeMoveTime += end - start;
   }
-  */
+  //Gibbs Xfer//
+  else if(RANDOMNUMBER < SystemComponents.Moves[comp].GibbsSwapProb)
+  {
+    //if(Vars.GibbsStatistics.DoGibbs)
+    //printf(" Gibbs SWAP\n");
+    if(Vars.SystemComponents.size() == 2)
+    {
+      //GibbsParticleTransfer(Vars, comp, Vars.GibbsStatistics);
+      MOVES.GIBBS_PARTICLE_XFER.Run(Vars, box_index, Vars.GibbsStatistics);
+    }
+  }
+  else if(RANDOMNUMBER < SystemComponents.Moves[comp].GibbsVolumeMoveProb)
+  {
+    //printf(" Gibbs VOLUME\n");
+    if(Vars.SystemComponents.size() == 2)
+      NVTGibbsMove(Vars.SystemComponents, Vars.Sims, FF, Vars.GibbsStatistics);
+  }
   SystemComponents.deltaE += DeltaE;
 }
 
-double CreateMolecule_InOneBox(Components& SystemComponents, Simulations& Sims, ForceField FF, RandomNumber& Random, WidomStruct Widom, bool AlreadyHasFractionalMolecule)
+double CreateMolecule_InOneBox(Variables& Vars, size_t systemId, bool AlreadyHasFractionalMolecule)
 {
+  MC_MOVES MOVES; 
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  //Simulations& Sims = Vars.Sims[systemId];
+  //ForceField& FF = Vars.device_FF;
+  //RandomNumber& Random = Vars.Random;
+  //WidomStruct& Widom = Vars.Widom[systemId];
   double running_energy = 0.0;
   // Create Molecules in the Box Before the Simulation //
   for(size_t comp = SystemComponents.NComponents.y; comp < SystemComponents.NComponents.x; comp++)
   {
     size_t CreateFailCount = 0; size_t Created = 0; size_t SelectedMol = 0;
     CreateFailCount = 0;
-    printf("Component %zu, Need to create %zu full molecule\n", comp, SystemComponents.NumberOfCreateMolecules[comp]);
+    fprintf(SystemComponents.OUTPUT, "Component %zu, Need to create %zu full molecule\n", comp, SystemComponents.NumberOfCreateMolecules[comp]);
     //Create Fractional Molecule first//
     if(SystemComponents.hasfractionalMolecule[comp])
     {
@@ -253,17 +321,21 @@ double CreateMolecule_InOneBox(Components& SystemComponents, Simulations& Sims, 
       if(FractionalMolToCreate > 0) Initialize_WangLandauIteration(SystemComponents.Lambda[comp]);
       while(FractionalMolToCreate > 0)
       {
-        printf("Creating Fractional Molecule for Component %zu; There are %zu Molecules of that component in the System\n", comp, SystemComponents.NumberOfMolecule_for_Component[comp]);
+        fprintf(SystemComponents.OUTPUT, "Creating Fractional Molecule for Component %zu; There are %zu Molecules of that component in the System\n", comp, SystemComponents.NumberOfMolecule_for_Component[comp]);
         SelectedMol = Created; if(Created > 0) SelectedMol = Created - 1; 
         //Zhao's note: this is a little confusing, but when number of molecule for that species = 0 or 1, the chosen molecule is zero. This is creating from zero loading, need to change in the future, when we read from restart file//
         size_t OldVal = SystemComponents.NumberOfMolecule_for_Component[comp];
 
         size_t NewBin = 5;
+        MoveEnergy DeltaE;
         if(SystemComponents.Tmmc[comp].DoTMMC) NewBin = 0;
         double newLambda = static_cast<double>(NewBin) * SystemComponents.Lambda[comp].delta;
-        double2 newScale = SystemComponents.Lambda[comp].SET_SCALE(newLambda);
-        MoveEnergy DeltaE;
-        DeltaE = CreateMolecule(SystemComponents, Sims, FF, Random, Widom, SelectedMol, comp, newScale);
+        SystemComponents.TempVal.Initialize();
+	SystemComponents.TempVal.Scale = SystemComponents.Lambda[comp].SET_SCALE(newLambda);
+        SystemComponents.TempVal.MoveType = INSERTION;
+        SystemComponents.TempVal.component = comp;
+        SystemComponents.TempVal.molecule  = SelectedMol;
+        DeltaE = MOVES.INSERTION.CreateMolecule(Vars, systemId);
         running_energy += DeltaE.total();
         SystemComponents.CreateMoldeltaE += DeltaE;
         if(SystemComponents.NumberOfMolecule_for_Component[comp] == OldVal)
@@ -275,253 +347,177 @@ double CreateMolecule_InOneBox(Components& SystemComponents, Simulations& Sims, 
           FractionalMolToCreate --; Created ++; SystemComponents.Lambda[comp].FractionalMoleculeID = SelectedMol;
           SystemComponents.Lambda[comp].currentBin = NewBin;
         }
-        if(CreateFailCount > 1000000000) throw std::runtime_error("Bad Insertions When Creating Fractional Molecules!");
+        if(CreateFailCount > 1e20) throw std::runtime_error("Bad Insertions When Creating Fractional Molecules!");
       }
     }
     while(SystemComponents.NumberOfCreateMolecules[comp] > 0)
     {
-      printf("Creating %zu Molecule for Component %zu; There are %zu Molecules of that component in the System\n", Created, comp, SystemComponents.NumberOfMolecule_for_Component[comp]);
+      fprintf(SystemComponents.OUTPUT, "Creating %zu Molecule for Component %zu; There are %zu Molecules of that component in the System\n", Created, comp, SystemComponents.NumberOfMolecule_for_Component[comp]);
       SelectedMol = Created; if(Created > 0) SelectedMol = Created - 1; //Zhao's note: this is a little confusing, but when number of molecule for that species = 0 or 1, the chosen molecule is zero. This is creating from zero loading, need to change in the future, when we read from restart file//
       size_t OldVal    = SystemComponents.NumberOfMolecule_for_Component[comp];
-      double2 newScale = SystemComponents.Lambda[comp].SET_SCALE(1.0); //Set scale for full molecule (lambda = 1.0)//
       MoveEnergy DeltaE;
-      DeltaE = CreateMolecule(SystemComponents, Sims, FF, Random, Widom, SelectedMol, comp, newScale);
+      SystemComponents.TempVal.Initialize();
+      SystemComponents.TempVal.Scale = SystemComponents.Lambda[comp].SET_SCALE(1.0); //Set scale for full molecule (lambda = 1.0)//
+      SystemComponents.TempVal.MoveType = INSERTION;
+      SystemComponents.TempVal.component = comp;
+      SystemComponents.TempVal.molecule  = SelectedMol;
+      DeltaE = MOVES.INSERTION.CreateMolecule(Vars, systemId);
       //printf("Creating %zu molecule\n", SelectedMol);
       //DeltaE.print();
       running_energy += DeltaE.total();
       SystemComponents.CreateMoldeltaE += DeltaE;
-      printf("Delta E in creating molecules:\n"); DeltaE.print();
+      fprintf(SystemComponents.OUTPUT, "Delta E in creating molecules:\n"); DeltaE.print();
       if(SystemComponents.NumberOfMolecule_for_Component[comp] == OldVal)
       {CreateFailCount ++;} else {SystemComponents.NumberOfCreateMolecules[comp] --; Created ++;}
-      if(CreateFailCount > 10000) throw std::runtime_error("Bad Insertions When Creating Molecules!");
+      if(CreateFailCount > 1e10) throw std::runtime_error("Bad Insertions When Creating Molecules!");
     }
   }
   return running_energy;
 }
 
-void Run_Simulation_MultipleBoxes(int Cycles, std::vector<Components>& SystemComponents, Simulations*& Sims, ForceField FF, RandomNumber& Random, std::vector<WidomStruct>& Widom, std::vector<SystemEnergies>& Energy, Gibbs& GibbsStatistics, int SimulationMode, bool SetMaxStep, size_t MaxStepPerCycle)
+void GatherStatisticsDuringSimulation(Variables& Vars, size_t systemId, size_t cycle)
 {
-  size_t NumberOfSimulations = SystemComponents.size();
-  size_t WLSampled = 0; size_t WLAdjusted = 0;
-
-  std::vector<int> BlockAverageSize(NumberOfSimulations, 1);
-
-  std::string Mode;
-  switch(SimulationMode)
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  Simulations&  Sims           = Vars.Sims[systemId];
+  size_t& i = cycle;
+  int& BlockAverageSize        = Vars.BlockAverageSize;
+  int& SimulationMode          = Vars.SimulationMode;
+  std::string& Mode = Vars.Mode;
+  //////////////////////////////////////////////
+  // SAMPLE (EQUILIBRATION) CBCF BIASING TERM //
+  //////////////////////////////////////////////
+  if(SimulationMode == EQUILIBRATION && i%50==0)
   {
-    case INITIALIZATION:{Mode = "INITIALIZATION"; break;}
-    case EQUILIBRATION: {Mode = "EQUILIBRATION"; break;}
-    case PRODUCTION:    {Mode = "PRODUCTION"; break;}
-  } 
-  /*
-  if(SimulationMode == INITIALIZATION && Cycles > 0)
-  {
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-    { 
-      SystemComponents[sim].deltaVDWReal = 0.0;
-      SystemComponents[sim].deltaEwald   = 0.0;
+    for(size_t icomp = 0; icomp < SystemComponents.NComponents.x; icomp++)
+    { //Try to sample it if there are more CBCF moves performed//
+      if(SystemComponents.hasfractionalMolecule[icomp] && !SystemComponents.Tmmc[icomp].DoTMMC)
+      {
+        Sample_WangLandauIteration(SystemComponents.Lambda[icomp]);
+        SystemComponents.CBCFPerformed[icomp] = SystemComponents.Moves[icomp].CBCFTotal; 
+        SystemComponents.WLSampled++;
+      }
     }
   }
-  */
+
+  if(i%500==0)
+  {
+    for(size_t comp = 0; comp < SystemComponents.NComponents.x; comp++)
+    {  
+      if(SystemComponents.Moves[comp].TranslationTotal > 0)
+        Update_Max_Translation(SystemComponents, comp);
+      if(SystemComponents.Moves[comp].RotationTotal > 0)
+        Update_Max_Rotation(SystemComponents, comp);
+      if(SystemComponents.Moves[comp].SpecialRotationTotal > 0)
+        Update_Max_SpecialRotation(SystemComponents, comp);
+      if(SystemComponents.VolumeMoveAttempts > 0) Update_Max_VolumeChange(SystemComponents);
+    }
+  }
+  if(i%SystemComponents.PrintStatsEvery==0) Print_Cycle_Statistics(i, SystemComponents, Mode);
+  ////////////////////////////////////////////////
+  // ADJUST CBCF BIASING FACTOR (EQUILIBRATION) //
+  ////////////////////////////////////////////////
+  if(i%5000==0 && SimulationMode == EQUILIBRATION)
+  {
+    for(size_t icomp = 0; icomp < SystemComponents.NComponents.x; icomp++)
+      if(SystemComponents.hasfractionalMolecule[icomp] && !SystemComponents.Tmmc[icomp].DoTMMC)//Try not to use CBCFC + TMMC//
+      {  Adjust_WangLandauIteration(SystemComponents.Lambda[icomp]); SystemComponents.WLAdjusted++;}
+  }
   if(SimulationMode == PRODUCTION)
   {
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
+    //Record values for Number of atoms//
+    for(size_t comp = 0; comp < SystemComponents.NComponents.x; comp++)
     {
-      BlockAverageSize[sim] = Cycles / SystemComponents[sim].Nblock;
-      if(Cycles % SystemComponents[sim].Nblock != 0)
-        printf("Warning! Number of Cycles cannot be divided by Number of blocks. Residue values go to the last block\n");
-      SystemComponents[sim].BookKeepEnergy.resize(SystemComponents[sim].Nblock);
-      SystemComponents[sim].BookKeepEnergy_SQ.resize(SystemComponents[sim].Nblock);
-    }
-  }
-
-  std::vector<double> running_Rosenbluth(NumberOfSimulations, 0.0);
-
-  /////////////////////////////////////////////
-  // FINALIZE (PRODUCTION) CBCF BIASING TERM //
-  /////////////////////////////////////////////
-  if(SimulationMode == PRODUCTION)
-  {
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-      for(size_t icomp = 0; icomp < SystemComponents[sim].Total_Components; icomp++)
-        if(SystemComponents[sim].hasfractionalMolecule[icomp] && !SystemComponents[sim].Tmmc[icomp].DoTMMC)
-          Finalize_WangLandauIteration(SystemComponents[sim].Lambda[icomp]);
-  }
-
-  ///////////////////////////////////////////////////////////////////////
-  // FORCE INITIALIZING CBCF BIASING TERM BEFORE INITIALIZATION CYCLES //
-  ///////////////////////////////////////////////////////////////////////
-  if(SimulationMode == INITIALIZATION && Cycles > 0)
-  {
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-      for(size_t icomp = 0; icomp < SystemComponents[sim].Total_Components; icomp++)
-        if(SystemComponents[sim].hasfractionalMolecule[icomp])
-          Initialize_WangLandauIteration(SystemComponents[sim].Lambda[icomp]);
-  }
-  ///////////////////////////////////////////////////////
-  // Run the simulations for different boxes IN SERIAL //
-  ///////////////////////////////////////////////////////
-  for(size_t i = 0; i < Cycles; i++)
-  {
-    size_t Steps = 1;
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-    {
-      if(Steps < SystemComponents[sim].TotalNumberOfMolecules) 
+      Gather_Averages_Types(SystemComponents.Moves[comp].MolAverage, SystemComponents.NumberOfMolecule_for_Component[comp], 0.0, i, BlockAverageSize, SystemComponents.Nblock);
+      //Gather total energy * number of molecules for each adsorbate component//
+      if(comp >= SystemComponents.NComponents.y)
       {
-        Steps = SystemComponents[sim].TotalNumberOfMolecules;
+        double deltaE_Adsorbate = SystemComponents.deltaE.total() - SystemComponents.deltaE.HHVDW - SystemComponents.deltaE.HHEwaldE - SystemComponents.deltaE.HHReal;
+        double ExN = SystemComponents.createmol_energy + deltaE_Adsorbate * SystemComponents.NumberOfMolecule_for_Component[comp];
+        Gather_Averages_double(SystemComponents.EnergyTimesNumberOfMolecule[comp], ExN, i, BlockAverageSize, SystemComponents.Nblock);
+        //Calculate Average Excess Loading//
+        //AmountOfExcessMolecules only be resized during EOS calculation, don't have that? then no excess loading because excess loading needs compressibility from EOS//
+        if(SystemComponents.AmountOfExcessMolecules.size() > 0)
+          Gather_Averages_Types(SystemComponents.ExcessLoading[comp], SystemComponents.NumberOfMolecule_for_Component[comp] - SystemComponents.AmountOfExcessMolecules[comp], 0.0, i, BlockAverageSize, SystemComponents.Nblock);
       }
-    }
-    ////////////////////////////////////////
-    // Zhao's note: for debugging purpose //
-    ////////////////////////////////////////
-    if(SetMaxStep && Steps > MaxStepPerCycle) Steps = MaxStepPerCycle;
-    for(size_t j = 0; j < Steps; j++)
-    {
-      //Draw a random number, if fits, run a Gibbs Box move//
-      //Zhao's note: if a Gibbs move is performed, skip the cycle//
-      double NVTGibbsRN = Get_Uniform_Random();
-      bool GoodForNVTGibbs = false;
-      //If no framework atoms for both simulation boxes//
-      if(NumberOfSimulations == 2 && SystemComponents[0].Moleculesize[0] == 0 && SystemComponents[1].Moleculesize[0] == 0) GoodForNVTGibbs = true;
-      if(GibbsStatistics.DoGibbs && GoodForNVTGibbs)
-        if(NVTGibbsRN < GibbsStatistics.GibbsBoxProb) //Zhao's note: for the test, do it at the last step//
+      for(size_t compj = 0; compj < SystemComponents.NComponents.x; compj++)
+      {
+        if(comp >= SystemComponents.NComponents.y && compj >= SystemComponents.NComponents.y)
         {
-          double start = omp_get_wtime();
-          printf("Cycle [%zu], Step [%zu], Perform Gibbs Volume Move\n", i, j);
-          NVTGibbsMove(SystemComponents, Sims, FF, Energy, GibbsStatistics);
-          double end = omp_get_wtime();
-          GibbsStatistics.GibbsTime += end - start;
-          continue;
+          double NxNj = SystemComponents.NumberOfMolecule_for_Component[comp] * SystemComponents.NumberOfMolecule_for_Component[compj];
+          Gather_Averages_double(SystemComponents.Moves[comp].MolSQPerComponent[compj], NxNj, i, BlockAverageSize, SystemComponents.Nblock);
         }
-      double GibbsXferRN = Get_Uniform_Random();
-      if(GibbsStatistics.DoGibbs && GoodForNVTGibbs)
-        if(GibbsXferRN < GibbsStatistics.GibbsXferProb)
-        {
-          //Do a Gibbs Particle Transfer move//
-          size_t SelectedComponent = 1;
-          printf("Cycle [%zu], Step [%zu], Perform Gibbs Particle Move\n", i, j);
-          GibbsParticleTransfer(SystemComponents, Sims, FF, Random, Widom, Energy, SelectedComponent, GibbsStatistics);
-          continue;
-        }
-      for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-      {
-        RunMoves(i, SystemComponents[sim], Sims[sim], FF, Random, Widom[sim], running_Rosenbluth[sim], SimulationMode);
       }
+      Gather_Averages_Types(SystemComponents.DensityPerComponent[comp], SystemComponents.NumberOfMolecule_for_Component[comp] / Sims.Box.Volume, 0.0, i, BlockAverageSize, SystemComponents.Nblock);
     }
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-    {
-      //////////////////////////////////////////////
-      // SAMPLE (EQUILIBRATION) CBCF BIASING TERM //
-      //////////////////////////////////////////////
-      if(SimulationMode == EQUILIBRATION && i%50==0)
-      {
-        for(size_t icomp = 0; icomp < SystemComponents[sim].Total_Components; icomp++)
-        { 
-          //Try to sample it if there are more CBCF moves performed//
-          if(SystemComponents[sim].hasfractionalMolecule[icomp] && !SystemComponents[sim].Tmmc[icomp].DoTMMC)
-          {
-            Sample_WangLandauIteration(SystemComponents[sim].Lambda[icomp]);
-            WLSampled++;
-          }
-        }
-      }
-
-      if(i%500==0)
-      {
-        for(size_t comp = 0; comp < SystemComponents[sim].Total_Components; comp++)
-          if(SystemComponents[sim].Moves[comp].TranslationTotal > 0)
-            Update_Max_Translation(SystemComponents[sim], comp);
-        for(size_t comp = 0; comp < SystemComponents[sim].Total_Components; comp++)
-          if(SystemComponents[sim].Moves[comp].RotationTotal > 0)
-            Update_Max_Rotation(SystemComponents[sim], comp);
-        for(size_t comp = 0; comp < SystemComponents[sim].Total_Components; comp++)
-          if(SystemComponents[sim].Moves[comp].SpecialRotationTotal > 0)
-            Update_Max_SpecialRotation(SystemComponents[sim], comp);
-      }
-      
-      if(i % SystemComponents[sim].PrintStatsEvery == 0) Print_Cycle_Statistics(i, SystemComponents[sim], Mode);
-      ////////////////////////////////////////////////
-      // ADJUST CBCF BIASING FACTOR (EQUILIBRATION) //
-      ////////////////////////////////////////////////
-      if(i%5000==0 && SimulationMode == EQUILIBRATION)
-      {
-        for(size_t icomp = 0; icomp < SystemComponents[sim].Total_Components; icomp++)
-        if(SystemComponents[sim].hasfractionalMolecule[icomp] && !SystemComponents[sim].Tmmc[icomp].DoTMMC)
-        {  
-          Adjust_WangLandauIteration(SystemComponents[sim].Lambda[icomp]); 
-          WLAdjusted++;
-        }
-      }
-      if(SimulationMode == PRODUCTION)
-      {
-        //Record values for energy//
-        Gather_Averages_Types(SystemComponents[sim].EnergyAverage, Energy[sim].InitialEnergy, Energy[sim].running_energy, i, BlockAverageSize[sim], SystemComponents[sim].Nblock);
-        //Record values for Number of atoms//
-        for(size_t comp = 0; comp < SystemComponents[sim].Total_Components; comp++)
-          Gather_Averages_Types(SystemComponents[sim].Moves[comp].MolAverage, SystemComponents[sim].NumberOfMolecule_for_Component[comp], 0.0, i, BlockAverageSize[sim], SystemComponents[sim].Nblock);
-        Gather_Averages_MoveEnergy(SystemComponents[sim], i, BlockAverageSize[sim], SystemComponents[sim].deltaE);
-      }
-    }
+    Gather_Averages_Types(SystemComponents.VolumeAverage, Sims.Box.Volume, 0.0, i, BlockAverageSize, SystemComponents.Nblock);
+    Gather_Averages_MoveEnergy(SystemComponents, i, BlockAverageSize, SystemComponents.deltaE);
   }
-  //print statistics
-  if(Cycles > 0)
+  if(SimulationMode != INITIALIZATION && i > 0)
   {
-    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
-    {
-      if(SimulationMode == EQUILIBRATION) printf("Sampled %zu WangLandau, Adjusted WL %zu times\n", WLSampled, WLAdjusted);
-      PrintAllStatistics(SystemComponents[sim], Sims[sim], Cycles, SimulationMode, BlockAverageSize[sim]);
-      if(SimulationMode == PRODUCTION)
-        Calculate_Overall_Averages_MoveEnergy(SystemComponents[sim], BlockAverageSize[sim]);
-    }
-    if(GibbsStatistics.DoGibbs)
-    {
-      PrintGibbs(GibbsStatistics);
-    }
+    for(size_t comp = 0; comp < SystemComponents.NComponents.x; comp++)
+      if(i % SystemComponents.Tmmc[comp].UpdateTMEvery == 0)
+        SystemComponents.Tmmc[comp].AdjustTMBias();
   }
+  if(i % SystemComponents.MoviesEvery == 0)//Generate restart file and movies 
+    GenerateRestartMovies(Vars, systemId, SystemComponents.PseudoAtoms, SimulationMode);
 }
 
-double Run_Simulation_ForOneBox(int Cycles, Components& SystemComponents, Simulations& Sims, ForceField FF, RandomNumber& Random, WidomStruct Widom, double init_energy, int SimulationMode, bool SetMaxStep, size_t MaxStepPerCycle, Units Constants)
+void InitialMCBeforeMoves(Variables& Vars, size_t systemId)
 {
-  std::vector<size_t>CBCFPerformed(SystemComponents.Total_Components);
-  size_t WLSampled = 0; size_t WLAdjusted = 0;
+  Components& SystemComponents = Vars.SystemComponents[systemId];
+  size_t NumberOfSimulations   = Vars.SystemComponents.size();
+  int&   BlockAverageSize      = Vars.BlockAverageSize;
+  int&   Cycles                = Vars.Cycles;
 
-  int BlockAverageSize = 1;
+  SystemComponents.CBCFPerformed.resize(SystemComponents.NComponents.x);
+  SystemComponents.WLSampled = 0; SystemComponents.WLAdjusted = 0;
+
+  fprintf(SystemComponents.OUTPUT, "==================================\n");
+  std::string& Mode   = Vars.Mode;
+  int& SimulationMode = Vars.SimulationMode;
+  switch(SimulationMode)
+  {
+    case INITIALIZATION: {Mode = "INITIALIZATION"; fprintf(SystemComponents.OUTPUT, "== RUNNING INITIALIZATION PHASE ==\n"); Cycles = Vars.NumberOfInitializationCycles; break;}
+    case EQUILIBRATION:  {Mode = "EQUILIBRATION";  fprintf(SystemComponents.OUTPUT, "== RUNNING EQUILIBRATION PHASE ==\n");  Cycles = Vars.NumberOfEquilibrationCycles; break;}
+    case PRODUCTION:     {Mode = "PRODUCTION";     fprintf(SystemComponents.OUTPUT, "==  RUNNING PRODUCTION PHASE   ==\n");     Cycles = Vars.NumberOfProductionCycles; break;}
+  }
+  fprintf(SystemComponents.OUTPUT, "==================================\n");
+
+  fprintf(SystemComponents.OUTPUT, "CBMC Uses %zu trial positions and %zu trial orientations\n", Vars.Widom[systemId].NumberWidomTrials, Vars.Widom[systemId].NumberWidomTrialsOrientations);
+
+  if(SimulationMode == INITIALIZATION)
+  {
+    fprintf(SystemComponents.OUTPUT, "Box %zu, Volume: %.5f\n", systemId, Vars.Sims[systemId].Box.Volume);
+    Vars.GibbsStatistics.TotalVolume += Vars.Sims[systemId].Box.Volume;
+
+    fprintf(SystemComponents.OUTPUT, "Total Volume: %.5f\n", Vars.GibbsStatistics.TotalVolume);
+  }
+  // Kaihang Shi: Record initial energy but exclude the host-host Ewald
+  SystemComponents.createmol_energy = SystemComponents.CreateMol_Energy.total() - SystemComponents.CreateMol_Energy.HHVDW - SystemComponents.CreateMol_Energy.HHEwaldE - SystemComponents.CreateMol_Energy.HHReal;
+
   if(SimulationMode == PRODUCTION)
   {
     BlockAverageSize = Cycles / SystemComponents.Nblock;
     if(Cycles % SystemComponents.Nblock != 0)
-      printf("Warning! Number of Cycles cannot be divided by Number of blocks. Residue values go to the last block\n");
+      fprintf(SystemComponents.OUTPUT, "Warning! Number of Cycles cannot be divided by Number of blocks. Residue values go to the last block\n");
+    SystemComponents.BookKeepEnergy.resize(SystemComponents.Nblock);
+    SystemComponents.BookKeepEnergy_SQ.resize(SystemComponents.Nblock);
+    //Initialize vectors for energy * N for each component//
+    //initialize for each component, start with zero//
+    std::vector<double>FILL(SystemComponents.Nblock, 0.0);
+    SystemComponents.EnergyTimesNumberOfMolecule.resize(SystemComponents.NComponents.x, FILL);
+    SystemComponents.VolumeAverage.resize(SystemComponents.Nblock, {0.0, 0.0});
+    SystemComponents.DensityPerComponent.resize(SystemComponents.NComponents.x, std::vector<double2>(SystemComponents.Nblock, {0.0, 0.0}));
+    if(SystemComponents.AmountOfExcessMolecules.size() > 0)
+      SystemComponents.ExcessLoading.resize(SystemComponents.NComponents.x, std::vector<double2>(SystemComponents.Nblock, {0.0, 0.0}));
   }
 
-  printf("Number of Frameworks: %zu\n", SystemComponents.NumberOfFrameworks);
- 
-  if(SimulationMode == EQUILIBRATION) //Rezero the TMMC stats at the beginning of the Equilibration cycles//
-  {
-    //Clear TMMC data in the collection matrix//
-    for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++)
-      SystemComponents.Tmmc[comp].ClearCMatrix();
-  }
-  //Clear Rosenbluth weight statistics after Initialization//
-  if(SimulationMode == EQUILIBRATION)
-  {
-    for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++)
-      for(size_t i = 0; i < SystemComponents.Nblock; i++)
-        SystemComponents.Moves[comp].ClearRosen(i);
-  }
-  double running_energy = 0.0;
-  double running_Rosenbluth = 0.0;
   /////////////////////////////////////////////
   // FINALIZE (PRODUCTION) CBCF BIASING TERM //
   /////////////////////////////////////////////
-  //////////////////////////////////////
-  // ALSO INITIALIZE AVERAGE ENERGIES //
-  //////////////////////////////////////
   if(SimulationMode == PRODUCTION)
   {
-    SystemComponents.BookKeepEnergy.resize(SystemComponents.Nblock);
-    SystemComponents.BookKeepEnergy_SQ.resize(SystemComponents.Nblock);
-
-    for(size_t icomp = 0; icomp < SystemComponents.Total_Components; icomp++)
+    for(size_t icomp = 0; icomp < SystemComponents.NComponents.x; icomp++)
       if(SystemComponents.hasfractionalMolecule[icomp] && !SystemComponents.Tmmc[icomp].DoTMMC)
         Finalize_WangLandauIteration(SystemComponents.Lambda[icomp]);
   }
@@ -531,106 +527,115 @@ double Run_Simulation_ForOneBox(int Cycles, Components& SystemComponents, Simula
   ///////////////////////////////////////////////////////////////////////
   if(SimulationMode == INITIALIZATION && Cycles > 0)
   {
-    for(size_t icomp = 0; icomp < SystemComponents.Total_Components; icomp++)
+    for(size_t icomp = 0; icomp < SystemComponents.NComponents.x; icomp++)
       if(SystemComponents.hasfractionalMolecule[icomp])
         Initialize_WangLandauIteration(SystemComponents.Lambda[icomp]);
   }
-
-  std::string Mode;
-  switch(SimulationMode)
+  
+  if(SimulationMode == EQUILIBRATION) //Rezero the TMMC stats at the beginning of the Equilibration cycles//
   {
-    case INITIALIZATION:{Mode = "INITIALIZATION"; break;}
-    case EQUILIBRATION: {Mode = "EQUILIBRATION"; break;}
-    case PRODUCTION:    {Mode = "PRODUCTION"; break;}
+    for(size_t comp = 0; comp < SystemComponents.NComponents.x; comp++)
+    {
+      //Clear TMMC data in the collection matrix//
+      SystemComponents.Tmmc[comp].ClearCMatrix();
+      //Clear Rosenbluth weight statistics after Initialization//
+      for(size_t i = 0; i < SystemComponents.Nblock; i++)
+        SystemComponents.Moves[comp].ClearRosen(i);
+    }
   }
+}
 
-  for(size_t i = 0; i < Cycles; i++)
-  {
-    size_t Steps = 20;
-    if(Steps < SystemComponents.TotalNumberOfMolecules)
-    {
-      Steps = SystemComponents.TotalNumberOfMolecules;
-    }
-    //Determine BlockID//
-    for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++){
-      BlockAverageSize = Cycles / SystemComponents.Nblock;
-      if(BlockAverageSize > 0) SystemComponents.Moves[comp].BlockID = i/BlockAverageSize; 
-      if(SystemComponents.Moves[comp].BlockID >= SystemComponents.Nblock) SystemComponents.Moves[comp].BlockID--;   }
-    ////////////////////////////////////////
-    // Zhao's note: for debugging purpose //
-    ////////////////////////////////////////
-    if(SetMaxStep && Steps > MaxStepPerCycle) Steps = MaxStepPerCycle;
-    for(size_t j = 0; j < Steps; j++)
-    {
-      RunMoves(i, SystemComponents, Sims, FF, Random, Widom, running_Rosenbluth, SimulationMode);
-    }
-    //////////////////////////////////////////////
-    // SAMPLE (EQUILIBRATION) CBCF BIASING TERM //
-    //////////////////////////////////////////////
-    if(SimulationMode == EQUILIBRATION && i%50==0)
-    {
-      for(size_t icomp = 0; icomp < SystemComponents.Total_Components; icomp++)
-      { //Try to sample it if there are more CBCF moves performed//
-        if(SystemComponents.hasfractionalMolecule[icomp] && !SystemComponents.Tmmc[icomp].DoTMMC)
-        {
-          Sample_WangLandauIteration(SystemComponents.Lambda[icomp]);
-          CBCFPerformed[icomp] = SystemComponents.Moves[icomp].CBCFTotal; WLSampled++;
-        }
-      }
-    }
+inline void MCEndOfPhaseSummary(Variables& Vars)
+{
+  std::vector<Components>& SystemComponents = Vars.SystemComponents;
+  Simulations*&  Sims   = Vars.Sims;
+  Units& Constants = Vars.Constants;
+  std::string& Mode = Vars.Mode;
 
-    if(i%500==0)
-    {
-      for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++)
-      {  
-        if(SystemComponents.Moves[comp].TranslationTotal > 0)
-          Update_Max_Translation(SystemComponents, comp);
-        if(SystemComponents.Moves[comp].RotationTotal > 0)
-          Update_Max_Rotation(SystemComponents, comp);
-        if(SystemComponents.Moves[comp].SpecialRotationTotal > 0)
-          Update_Max_SpecialRotation(SystemComponents, comp);
-      }
-    }
-    if(i%SystemComponents.PrintStatsEvery==0) Print_Cycle_Statistics(i, SystemComponents, Mode);
-    ////////////////////////////////////////////////
-    // ADJUST CBCF BIASING FACTOR (EQUILIBRATION) //
-    ////////////////////////////////////////////////
-    if(i%5000==0 && SimulationMode == EQUILIBRATION)
-    {
-      for(size_t icomp = 0; icomp < SystemComponents.Total_Components; icomp++)
-        if(SystemComponents.hasfractionalMolecule[icomp] && !SystemComponents.Tmmc[icomp].DoTMMC)//Try not to use CBCFC + TMMC//
-        {  Adjust_WangLandauIteration(SystemComponents.Lambda[icomp]); WLAdjusted++;}
-    }
-    if(SimulationMode == PRODUCTION)
-    {
-      //Record values for energy//
-      Gather_Averages_Types(SystemComponents.EnergyAverage, init_energy, running_energy, i, BlockAverageSize, SystemComponents.Nblock);
-      //Record values for Number of atoms//
-      for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++)
-        Gather_Averages_Types(SystemComponents.Moves[comp].MolAverage, SystemComponents.NumberOfMolecule_for_Component[comp], 0.0, i, BlockAverageSize, SystemComponents.Nblock);
-      Gather_Averages_MoveEnergy(SystemComponents, i, BlockAverageSize, SystemComponents.deltaE);
-    }
-    if(SimulationMode != INITIALIZATION && i > 0)
-    {
-      for(size_t comp = 0; comp < SystemComponents.Total_Components; comp++)
-        if(i % SystemComponents.Tmmc[comp].UpdateTMEvery == 0)
-          SystemComponents.Tmmc[comp].AdjustTMBias();
-    }
-    if(i % SystemComponents.MoviesEvery == 0)//Generate restart file and movies 
-      GenerateRestartMovies(SystemComponents, Sims, SystemComponents.PseudoAtoms, 0, SimulationMode);
-  }
+  size_t NumberOfSimulations = SystemComponents.size();
+  int& Cycles = Vars.Cycles;
+
   //print statistics
   if(Cycles > 0)
   {
-    if(SimulationMode == EQUILIBRATION) printf("Sampled %zu WangLandau, Adjusted WL %zu times\n", WLSampled, WLAdjusted);
-    PrintAllStatistics(SystemComponents, Sims, Cycles, SimulationMode, BlockAverageSize);
-    if(SimulationMode == PRODUCTION)
+    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
     {
-      Calculate_Overall_Averages_MoveEnergy(SystemComponents, BlockAverageSize);
-      Print_Widom_Statistics(SystemComponents, Sims.Box, Constants, 1);
+      if(Vars.SimulationMode == EQUILIBRATION) fprintf(SystemComponents[sim].OUTPUT, "Sampled %zu WangLandau, Adjusted WL %zu times\n", SystemComponents[sim].WLSampled, SystemComponents[sim].WLAdjusted);
+      PrintAllStatistics(SystemComponents[sim], Sims[sim], Cycles, Vars.SimulationMode, Vars.BlockAverageSize, Constants);
+      if(Vars.SimulationMode == PRODUCTION)
+        Calculate_Overall_Averages_MoveEnergy(SystemComponents[sim], Vars.BlockAverageSize, Cycles);
     }
+    PrintSystemMoves(Vars);
   }
-  //At the end of the sim, print a last-step restart and last-step movie
-  GenerateRestartMovies(SystemComponents, Sims, SystemComponents.PseudoAtoms, 0, SimulationMode);
-  return running_energy;
+  for(size_t i = 0; i < Vars.SystemComponents.size(); i++)
+  {
+    fprintf(SystemComponents[i].OUTPUT, "===============================\n");
+    fprintf(SystemComponents[i].OUTPUT, "== %s PHASE ENDS ==\n", Mode.c_str());
+    fprintf(SystemComponents[i].OUTPUT, "===============================\n");
+  }
+}
+//Default is 20 steps per cycle//
+//If # of molecules > 20, use # of molecules//
+//If a max limit is imposed, use the max limit if it exceeds//
+size_t Determine_Number_Of_Steps(Variables& Vars, size_t systemId, size_t current_cycle)
+{ 
+  //Record current step//
+  Vars.SystemComponents[systemId].CURRENTCYCLE = current_cycle;
+  size_t Steps = 20;
+  if(Steps < Vars.SystemComponents[systemId].TotalNumberOfMolecules)
+  {
+    Steps = Vars.SystemComponents[systemId].TotalNumberOfMolecules;
+  }
+  if(Vars.SetMaxStep && Steps > Vars.MaxStepPerCycle) Steps = Vars.MaxStepPerCycle;
+  return Steps;
+}
+
+void Run_Simulation_MultipleBoxes(Variables& Vars)
+{
+  std::vector<Components>&   SystemComponents = Vars.SystemComponents;
+  size_t NumberOfSimulations = SystemComponents.size();
+
+  for(size_t sim = 0; sim < NumberOfSimulations; sim++)
+    InitialMCBeforeMoves(Vars, sim);
+
+  ///////////////////////////////////////////////////////
+  // Run the simulations for different boxes IN SERIAL //
+  ///////////////////////////////////////////////////////
+  for(size_t i = 0; i < Vars.Cycles; i++)
+  {
+    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
+    {
+      double RNM = Get_Uniform_Random();
+      size_t selectedSim = static_cast<size_t>(RNM * static_cast<double>(NumberOfSimulations));
+      size_t Steps = Determine_Number_Of_Steps(Vars, selectedSim, i);
+      //printf("STEPS: %zu, RNM: %.5f, selectedSim: %zu\n", Steps, RNM, selectedSim);
+      for(size_t j = 0; j < Steps; j++)
+      {
+        RunMoves(Vars, selectedSim, i);
+      }
+    }
+    for(size_t sim = 0; sim < NumberOfSimulations; sim++)
+    {
+      GatherStatisticsDuringSimulation(Vars, sim, i);
+    }
+    if(i > 0 && i % 500 == 0)
+      Update_Max_GibbsVolume(Vars.GibbsStatistics);
+  }
+  MCEndOfPhaseSummary(Vars);
+}
+
+void Run_Simulation_ForOneBox(Variables& Vars, size_t box_index)
+{
+  InitialMCBeforeMoves(Vars, box_index);
+
+  for(size_t i = 0; i < Vars.Cycles; i++)
+  {
+    size_t Steps = Determine_Number_Of_Steps(Vars, box_index, i);
+    for(size_t j = 0; j < Steps; j++)
+    {
+      RunMoves(Vars, box_index, i);
+    }
+    GatherStatisticsDuringSimulation(Vars, box_index, i);
+  }
+  MCEndOfPhaseSummary(Vars);
 }

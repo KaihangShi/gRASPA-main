@@ -6,14 +6,7 @@
 #include "data_struct.h"
 #include "equations_of_state.h"
 */
-/*
-Done By Xiaoyi Zhang at xiaoyizhang2028@u.northwestern.edu
-Purpose of the file: Takes in Pressure, Temperature and critical values and return P-R Fugacities for different components for calculation
-EOS included: P-R EOS
-References:
-https://onlinelibrary.wiley.com/doi/full/10.1002/adts.201900135
-https://pubs.acs.org/doi/10.1021/i160057a011
-*/
+
 // Assuming the definition of Components and MOLAR_GAS_CONSTANT are provided elsewhere
 const double MOLAR_GAS_CONSTANT = 8.314; // J/(mol*K), example value
 #include <vector>
@@ -125,9 +118,9 @@ int cubic(const std::array<REAL, 4>& A, std::vector<REAL>& X, int* L)
 }
 
 //Zhao's note: pressure and temperature should already be in Components variable
-void ComputeFugacity(Components& TempComponents, double Pressure, double Temperature)
+void ComputeFugacity(Components& TempComponents, double Pressure, double Temperature, double Volume)
 {
-  printf("================FUGACITY COEFFICIENT CALCULATION================\n");
+  fprintf(TempComponents.OUTPUT, "================FUGACITY COEFFICIENT CALCULATION================\n");
   double SumofFractions = 0.0;
   std::vector<double> MolFraction, PartialPressure, LocalPc, LocalTc, LocalAc, CompNum;
   std::vector<double> a, b, A, B; // Storing calculated properties
@@ -137,20 +130,20 @@ void ComputeFugacity(Components& TempComponents, double Pressure, double Tempera
   int FrameworkComponents = TempComponents.NComponents.y;
   
   bool NeedEOSFugacityCoeff = false; //If false, then no need to calculate PR-EOS fugacity coefficient, return//
-  for(size_t comp = FrameworkComponents; comp < TempComponents.Total_Components; comp++)
+  for(size_t comp = FrameworkComponents; comp < TempComponents.NComponents.x; comp++)
   {
-    printf("Checking: Current Fugacity Coeff for %zu component: %.5f\n", comp, TempComponents.FugacityCoeff[comp]);
+    fprintf(TempComponents.OUTPUT, "Checking: Current Fugacity Coeff for %zu component: %.5f\n", comp, TempComponents.FugacityCoeff[comp]);
     if(TempComponents.FugacityCoeff[comp] < 0.0)
     {
-      printf("Component %zu needs PR-EOS for fugacity coeff (negative value), going to ignore the fugacity coefficient for other components and calculate all using PR-EOS!", comp);
+      fprintf(TempComponents.OUTPUT, "Component %zu needs PR-EOS for fugacity coeff (negative value), going to ignore the fugacity coefficient for other components and calculate all using PR-EOS!", comp);
       NeedEOSFugacityCoeff = true;
     }
   }
 
-  if(!NeedEOSFugacityCoeff){ printf("Every Adsorbate Component has fugacity coefficient assigned, skip EOS calculation!\n"); return;}
-  printf("start calculating fugacity, Pressure: %.5f, Temperature: %.5f\n", Pressure, Temperature);
+  if(!NeedEOSFugacityCoeff){ fprintf(TempComponents.OUTPUT, "Every Adsorbate Component has fugacity coefficient assigned, skip EOS calculation!\n"); return;}
+  fprintf(TempComponents.OUTPUT, "start calculating fugacity, Pressure: %.5f, Temperature: %.5f\n", Pressure, Temperature);
 
-  for(size_t comp = FrameworkComponents; comp < TempComponents.Total_Components; comp++)
+  for(size_t comp = FrameworkComponents; comp < TempComponents.NComponents.x; comp++)
   {
     double ComponentMolFrac = TempComponents.MolFraction[comp];
     SumofFractions += ComponentMolFrac;
@@ -178,9 +171,9 @@ void ComputeFugacity(Components& TempComponents, double Pressure, double Tempera
 
     CompNum.push_back(comp);
 
-    printf("Component %zu, Pc: %.5f, Tc: %.5f, Ac: %.5f\n", comp, ComponentPc, ComponentTc, ComponentAc);
-    printf("Component Mol Fraction: %.5f\n", SumofFractions);
-    printf("kappa: %.5f, alpha: %.5f\n", kappa, alpha);
+    fprintf(TempComponents.OUTPUT, "Component %zu, Pc: %.5f, Tc: %.5f, Ac: %.5f\n", comp, ComponentPc, ComponentTc, ComponentAc);
+    fprintf(TempComponents.OUTPUT, "Component Mol Fraction: %.5f\n", SumofFractions);
+    fprintf(TempComponents.OUTPUT, "kappa: %.5f, alpha: %.5f\n", kappa, alpha);
     //printf("a: %.5f, b: %.5f, A: %.5f, B: %.5f\n", a.back(), b.back(), A.back(), B.back());
   }
 
@@ -241,7 +234,7 @@ void ComputeFugacity(Components& TempComponents, double Pressure, double Tempera
   cubic(CoefficientsArray,Compressibility,&NumberOfSolutions);
   double temp = 0.0;
 
-  printf("Number of Solutions: %d\n", NumberOfSolutions);
+  fprintf(TempComponents.OUTPUT, "Number of Solutions: %d\n", NumberOfSolutions);
 
   //for(size_t i = 0; i < Compressibility.size(); i++)
   //  printf("Before Processing: Compressibility %zu = %.5f\n", i, Compressibility[i]);
@@ -293,13 +286,26 @@ void ComputeFugacity(Components& TempComponents, double Pressure, double Tempera
   //   printf("first row for calculated fugacity %zu = %.5f\n", i, Compressibility[i]);
 
   // ToDO: need to fix
+  // Add excess loadings //
+  double excess_volume = Volume * TempComponents.HeliumVoidFraction;
+  if(TempComponents.ExcessVolume > 0.0)
+  {
+    excess_volume = TempComponents.ExcessVolume * TempComponents.HeliumVoidFraction;
+  }
+  printf("Volume: %.5f, excess_volume: %.5f, Pressure: %.5f\n", Volume, excess_volume, TempComponents.Pressure);
+  double MOLAR_GAS_CONSTANT = 8.314464919;         // J mol^-1 K^-1
+  double AVOGADRO_CONSTANT  = 6.0221419947e23;     // mol^-1
+  TempComponents.Compressibility.resize(TempComponents.NComponents.x, 0.0);
+  TempComponents.AmountOfExcessMolecules.resize(TempComponents.NComponents.x, 0.0);
   for(size_t i = 0; i < NumberOfComponents; i++)
   {
     int index = FrameworkComponents + i;
+    double compressibility = 0.0;
     if(NumberOfSolutions == 1)
     {
       // If there is only one solution, use it
       TempComponents.FugacityCoeff[index]= FugacityCoefficients[i][0];
+      compressibility = Compressibility[0];
     }
     else
     {
@@ -312,28 +318,38 @@ void ComputeFugacity(Components& TempComponents, double Pressure, double Tempera
         if(FugacityCoefficients[i][0] < FugacityCoefficients[i][2])
         {
           TempComponents.FugacityCoeff[index] = FugacityCoefficients[i][0];  // Favor the first solution
+          compressibility = Compressibility[0];
         }
         else if(FugacityCoefficients[i][0] > FugacityCoefficients[i][2])
         {
           // Favor the third solution, interpreted as vapor (metastable) and liquid (stable)
           TempComponents.FugacityCoeff[index] = FugacityCoefficients[i][2];
+          compressibility = Compressibility[2];
         }
         else
         {
           // When they are equal, it indicates both vapor and liquid are stable
           TempComponents.FugacityCoeff[index] = FugacityCoefficients[i][0];
+          compressibility = Compressibility[0];
         }
       }
       else
       {
         // Default to the first solution if the third compressibility is not positive
         TempComponents.FugacityCoeff[index] = FugacityCoefficients[i][0];
+        compressibility = Compressibility[0];
       }
     }
-    printf("Fugacity Coefficient for component %zu is %.10f\n", index, TempComponents.FugacityCoeff[index]);
+    //Get excess loading for each component//
+    TempComponents.Compressibility[index] = compressibility;
+    TempComponents.AmountOfExcessMolecules[index] = TempComponents.MolFraction[index]*AVOGADRO_CONSTANT*
+                excess_volume*(1e-30)*TempComponents.Pressure/(TempComponents.Compressibility[index]*MOLAR_GAS_CONSTANT*TempComponents.Temperature);
+    fprintf(TempComponents.OUTPUT, "TempComponents.AmountOfExcessMolecules for component %zu is %.10f; Compressibility: %.10f\n", i, TempComponents.AmountOfExcessMolecules[index], TempComponents.Compressibility[index]);
+
+    fprintf(TempComponents.OUTPUT, "Fugacity Coefficient for component %zu is %.10f\n", index, TempComponents.FugacityCoeff[index]);
     for(size_t ii = 0; ii < FugacityCoefficients.size(); ii++)
       for(size_t jj = 0; jj < FugacityCoefficients[ii].size(); jj++)
-        printf("Check: Computed FugaCoeff for %zu, %zu is %.10f\n", ii, jj, FugacityCoefficients[ii][jj]);
+        fprintf(TempComponents.OUTPUT, "Check: Computed FugaCoeff for %zu, %zu is %.10f\n", ii, jj, FugacityCoefficients[ii][jj]);
   }
-  printf("================END OF FUGACITY COEFFICIENT CALCULATION================\n");
+  fprintf(TempComponents.OUTPUT, "================END OF FUGACITY COEFFICIENT CALCULATION================\n");
 }
